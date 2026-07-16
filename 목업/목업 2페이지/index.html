@@ -96,8 +96,8 @@
     }
 
     .card.equal-height {
-      min-height: 340px;
-      height: 340px;
+      min-height: 320px;
+      height: 320px;
     }
 
     .card-header {
@@ -387,7 +387,7 @@
     .allocation-layout {
       display: grid;
       grid-template-columns: 200px 1fr;
-      gap: 20px;
+      gap: 16px;
       align-items: center;
     }
 
@@ -432,23 +432,9 @@
       font-weight: 850;
     }
 
-    .donut-label {
-      position: absolute;
-      z-index: 2;
-      color: #FFFFFF;
-      font-size: 12px;
-      font-weight: 850;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
-      pointer-events: none;
-    }
-
-    .donut-label.cash { top: 33px; right: 53px; }
-    .donut-label.domestic { right: 22px; bottom: 76px; }
-    .donut-label.global { left: 45px; bottom: 28px; }
-
     .legend-list {
       display: grid;
-      gap: 10px;
+      gap: 9px;
     }
 
     .legend-row {
@@ -496,6 +482,17 @@
       min-height: 0;
       overflow-y: auto;
       padding-right: 4px;
+    }
+
+    .asset-list-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) 90px 118px 64px;
+      gap: 12px;
+      padding: 0 4px 9px 0;
+      border-bottom: 1px solid var(--border-card);
+      color: #8892A3;
+      font-size: 12px;
+      font-weight: 650;
     }
 
     .asset-scroll::-webkit-scrollbar { width: 8px; }
@@ -562,7 +559,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .carousel-controls {
@@ -600,8 +597,39 @@
     .carousel-body {
       display: grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(340px, 1fr);
-      gap: 26px;
+      gap: 22px;
+      align-items: start;
+      min-height: 214px;
+    }
+
+    .insight-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .insight-label {
+      display: inline-flex;
+      min-height: 24px;
       align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(108, 140, 255, 0.14);
+      color: #C7D2FE;
+      font-size: 12px;
+      font-weight: 750;
+      margin-bottom: 12px;
+    }
+
+    .insight-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(40, 47, 59, 0.82);
+    }
+
+    .insight-title-wrap {
+      width: 100%;
+      padding: 20px 0;
     }
 
     .focus-title {
@@ -676,16 +704,16 @@
     }
 
     .bar-track {
-      height: 8px;
+      height: 9px;
       border-radius: 999px;
-      background: #252C38;
+      background: #1E2531;
       overflow: hidden;
     }
 
     .bar-fill {
       height: 100%;
       border-radius: inherit;
-      background: var(--accent);
+      background: var(--accent-hover);
     }
 
     .factor-value {
@@ -718,7 +746,7 @@
 
     .contribution-row {
       display: grid;
-      grid-template-columns: 128px 1fr 92px;
+      grid-template-columns: 128px 1fr 122px;
       gap: 12px;
       align-items: center;
     }
@@ -731,8 +759,14 @@
       white-space: nowrap;
     }
 
-    .money-positive { color: var(--positive); font-weight: 800; }
-    .money-negative { color: var(--negative); font-weight: 800; }
+    .money-positive,
+    .money-negative {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .money-positive { color: var(--positive); }
+    .money-negative { color: var(--negative); }
 
     .section-hint {
       grid-column: span 12;
@@ -856,9 +890,6 @@
             </div>
             <div class="allocation-layout">
               <div class="donut" aria-label="자산 구성 도넛 차트">
-                <span class="donut-label cash">25%</span>
-                <span class="donut-label domestic">20%</span>
-                <span class="donut-label global">18%</span>
                 <div class="donut-center">
                   <div>
                     <span>총자산</span>
@@ -880,6 +911,12 @@
                 <option>전체</option>
               </select>
             </div>
+            <div class="asset-list-header" aria-hidden="true">
+              <span>자산명</span>
+              <span>유형</span>
+              <span class="right">평가금액</span>
+              <span class="right">전체 비중</span>
+            </div>
             <div class="asset-scroll" id="assetList" aria-label="보유 자산 목록"></div>
             <button class="text-button" type="button" style="align-self:flex-end; margin-top: 16px;">전체 보기</button>
           </article>
@@ -890,7 +927,6 @@
             <div class="carousel-head">
               <div>
                 <p class="feature-kicker">확인해 볼 자산 구성</p>
-                <h2 class="card-title" id="insightLabel">산업</h2>
               </div>
               <div class="carousel-controls" aria-label="확인할 구성 넘기기">
                 <span class="carousel-count" id="insightCount">1 / 3</span>
@@ -899,8 +935,13 @@
               </div>
             </div>
             <div class="carousel-body">
-              <div>
-                <h2 class="focus-title" id="insightTitle">국내 기술 산업 관련 자산이 전체 자산의 34%예요.</h2>
+              <div class="insight-panel">
+                <span class="insight-label" id="insightLabel">산업</span>
+                <div class="insight-divider"></div>
+                <div class="insight-title-wrap">
+                  <h2 class="focus-title" id="insightTitle">국내 기술 산업 관련 자산이 전체 자산의 34%예요.</h2>
+                </div>
+                <div class="insight-divider"></div>
                 <p class="feature-desc" id="insightDesc">서로 다른 자산이지만 국내 기술 산업의 변화에 함께 영향을 받을 수 있어요.</p>
               </div>
               <div>
