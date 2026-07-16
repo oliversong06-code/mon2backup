@@ -24,12 +24,12 @@
       --radius-card: 16px;
       --sidebar-width: 240px;
       --gap-card: 24px;
-      --chart-cash: #4FA3A5;
-      --chart-domestic: #D97777;
-      --chart-global: #5B8DEF;
-      --chart-etf: #8B78C6;
-      --chart-pension: #C79A4B;
-      --chart-realestate: #5F9B76;
+      --chart-cash: #22C7C9;
+      --chart-domestic: #FF6B6B;
+      --chart-global: #4D8DFF;
+      --chart-etf: #9B6DFF;
+      --chart-pension: #F2B84B;
+      --chart-realestate: #4FC27A;
       --chart-other: #6B7280;
     }
 
@@ -113,6 +113,13 @@
       justify-content: space-between;
       gap: 18px;
       margin-bottom: 20px;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: none;
     }
 
     .card-title {
@@ -356,6 +363,10 @@
       justify-content: space-between;
     }
 
+    .summary-card.hero {
+      min-height: 190px;
+    }
+
     .summary-label {
       color: var(--text-secondary);
       font-size: 14px;
@@ -367,6 +378,11 @@
       font-size: 31px;
       line-height: 1;
       font-weight: 800;
+    }
+
+    .hero .summary-value {
+      margin-top: 20px;
+      font-size: 38px;
     }
 
     .summary-note {
@@ -395,6 +411,68 @@
     .sparkline {
       width: 86px;
       height: 30px;
+    }
+
+    .summary-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .compact-list {
+      display: grid;
+      gap: 11px;
+      margin-top: 14px;
+    }
+
+    .compact-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .compact-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: rgba(199, 154, 75, 0.13);
+      color: #D5B16E;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .compact-title {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .compact-desc {
+      margin: 3px 0 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .schedule-item {
+      display: grid;
+      grid-template-columns: 66px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .schedule-date {
+      color: #C7D2FE;
+      font-size: 12px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
     }
 
     /* Allocation */
@@ -802,43 +880,43 @@
 
         <section class="grid" aria-label="자산 대시보드">
           <!-- Summary cards -->
-          <article class="card summary-card span-3">
+          <article class="card summary-card hero span-6">
             <div>
               <div class="summary-label">총자산</div>
               <div class="summary-value num">₩324,500,000</div>
-              <div class="summary-note">전월 대비</div>
+              <div class="summary-meta">
+                <span>전월 대비 <b class="positive num">+₩12,400,000</b></span>
+                <span class="positive num">+3.97%</span>
+                <span>최근 업데이트 10분 전</span>
+              </div>
             </div>
             <div class="change-row">
-              <span class="positive num">+₩2,400,000 · +3.97%</span>
+              <span class="summary-note">최근 자산 추이</span>
               <svg class="sparkline" viewBox="0 0 86 30" aria-hidden="true"><path d="M2 25 C13 22, 18 18, 29 20 S43 12, 53 14 S69 6, 84 4" fill="none" stroke="#E57373" stroke-width="2.4"/><path d="M2 25 C13 22, 18 18, 29 20 S43 12, 53 14 S69 6, 84 4 L84 30 L2 30Z" fill="rgba(229,115,115,0.12)"/></svg>
             </div>
           </article>
 
           <article class="card summary-card span-3">
             <div>
-              <div class="summary-label">투자자산</div>
-              <div class="summary-value num">₩178,200,000</div>
-              <div class="summary-note">전체 자산의 54.9%</div>
+              <div class="summary-label">확인이 필요한 항목</div>
+              <div class="compact-list">
+                <div class="compact-item"><span class="compact-icon">1</span><div><p class="compact-title">예금 만기까지 14일 남았어요</p><p class="compact-desc">국민은행 정기예금</p></div></div>
+                <div class="compact-item"><span class="compact-icon">2</span><div><p class="compact-title">해외주식 비중이 설정 기준보다 높아요</p><p class="compact-desc">현재 18% · 기준 15%</p></div></div>
+                <div class="compact-item"><span class="compact-icon">3</span><div><p class="compact-title">업데이트가 필요한 계좌가 2개 있어요</p><p class="compact-desc">연결 상태 확인 필요</p></div></div>
+              </div>
             </div>
-            <span class="pill accent">주식 · ETF · 연금</span>
+            <button class="text-button" type="button">전체 보기</button>
           </article>
 
           <article class="card summary-card span-3">
             <div>
-              <div class="summary-label">안전자산</div>
-              <div class="summary-value num">₩116,300,000</div>
-              <div class="summary-note">전체 자산의 35.8%</div>
+              <div class="summary-label">이번 달 주요 일정</div>
+              <div class="compact-list">
+                <div class="schedule-item"><span class="schedule-date">7월 25일</span><div><p class="compact-title">삼성전자 실적 발표</p><p class="compact-desc">국내주식 평가 변동에 영향을 줄 수 있어요</p></div></div>
+                <div class="schedule-item"><span class="schedule-date">7월 29일</span><div><p class="compact-title">Apple 실적 발표</p><p class="compact-desc">해외주식 변동성이 커질 수 있어요</p></div></div>
+                <div class="schedule-item"><span class="schedule-date">7월 31일</span><div><p class="compact-title">미국 기준금리 발표</p><p class="compact-desc">달러 자산에 영향을 줄 수 있어요</p></div></div>
+              </div>
             </div>
-            <span class="pill">예금 · 현금성 자산</span>
-          </article>
-
-          <article class="card summary-card span-3">
-            <div>
-              <div class="summary-label">이번 달 변동</div>
-              <div class="summary-value positive num">+₩9,750,000</div>
-              <div class="summary-note">평가손익 · 입출금 합산 변동</div>
-            </div>
-            <span class="pill accent">월간 업데이트</span>
           </article>
 
           <!-- Allocation -->
@@ -848,7 +926,15 @@
                 <h2 class="card-title">자산 구성</h2>
                 <p class="subtext">카테고리별 평가금액과 비중</p>
               </div>
-              <button class="text-button" type="button">전체 보기</button>
+              <div class="card-actions">
+                <div class="segment" aria-label="자산 구성 분류 기준">
+                  <button class="active" type="button" data-allocation-view="type">자산 유형</button>
+                  <button type="button" data-allocation-view="nature">자산 성격</button>
+                  <button type="button" data-allocation-view="institution">금융기관</button>
+                  <button type="button" data-allocation-view="country">국가</button>
+                </div>
+                <button class="text-button" type="button">전체 보기</button>
+              </div>
             </div>
             <div class="allocation-body">
               <div class="donut-wrap">
@@ -861,7 +947,7 @@
                   </div>
                 </div>
               </div>
-              <div class="legend-list" aria-label="자산 카테고리 목록">
+              <div class="legend-list" id="allocationLegend" aria-label="자산 카테고리 목록">
                 <div class="legend-item"><span class="legend-dot" style="background: var(--chart-cash)"></span><span class="legend-name">현금·예금</span><span class="legend-amount num">₩81,125,000</span><span class="legend-rate num">25%</span></div>
                 <div class="legend-item"><span class="legend-dot" style="background: var(--chart-domestic)"></span><span class="legend-name">국내주식</span><span class="legend-amount num">₩64,900,000</span><span class="legend-rate num">20%</span></div>
                 <div class="legend-item"><span class="legend-dot" style="background: var(--chart-global)"></span><span class="legend-name">해외주식</span><span class="legend-amount num">₩58,410,000</span><span class="legend-rate num">18%</span></div>
@@ -893,7 +979,7 @@
           </article>
 
           <!-- Trend -->
-          <article class="card span-8">
+          <article class="card span-12">
             <div class="card-header">
               <div>
                 <h2 class="card-title">자산 추이</h2>
@@ -913,31 +999,6 @@
               <span>6개월 변동 <b class="positive num">+₩38,500,000</b></span>
               <span>변동률 <b class="positive num">+13.46%</b></span>
             </div>
-          </article>
-
-          <!-- Tasks -->
-          <article class="card span-4">
-            <div class="card-header">
-              <div>
-                <h2 class="card-title">확인이 필요한 항목</h2>
-                <p class="subtext">최근 상태 기반 알림</p>
-              </div>
-            </div>
-            <div class="task-list">
-              <div class="task-item">
-                <div class="task-icon" aria-hidden="true">!</div>
-                <div><p class="task-title">예금 만기까지 14일 남았어요</p><p class="task-desc">국민은행 정기예금</p></div>
-              </div>
-              <div class="task-item">
-                <div class="task-icon" aria-hidden="true">%</div>
-                <div><p class="task-title">해외주식 비중이 설정 기준보다 높아요</p><p class="task-desc">현재 18% · 설정 기준 15%</p></div>
-              </div>
-              <div class="task-item">
-                <div class="task-icon" aria-hidden="true">↻</div>
-                <div><p class="task-title">자산 정보 업데이트가 필요해요</p><p class="task-desc">연결된 오래된 계좌 2개</p></div>
-              </div>
-            </div>
-            <button class="text-button" type="button">전체 보기</button>
           </article>
 
           <!-- Asset list -->
@@ -1026,10 +1087,56 @@
   <script>
     // Chart configuration for static dashboard mockup.
     const allocationCanvas = document.getElementById("allocationChart");
+    const allocationLegend = document.getElementById("allocationLegend");
     const trendCanvas = document.getElementById("trendChart");
-    const allocationColors = ["#4FA3A5", "#D97777", "#5B8DEF", "#8B78C6", "#C79A4B", "#5F9B76", "#6B7280"];
-    const allocationData = [25, 20, 18, 15, 10, 8, 4];
+    const allocationViews = {
+      type: [
+        { label: "현금·예금", amount: "₩81,125,000", rate: 25, color: "#22C7C9" },
+        { label: "국내주식", amount: "₩64,900,000", rate: 20, color: "#FF6B6B" },
+        { label: "해외주식", amount: "₩58,410,000", rate: 18, color: "#4D8DFF" },
+        { label: "ETF", amount: "₩48,675,000", rate: 15, color: "#9B6DFF" },
+        { label: "연금", amount: "₩32,450,000", rate: 10, color: "#F2B84B" },
+        { label: "부동산", amount: "₩25,960,000", rate: 8, color: "#4FC27A" },
+        { label: "기타", amount: "₩12,980,000", rate: 4, color: "#6B7280" }
+      ],
+      nature: [
+        { label: "위험자산", amount: "₩178,200,000", rate: 54.9, color: "#FF6B6B" },
+        { label: "안전자산", amount: "₩116,300,000", rate: 35.8, color: "#22C7C9" },
+        { label: "중립·기타자산", amount: "₩30,000,000", rate: 9.3, color: "#9B6DFF" }
+      ],
+      institution: [
+        { label: "삼성증권", amount: "₩74,200,000", rate: 22.9, color: "#4D8DFF" },
+        { label: "미래에셋증권", amount: "₩68,500,000", rate: 21.1, color: "#9B6DFF" },
+        { label: "국민은행", amount: "₩61,700,000", rate: 19, color: "#22C7C9" },
+        { label: "신한은행", amount: "₩48,300,000", rate: 14.9, color: "#F2B84B" },
+        { label: "NH투자증권", amount: "₩39,600,000", rate: 12.2, color: "#4FC27A" },
+        { label: "기타", amount: "₩32,200,000", rate: 9.9, color: "#6B7280" }
+      ],
+      country: [
+        { label: "대한민국", amount: "₩210,900,000", rate: 65, color: "#22C7C9" },
+        { label: "미국", amount: "₩94,100,000", rate: 29, color: "#4D8DFF" },
+        { label: "글로벌 ETF", amount: "₩12,980,000", rate: 4, color: "#9B6DFF" },
+        { label: "기타", amount: "₩6,520,000", rate: 2, color: "#6B7280" }
+      ]
+    };
+    let currentAllocationView = "type";
+    let allocationChart;
     const trendData = [286000000, 293500000, 301200000, 306800000, 312100000, 324500000];
+
+    function getAllocationRows() {
+      return allocationViews[currentAllocationView];
+    }
+
+    function renderAllocationLegend() {
+      allocationLegend.innerHTML = getAllocationRows().map(item => `
+        <div class="legend-item">
+          <span class="legend-dot" style="background: ${item.color}"></span>
+          <span class="legend-name">${item.label}</span>
+          <span class="legend-amount num">${item.amount}</span>
+          <span class="legend-rate num">${item.rate}%</span>
+        </div>
+      `).join("");
+    }
 
     function drawFallbackDonut() {
       const ctx = allocationCanvas.getContext("2d");
@@ -1037,12 +1144,12 @@
       const center = size / 2;
       let start = -Math.PI / 2;
       ctx.clearRect(0, 0, size, size);
-      allocationData.forEach((value, index) => {
-        const angle = (value / 100) * Math.PI * 2;
+      getAllocationRows().forEach(item => {
+        const angle = (item.rate / 100) * Math.PI * 2;
         ctx.beginPath();
         ctx.arc(center, center, 92, start, start + angle);
         ctx.lineWidth = 32;
-        ctx.strokeStyle = allocationColors[index];
+        ctx.strokeStyle = item.color;
         ctx.stroke();
         start += angle;
       });
@@ -1118,13 +1225,13 @@
       Chart.defaults.color = "#9CA3AF";
       Chart.defaults.font.family = 'Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
-      new Chart(allocationCanvas, {
+      allocationChart = new Chart(allocationCanvas, {
         type: "doughnut",
         data: {
-          labels: ["현금·예금", "국내주식", "해외주식", "ETF", "연금", "부동산", "기타"],
+          labels: getAllocationRows().map(item => item.label),
           datasets: [{
-            data: allocationData,
-            backgroundColor: allocationColors,
+            data: getAllocationRows().map(item => item.rate),
+            backgroundColor: getAllocationRows().map(item => item.color),
             borderWidth: 0,
             hoverOffset: 2
           }]
@@ -1189,6 +1296,25 @@
       drawFallbackTrend();
       window.addEventListener("resize", drawFallbackTrend);
     }
+
+    renderAllocationLegend();
+
+    document.querySelectorAll("[data-allocation-view]").forEach(button => {
+      button.addEventListener("click", () => {
+        currentAllocationView = button.dataset.allocationView;
+        document.querySelectorAll("[data-allocation-view]").forEach(item => item.classList.toggle("active", item === button));
+        renderAllocationLegend();
+
+        if (allocationChart) {
+          allocationChart.data.labels = getAllocationRows().map(item => item.label);
+          allocationChart.data.datasets[0].data = getAllocationRows().map(item => item.rate);
+          allocationChart.data.datasets[0].backgroundColor = getAllocationRows().map(item => item.color);
+          allocationChart.update();
+        } else {
+          drawFallbackDonut();
+        }
+      });
+    });
   </script>
 </body>
 </html>
