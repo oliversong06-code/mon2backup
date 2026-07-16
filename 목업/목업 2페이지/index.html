@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AssetFlow | 전체 자산</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    :root {
+      --bg-main: #0E1117;
+      --bg-sidebar: #121722;
+      --bg-card: #171C26;
+      --bg-card-secondary: #141923;
+      --border-card: #282F3B;
+      --text-primary: #F3F4F6;
+      --text-secondary: #9CA3AF;
+      --text-disabled: #667085;
+      --accent: #6C8CFF;
+      --accent-hover: #89A2FF;
+      --positive: #E57373;
+      --negative: #5B8DEF;
+      --radius-card: 16px;
+      --sidebar-width: 240px;
+      --gap-card: 24px;
+      --chart-cash: #22C7C9;
+      --chart-domestic: #FF6B6B;
+      --chart-global: #4D8DFF;
+      --chart-etf: #9B6DFF;
+      --chart-pension: #F2B84B;
+      --chart-realestate: #4FC27A;
+      --chart-other: #6B7280;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 1200px;
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button, select { font: inherit; color: inherit; }
+    button { cursor: default; }
+
+    .num { font-variant-numeric: tabular-nums; }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-card);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+    }
+
+    .main {
+      width: calc(100% - var(--sidebar-width));
+      margin-left: var(--sidebar-width);
+      padding: 30px 40px 44px;
+    }
+
+    .content {
+      max-width: 1580px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--gap-card);
+    }
+
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-12 { grid-column: span 12; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      padding: 24px;
+    }
+
+    .card.equal-height {
+      min-height: 430px;
+      height: 430px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      word-break: keep-all;
+    }
+
+    .subtext {
+      margin: 6px 0 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    .text-button {
+      border: 0;
+      background: transparent;
+      color: var(--accent-hover);
+      padding: 2px 0;
+      font-size: 13px;
+      font-weight: 650;
+      transition: color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .text-button:hover { color: #B4C1FF; }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      border: 0;
+      border-radius: 10px;
+      padding: 0 15px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-weight: 700;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .primary-btn:hover { background: var(--accent-hover); }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      background: var(--bg-card-secondary);
+      color: var(--text-secondary);
+      transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      color: var(--text-primary);
+      border-color: #3B4556;
+      background: #1A2130;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #222A38;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .pill.ready {
+      background: rgba(156, 163, 175, 0.12);
+      color: #A7B0BE;
+      border: 1px solid #313947;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 34px;
+      padding: 0 6px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: #1D2638;
+      color: var(--accent-hover);
+      border: 1px solid #30394B;
+      font-weight: 800;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      height: 42px;
+      border: 0;
+      border-radius: 11px;
+      padding: 0 12px;
+      background: transparent;
+      color: var(--text-secondary);
+      text-align: left;
+      font-weight: 650;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-item:hover {
+      background: #171E2B;
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: rgba(108, 140, 255, 0.14);
+      color: var(--text-primary);
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+
+    .nav-item.disabled {
+      color: var(--text-disabled);
+    }
+
+    .nav-spacer { flex: 1; }
+
+    .user-panel {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 14px 8px 0;
+      border-top: 1px solid var(--border-card);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #243047;
+      color: #C5D0FF;
+      font-weight: 800;
+    }
+
+    .user-name {
+      margin: 0;
+      font-weight: 750;
+    }
+
+    .user-desc {
+      margin: 3px 0 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 26px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 800;
+    }
+
+    .page-desc {
+      margin: 8px 0 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: right;
+    }
+
+    .feature-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background: linear-gradient(180deg, #171C26 0%, #151B25 100%);
+    }
+
+    .feature-kicker {
+      margin: 0 0 10px;
+      color: #C7D2FE;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .feature-title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.32;
+      font-weight: 800;
+      word-break: keep-all;
+    }
+
+    .feature-desc {
+      margin: 10px 0 0;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    .segment {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      background: var(--bg-card-secondary);
+    }
+
+    .segment button {
+      height: 30px;
+      min-width: 74px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .segment button:hover,
+    .segment button.active {
+      background: #242C3B;
+      color: var(--text-primary);
+    }
+
+    .allocation-layout {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .donut {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          var(--chart-cash) 0 44%,
+          var(--chart-domestic) 44% 72%,
+          var(--chart-global) 72% 92%,
+          var(--chart-other) 92% 100%
+        );
+    }
+
+    .donut::after {
+      content: "";
+      position: absolute;
+      inset: 34px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid rgba(40, 47, 59, 0.7);
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .donut-center span {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .donut-center strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 24px;
+      line-height: 1.1;
+      font-weight: 850;
+    }
+
+    .legend-list {
+      display: grid;
+      gap: 13px;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 12px minmax(100px, 1fr) 52px 110px;
+      gap: 10px;
+      align-items: center;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend-name {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .legend-rate,
+    .legend-amount {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .asset-list-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .asset-scroll {
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .asset-scroll::-webkit-scrollbar { width: 8px; }
+    .asset-scroll::-webkit-scrollbar-thumb {
+      background: #303848;
+      border-radius: 999px;
+    }
+
+    .asset-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) 90px 118px 64px;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid #232B38;
+      transition: background 0.15s ease;
+    }
+
+    .asset-row:hover {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .asset-row:last-child { border-bottom: 0; }
+
+    .asset-name {
+      color: var(--text-primary);
+      font-weight: 750;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .asset-type {
+      display: inline-flex;
+      justify-content: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #202838;
+      color: #BCC6D5;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .right { text-align: right; }
+
+    .select-lite {
+      height: 32px;
+      border: 1px solid var(--border-card);
+      border-radius: 9px;
+      background: var(--bg-card-secondary);
+      padding: 0 10px;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .focus-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .focus-title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.35;
+      font-weight: 800;
+      word-break: keep-all;
+    }
+
+    .stackbar {
+      height: 40px;
+      display: flex;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #252C38;
+      border: 1px solid #303847;
+    }
+
+    .stack-segment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 58px;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .stack-labels {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stack-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text-secondary);
+    }
+
+    .factor-list,
+    .contribution-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .factor-row {
+      display: grid;
+      grid-template-columns: 126px 94px 1fr 44px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .factor-name {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .factor-count {
+      color: var(--text-secondary);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #252C38;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+    }
+
+    .factor-value {
+      text-align: right;
+      color: #DCE1EA;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .contribution-total {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+      margin-bottom: 18px;
+    }
+
+    .contribution-total span {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .contribution-total strong {
+      font-size: 22px;
+      font-weight: 850;
+    }
+
+    .contribution-row {
+      display: grid;
+      grid-template-columns: 128px 1fr 92px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .contribution-name {
+      color: var(--text-primary);
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .money-positive { color: var(--positive); font-weight: 800; }
+    .money-negative { color: var(--negative); font-weight: 800; }
+
+    @media (max-width: 1360px) {
+      .span-5,
+      .span-6,
+      .span-7 {
+        grid-column: span 12;
+      }
+
+      .card.equal-height {
+        height: auto;
+        min-height: 0;
+      }
+
+      .asset-scroll {
+        max-height: 330px;
+      }
+
+      .focus-card,
+      .allocation-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="주요 메뉴">
+      <div class="brand">
+        <div class="logo-mark" aria-hidden="true">A</div>
+        <div class="brand-name">AssetFlow</div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+          홈
+        </button>
+        <button class="nav-item active" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16V9"/><path d="M13 16V6"/><path d="M18 16v-4"/></svg>
+          자산
+        </button>
+        <button class="nav-item" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="m4 15 5-5 4 4 7-8"/><path d="M14 6h6v6"/></svg>
+          분석
+        </button>
+        <button class="nav-item disabled" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4v3"/><path d="M12 17v3"/><path d="M4 12h3"/><path d="M17 12h3"/></svg>
+          목표 관리
+          <span class="pill ready">준비 중</span>
+        </button>
+        <button class="nav-item disabled" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+          알림
+          <span class="pill ready">준비 중</span>
+        </button>
+        <button class="nav-item" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.12V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.12-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06A2 2 0 1 1 7.03 3.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.12V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.38.22.75.47 1 .6.35.17.74.4 1.12.4H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
+          설정
+        </button>
+      </nav>
+
+      <div class="nav-spacer"></div>
+      <div class="user-panel">
+        <div class="avatar" aria-hidden="true">김</div>
+        <div>
+          <p class="user-name">김지훈</p>
+          <p class="user-desc">개인 자산</p>
+        </div>
+        <button class="icon-btn" type="button" aria-label="로그아웃">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 3v18"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="content">
+        <header class="topbar">
+          <div>
+            <h1 class="page-title">전체 자산</h1>
+            <p class="page-desc">보유 자산의 구성과 영향을 자세히 살펴보세요.</p>
+          </div>
+          <div class="top-actions">
+            <p class="subtext">자산 비중을 변경한 예시를 확인해보세요.</p>
+            <!-- Future route: current allocation versus simulated allocation comparison. -->
+            <button class="primary-btn" type="button">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16V9"/><path d="M13 16V6"/><path d="M18 16v-4"/></svg>
+              자산 구성해보기
+            </button>
+          </div>
+        </header>
+
+        <section class="grid" aria-label="전체 자산 화면">
+          <article class="card feature-card span-12">
+            <div>
+              <p class="feature-kicker">자산 구성에서 확인된 특징</p>
+              <h2 class="feature-title">국내 기술 산업과 금리 변화에 연결된 자산이 많아요.</h2>
+              <p class="feature-desc">좋고 나쁨을 평가한 결과가 아니라 현재 자산 구성에서 확인된 특징입니다.</p>
+            </div>
+            <span class="pill">관찰된 특징</span>
+          </article>
+
+          <article class="card equal-height span-7">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">자산 구성</h2>
+                <p class="subtext">합계 100% 기준으로 묶은 보유 자산 분포</p>
+              </div>
+              <div class="segment" aria-label="자산 구성 분류 기준">
+                <button class="active" type="button">자산 유형</button>
+                <button type="button">금융기관</button>
+                <button type="button">국가</button>
+              </div>
+            </div>
+            <div class="allocation-layout">
+              <div class="donut" aria-label="자산 구성 도넛 차트">
+                <div class="donut-center">
+                  <div>
+                    <span>총자산</span>
+                    <strong class="num">3,842만원</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="legend-list" id="allocationLegend"></div>
+            </div>
+          </article>
+
+          <article class="card equal-height asset-list-card span-5">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">보유 자산 <span class="pill">전체 12개</span></h2>
+                <p class="subtext">평가금액 기준 주요 자산</p>
+              </div>
+              <select class="select-lite" aria-label="자산 목록 필터">
+                <option>전체</option>
+              </select>
+            </div>
+            <div class="asset-scroll" id="assetList" aria-label="보유 자산 목록"></div>
+            <button class="text-button" type="button" style="align-self:flex-end; margin-top: 16px;">전체 보기</button>
+          </article>
+
+          <article class="card focus-card span-12">
+            <div>
+              <p class="feature-kicker">가장 먼저 확인할 구성</p>
+              <h2 class="focus-title">국내 기술 산업 관련 자산이 전체 자산의 34%예요.</h2>
+              <p class="feature-desc">서로 다른 자산이지만 국내 기술 산업의 변화에 함께 영향을 받을 수 있어요.</p>
+            </div>
+            <div>
+              <div class="stackbar" aria-label="국내 기술 산업 관련 자산 34%">
+                <div class="stack-segment" style="width: 52.1%; background: var(--chart-domestic);">삼성전자</div>
+                <div class="stack-segment" style="width: 42.1%; background: var(--chart-etf);">기술주 ETF</div>
+                <div class="stack-segment" style="width: 5.8%; background: var(--chart-other);">기타</div>
+              </div>
+              <div class="stack-labels">
+                <div class="stack-label"><span>삼성전자</span><strong class="num">17.7%</strong></div>
+                <div class="stack-label"><span>국내 기술주 ETF</span><strong class="num">14.3%</strong></div>
+                <div class="stack-label"><span>기타 관련 자산</span><strong class="num">2.0%</strong></div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:18px;">
+                <span class="subtext">다른 특징 2개</span>
+                <button class="text-button" type="button">관련 자산 보기</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card span-6">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">주요 영향 요인</h2>
+                <p class="subtext">자산별로 함께 연결될 수 있는 시장·산업·금리 요인</p>
+              </div>
+            </div>
+            <div class="factor-list" id="factorList"></div>
+            <p class="subtext" style="margin-top: 20px;">하나의 자산이 여러 영향 요인에 동시에 포함될 수 있어 합계가 100%를 넘을 수 있습니다.</p>
+          </article>
+
+          <article class="card span-6">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">최근 1개월 수익 기여도</h2>
+                <p class="subtext">수익률이 아닌 총자산 변화에 기여한 절대금액</p>
+              </div>
+            </div>
+            <div class="contribution-total">
+              <span>총자산</span>
+              <strong class="money-positive num">+480,000원</strong>
+            </div>
+            <div class="contribution-list" id="contributionList"></div>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const allocationData = [
+      { name: "현금·예금", rate: 44, amount: "16,900,000원", color: "#22C7C9" },
+      { name: "국내주식", rate: 28, amount: "10,760,000원", color: "#FF6B6B" },
+      { name: "해외주식", rate: 20, amount: "7,680,000원", color: "#4D8DFF" },
+      { name: "기타", rate: 8, amount: "3,080,000원", color: "#6B7280" }
+    ];
+
+    const assets = [
+      { name: "정기예금", type: "현금·예금", amount: "12,000,000원", rate: "31.2%" },
+      { name: "삼성전자", type: "국내주식", amount: "6,800,000원", rate: "17.7%" },
+      { name: "S&P 500 ETF", type: "해외주식", amount: "5,200,000원", rate: "13.5%" },
+      { name: "입출금통장", type: "현금·예금", amount: "4,900,000원", rate: "12.8%" },
+      { name: "카카오", type: "국내주식", amount: "3,960,000원", rate: "10.3%" },
+      { name: "미국 기술주 ETF", type: "해외주식", amount: "2,480,000원", rate: "6.5%" },
+      { name: "기타 자산", type: "기타", amount: "3,080,000원", rate: "8.0%" }
+    ];
+
+    const factors = [
+      { name: "국내 주식시장", count: "연결 자산 4개", value: 38 },
+      { name: "기술 산업", count: "연결 자산 3개", value: 34 },
+      { name: "금리 변화", count: "연결 자산 2개", value: 31 },
+      { name: "원·달러 환율", count: "연결 자산 2개", value: 18 }
+    ];
+
+    const contributions = [
+      { name: "S&P 500 ETF", value: 210000 },
+      { name: "삼성전자", value: 170000 },
+      { name: "정기예금", value: 30000 },
+      { name: "카카오", value: -80000 },
+      { name: "기타 자산", value: 150000 }
+    ];
+
+    const formatMoney = value => `${value > 0 ? "+" : "-"}${Math.abs(value).toLocaleString("ko-KR")}원`;
+
+    document.getElementById("allocationLegend").innerHTML = allocationData.map(item => `
+      <div class="legend-row">
+        <span class="legend-dot" style="background:${item.color}"></span>
+        <span class="legend-name">${item.name}</span>
+        <span class="legend-rate num">${item.rate}%</span>
+        <span class="legend-amount num">${item.amount}</span>
+      </div>
+    `).join("");
+
+    document.getElementById("assetList").innerHTML = assets.map(item => `
+      <div class="asset-row">
+        <span class="asset-name">${item.name}</span>
+        <span class="asset-type">${item.type}</span>
+        <span class="right num">${item.amount}</span>
+        <span class="right num">${item.rate}</span>
+      </div>
+    `).join("");
+
+    document.getElementById("factorList").innerHTML = factors.map(item => `
+      <div class="factor-row">
+        <span class="factor-name">${item.name}</span>
+        <span class="factor-count">${item.count}</span>
+        <span class="bar-track"><span class="bar-fill" style="width:${item.value}%"></span></span>
+        <span class="factor-value num">${item.value}%</span>
+      </div>
+    `).join("");
+
+    document.getElementById("contributionList").innerHTML = contributions.map(item => {
+      const width = Math.max(12, Math.min(100, Math.abs(item.value) / 210000 * 100));
+      const className = item.value >= 0 ? "money-positive" : "money-negative";
+      return `
+        <div class="contribution-row">
+          <span class="contribution-name">${item.name}</span>
+          <span class="bar-track"><span class="bar-fill" style="width:${width}%; background:${item.value >= 0 ? "var(--positive)" : "var(--negative)"}"></span></span>
+          <span class="${className} right num">${formatMoney(item.value)}</span>
+        </div>
+      `;
+    }).join("");
+  </script>
+</body>
+</html>
