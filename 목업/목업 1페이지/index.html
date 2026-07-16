@@ -1131,12 +1131,14 @@
     </main>
   </div>
 
+  <script src="../shared/mock-data.js"></script>
   <script>
     // Chart configuration for static dashboard mockup.
     const allocationCanvas = document.getElementById("allocationChart");
     const allocationLegend = document.getElementById("allocationLegend");
     const trendCanvas = document.getElementById("trendChart");
-    const allocationViews = {
+    const sharedMockData = window.AssetFlowMockData;
+    let allocationViews = {
       type: [
         { label: "현금·예금", amount: "₩81,125,000", rate: 25, color: "#22C7C9" },
         { label: "국내주식", amount: "₩64,900,000", rate: 20, color: "#FF6B6B" },
@@ -1166,9 +1168,14 @@
         { label: "기타", amount: "₩6,520,000", rate: 2, color: "#6B7280" }
       ]
     };
+    if (sharedMockData) {
+      allocationViews.type = sharedMockData.assetComposition;
+      allocationViews.nature = sharedMockData.allocationViews.nature;
+    }
+
     let currentAllocationView = "type";
     let allocationChart;
-    const trendData = [286000000, 293500000, 301200000, 306800000, 312100000, 324500000];
+    let trendData = sharedMockData ? sharedMockData.trendValues : [286000000, 293500000, 301200000, 306800000, 312100000, 324500000];
 
     function getAllocationRows() {
       return allocationViews[currentAllocationView];

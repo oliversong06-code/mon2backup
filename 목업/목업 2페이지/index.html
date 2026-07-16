@@ -80,7 +80,7 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: var(--gap-card);
+      gap: 20px var(--gap-card);
     }
 
     .span-5 { grid-column: span 5; }
@@ -96,8 +96,8 @@
     }
 
     .card.equal-height {
-      min-height: 430px;
-      height: 430px;
+      min-height: 340px;
+      height: 340px;
     }
 
     .card-header {
@@ -105,7 +105,7 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 18px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .card-title {
@@ -328,12 +328,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
+      gap: 18px;
       background: linear-gradient(180deg, #171C26 0%, #151B25 100%);
+      padding-top: 18px;
+      padding-bottom: 18px;
     }
 
     .feature-kicker {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       color: #C7D2FE;
       font-size: 13px;
       font-weight: 750;
@@ -341,14 +343,14 @@
 
     .feature-title {
       margin: 0;
-      font-size: 22px;
+      font-size: 20px;
       line-height: 1.32;
       font-weight: 800;
       word-break: keep-all;
     }
 
     .feature-desc {
-      margin: 10px 0 0;
+      margin: 8px 0 0;
       color: var(--text-secondary);
       line-height: 1.5;
       word-break: keep-all;
@@ -384,29 +386,23 @@
 
     .allocation-layout {
       display: grid;
-      grid-template-columns: 230px 1fr;
-      gap: 24px;
+      grid-template-columns: 200px 1fr;
+      gap: 20px;
       align-items: center;
     }
 
     .donut {
       position: relative;
-      width: 220px;
-      height: 220px;
+      width: 190px;
+      height: 190px;
       border-radius: 50%;
-      background:
-        conic-gradient(
-          var(--chart-cash) 0 44%,
-          var(--chart-domestic) 44% 72%,
-          var(--chart-global) 72% 92%,
-          var(--chart-other) 92% 100%
-        );
+      background: conic-gradient(var(--chart-cash) 0 25%, var(--chart-domestic) 25% 45%, var(--chart-global) 45% 63%, var(--chart-etf) 63% 78%, var(--chart-pension) 78% 88%, var(--chart-realestate) 88% 96%, var(--chart-other) 96% 100%);
     }
 
     .donut::after {
       content: "";
       position: absolute;
-      inset: 34px;
+      inset: 32px;
       border-radius: 50%;
       background: var(--bg-card);
       border: 1px solid rgba(40, 47, 59, 0.7);
@@ -431,19 +427,33 @@
     .donut-center strong {
       display: block;
       margin-top: 5px;
-      font-size: 24px;
+      font-size: 21px;
       line-height: 1.1;
       font-weight: 850;
     }
 
+    .donut-label {
+      position: absolute;
+      z-index: 2;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 850;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+
+    .donut-label.cash { top: 33px; right: 53px; }
+    .donut-label.domestic { right: 22px; bottom: 76px; }
+    .donut-label.global { left: 45px; bottom: 28px; }
+
     .legend-list {
       display: grid;
-      gap: 13px;
+      gap: 10px;
     }
 
     .legend-row {
       display: grid;
-      grid-template-columns: 12px minmax(100px, 1fr) 52px 110px;
+      grid-template-columns: 12px minmax(96px, 1fr) 48px 104px;
       gap: 10px;
       align-items: center;
       color: var(--text-secondary);
@@ -464,6 +474,17 @@
     .legend-amount {
       text-align: right;
       font-variant-numeric: tabular-nums;
+    }
+
+    .legend-rate {
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .legend-amount {
+      color: var(--text-secondary);
+      font-size: 12px;
     }
 
     .asset-list-card {
@@ -488,7 +509,7 @@
       grid-template-columns: minmax(0, 1.15fr) 90px 118px 64px;
       gap: 12px;
       align-items: center;
-      padding: 14px 0;
+      padding: 12px 0;
       border-bottom: 1px solid #232B38;
       transition: background 0.15s ease;
     }
@@ -533,9 +554,53 @@
     }
 
     .focus-card {
+      display: block;
+    }
+
+    .carousel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .carousel-count {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .carousel-btn {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-card);
+      border-radius: 9px;
+      background: var(--bg-card-secondary);
+      color: var(--text-secondary);
+      transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+    }
+
+    .carousel-btn:hover {
+      color: var(--text-primary);
+      border-color: #3B4556;
+      background: #1A2130;
+    }
+
+    .carousel-body {
       display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
-      gap: 28px;
+      grid-template-columns: minmax(0, 1.35fr) minmax(340px, 1fr);
+      gap: 26px;
       align-items: center;
     }
 
@@ -548,7 +613,7 @@
     }
 
     .stackbar {
-      height: 40px;
+      height: 36px;
       display: flex;
       overflow: hidden;
       border-radius: 12px;
@@ -569,8 +634,8 @@
 
     .stack-labels {
       display: grid;
-      gap: 10px;
-      margin-top: 14px;
+      gap: 8px;
+      margin-top: 12px;
     }
 
     .stack-label {
@@ -584,12 +649,12 @@
     .factor-list,
     .contribution-list {
       display: grid;
-      gap: 16px;
+      gap: 14px;
     }
 
     .factor-row {
       display: grid;
-      grid-template-columns: 126px 94px 1fr 44px;
+      grid-template-columns: 132px 1fr 48px;
       gap: 12px;
       align-items: center;
     }
@@ -603,6 +668,11 @@
       color: var(--text-secondary);
       font-size: 12px;
       white-space: nowrap;
+    }
+
+    .factor-meta {
+      display: grid;
+      gap: 4px;
     }
 
     .bar-track {
@@ -629,7 +699,7 @@
       display: flex;
       align-items: baseline;
       gap: 10px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       border-radius: 14px;
       background: var(--bg-card-secondary);
       border: 1px solid #263040;
@@ -642,7 +712,7 @@
     }
 
     .contribution-total strong {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 850;
     }
 
@@ -664,6 +734,13 @@
     .money-positive { color: var(--positive); font-weight: 800; }
     .money-negative { color: var(--negative); font-weight: 800; }
 
+    .section-hint {
+      grid-column: span 12;
+      margin: -6px 0 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
     @media (max-width: 1360px) {
       .span-5,
       .span-6,
@@ -681,6 +758,7 @@
       }
 
       .focus-card,
+      .carousel-body,
       .allocation-layout {
         grid-template-columns: 1fr;
       }
@@ -761,7 +839,7 @@
               <h2 class="feature-title">국내 기술 산업과 금리 변화에 연결된 자산이 많아요.</h2>
               <p class="feature-desc">좋고 나쁨을 평가한 결과가 아니라 현재 자산 구성에서 확인된 특징입니다.</p>
             </div>
-            <span class="pill">관찰된 특징</span>
+            <span class="pill">특징</span>
           </article>
 
           <article class="card equal-height span-7">
@@ -778,10 +856,13 @@
             </div>
             <div class="allocation-layout">
               <div class="donut" aria-label="자산 구성 도넛 차트">
+                <span class="donut-label cash">25%</span>
+                <span class="donut-label domestic">20%</span>
+                <span class="donut-label global">18%</span>
                 <div class="donut-center">
                   <div>
                     <span>총자산</span>
-                    <strong class="num">3,842만원</strong>
+                    <strong class="num" id="totalAssetsShort">3.25억</strong>
                   </div>
                 </div>
               </div>
@@ -792,7 +873,7 @@
           <article class="card equal-height asset-list-card span-5">
             <div class="card-header">
               <div>
-                <h2 class="card-title">보유 자산 <span class="pill">전체 12개</span></h2>
+                <h2 class="card-title">보유 자산 <span class="pill" id="holdingCount">전체 0개</span></h2>
                 <p class="subtext">평가금액 기준 주요 자산</p>
               </div>
               <select class="select-lite" aria-label="자산 목록 필터">
@@ -803,29 +884,37 @@
             <button class="text-button" type="button" style="align-self:flex-end; margin-top: 16px;">전체 보기</button>
           </article>
 
+          <p class="section-hint">이 자산들이 어떤 변화에 함께 영향을 받는지도 확인해보세요.</p>
+
           <article class="card focus-card span-12">
-            <div>
-              <p class="feature-kicker">가장 먼저 확인할 구성</p>
-              <h2 class="focus-title">국내 기술 산업 관련 자산이 전체 자산의 34%예요.</h2>
-              <p class="feature-desc">서로 다른 자산이지만 국내 기술 산업의 변화에 함께 영향을 받을 수 있어요.</p>
+            <div class="carousel-head">
+              <div>
+                <p class="feature-kicker">확인해 볼 자산 구성</p>
+                <h2 class="card-title" id="insightLabel">산업</h2>
+              </div>
+              <div class="carousel-controls" aria-label="확인할 구성 넘기기">
+                <span class="carousel-count" id="insightCount">1 / 3</span>
+                <button class="carousel-btn" type="button" id="prevInsight" aria-label="이전 구성">‹</button>
+                <button class="carousel-btn" type="button" id="nextInsight" aria-label="다음 구성">›</button>
+              </div>
             </div>
-            <div>
-              <div class="stackbar" aria-label="국내 기술 산업 관련 자산 34%">
-                <div class="stack-segment" style="width: 52.1%; background: var(--chart-domestic);">삼성전자</div>
-                <div class="stack-segment" style="width: 42.1%; background: var(--chart-etf);">기술주 ETF</div>
-                <div class="stack-segment" style="width: 5.8%; background: var(--chart-other);">기타</div>
+            <div class="carousel-body">
+              <div>
+                <h2 class="focus-title" id="insightTitle">국내 기술 산업 관련 자산이 전체 자산의 34%예요.</h2>
+                <p class="feature-desc" id="insightDesc">서로 다른 자산이지만 국내 기술 산업의 변화에 함께 영향을 받을 수 있어요.</p>
               </div>
-              <div class="stack-labels">
-                <div class="stack-label"><span>삼성전자</span><strong class="num">17.7%</strong></div>
-                <div class="stack-label"><span>국내 기술주 ETF</span><strong class="num">14.3%</strong></div>
-                <div class="stack-label"><span>기타 관련 자산</span><strong class="num">2.0%</strong></div>
-              </div>
-              <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:18px;">
-                <span class="subtext">다른 특징 2개</span>
-                <button class="text-button" type="button">관련 자산 보기</button>
+              <div>
+                <div class="stackbar" id="insightStack" aria-label="확인할 자산 구성"></div>
+                <div class="stack-labels" id="insightStackLabels"></div>
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:16px;">
+                  <span class="subtext">다른 특징 2개</span>
+                  <button class="text-button" type="button">관련 자산 보기</button>
+                </div>
               </div>
             </div>
           </article>
+
+          <p class="section-hint">다음으로 내 자산에 영향을 주는 요인을 살펴보세요.</p>
 
           <article class="card span-6">
             <div class="card-header">
@@ -835,6 +924,7 @@
               </div>
             </div>
             <div class="factor-list" id="factorList"></div>
+            <!-- TODO: 향후 영향 요인별 관련 뉴스 및 연결 자산 상세 제공 가능 -->
             <p class="subtext" style="margin-top: 20px;">하나의 자산이 여러 영향 요인에 동시에 포함될 수 있어 합계가 100%를 넘을 수 있습니다.</p>
           </article>
 
@@ -847,54 +937,48 @@
             </div>
             <div class="contribution-total">
               <span>총자산</span>
-              <strong class="money-positive num">+480,000원</strong>
+              <strong class="money-positive num" id="monthlyChange">+12,400,000원</strong>
             </div>
             <div class="contribution-list" id="contributionList"></div>
           </article>
+          <p class="section-hint">최근 자산 변화에 가장 크게 기여한 자산을 확인해보세요.</p>
         </section>
       </div>
     </main>
   </div>
 
+  <script src="../shared/mock-data.js"></script>
   <script>
-    const allocationData = [
-      { name: "현금·예금", rate: 44, amount: "16,900,000원", color: "#22C7C9" },
-      { name: "국내주식", rate: 28, amount: "10,760,000원", color: "#FF6B6B" },
-      { name: "해외주식", rate: 20, amount: "7,680,000원", color: "#4D8DFF" },
-      { name: "기타", rate: 8, amount: "3,080,000원", color: "#6B7280" }
-    ];
-
-    const assets = [
-      { name: "정기예금", type: "현금·예금", amount: "12,000,000원", rate: "31.2%" },
-      { name: "삼성전자", type: "국내주식", amount: "6,800,000원", rate: "17.7%" },
-      { name: "S&P 500 ETF", type: "해외주식", amount: "5,200,000원", rate: "13.5%" },
-      { name: "입출금통장", type: "현금·예금", amount: "4,900,000원", rate: "12.8%" },
-      { name: "카카오", type: "국내주식", amount: "3,960,000원", rate: "10.3%" },
-      { name: "미국 기술주 ETF", type: "해외주식", amount: "2,480,000원", rate: "6.5%" },
-      { name: "기타 자산", type: "기타", amount: "3,080,000원", rate: "8.0%" }
-    ];
-
-    const factors = [
-      { name: "국내 주식시장", count: "연결 자산 4개", value: 38 },
-      { name: "기술 산업", count: "연결 자산 3개", value: 34 },
-      { name: "금리 변화", count: "연결 자산 2개", value: 31 },
-      { name: "원·달러 환율", count: "연결 자산 2개", value: 18 }
-    ];
-
-    const contributions = [
-      { name: "S&P 500 ETF", value: 210000 },
-      { name: "삼성전자", value: 170000 },
-      { name: "정기예금", value: 30000 },
-      { name: "카카오", value: -80000 },
-      { name: "기타 자산", value: 150000 }
-    ];
+    const mock = window.AssetFlowMockData;
+    const allocationData = mock.assetComposition;
+    const assets = mock.holdings;
+    const factors = mock.influenceFactors;
+    const contributions = mock.returnContributions;
+    const insights = mock.assetInsights;
 
     const formatMoney = value => `${value > 0 ? "+" : "-"}${Math.abs(value).toLocaleString("ko-KR")}원`;
+    const toKoreanWon = value => `₩${value.toLocaleString("ko-KR")}`;
+    const totalChange = contributions.reduce((sum, item) => sum + item.value, 0);
+
+    function buildConicGradient(rows) {
+      let cursor = 0;
+      const stops = rows.map(item => {
+        const start = cursor;
+        cursor += item.rate;
+        return `${item.color} ${start}% ${cursor}%`;
+      });
+      return `conic-gradient(${stops.join(", ")})`;
+    }
+
+    document.querySelector(".donut").style.background = buildConicGradient(allocationData);
+    document.getElementById("totalAssetsShort").textContent = "3.25억";
+    document.getElementById("monthlyChange").textContent = formatMoney(totalChange);
+    document.getElementById("holdingCount").textContent = `전체 ${assets.length}개`;
 
     document.getElementById("allocationLegend").innerHTML = allocationData.map(item => `
       <div class="legend-row">
         <span class="legend-dot" style="background:${item.color}"></span>
-        <span class="legend-name">${item.name}</span>
+        <span class="legend-name">${item.label}</span>
         <span class="legend-rate num">${item.rate}%</span>
         <span class="legend-amount num">${item.amount}</span>
       </div>
@@ -911,15 +995,47 @@
 
     document.getElementById("factorList").innerHTML = factors.map(item => `
       <div class="factor-row">
-        <span class="factor-name">${item.name}</span>
-        <span class="factor-count">${item.count}</span>
+        <span class="factor-meta"><span class="factor-name">${item.name}</span><span class="factor-count">${item.count}</span></span>
         <span class="bar-track"><span class="bar-fill" style="width:${item.value}%"></span></span>
         <span class="factor-value num">${item.value}%</span>
       </div>
     `).join("");
 
+    let activeInsight = 0;
+
+    function renderInsight() {
+      const insight = insights[activeInsight];
+      const total = insight.segments.reduce((sum, item) => sum + item.rate, 0);
+
+      document.getElementById("insightLabel").textContent = insight.label;
+      document.getElementById("insightTitle").textContent = insight.title;
+      document.getElementById("insightDesc").textContent = insight.desc;
+      document.getElementById("insightCount").textContent = `${activeInsight + 1} / ${insights.length}`;
+
+      document.getElementById("insightStack").innerHTML = insight.segments.map(item => `
+        <div class="stack-segment" style="width:${(item.rate / total) * 100}%; background:${item.color};">${item.name}</div>
+      `).join("");
+
+      document.getElementById("insightStackLabels").innerHTML = insight.segments.map(item => `
+        <div class="stack-label"><span>${item.name}</span><strong class="num">${item.rate.toFixed(1)}%</strong></div>
+      `).join("");
+    }
+
+    document.getElementById("prevInsight").addEventListener("click", () => {
+      activeInsight = (activeInsight - 1 + insights.length) % insights.length;
+      renderInsight();
+    });
+
+    document.getElementById("nextInsight").addEventListener("click", () => {
+      activeInsight = (activeInsight + 1) % insights.length;
+      renderInsight();
+    });
+
+    renderInsight();
+
     document.getElementById("contributionList").innerHTML = contributions.map(item => {
-      const width = Math.max(12, Math.min(100, Math.abs(item.value) / 210000 * 100));
+      const max = Math.max(...contributions.map(row => Math.abs(row.value)));
+      const width = Math.max(10, Math.min(100, Math.abs(item.value) / max * 100));
       const className = item.value >= 0 ? "money-positive" : "money-negative";
       return `
         <div class="contribution-row">
