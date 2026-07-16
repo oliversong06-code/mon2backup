@@ -31,6 +31,8 @@
       --chart-pension: #F2B84B;
       --chart-realestate: #4FC27A;
       --chart-other: #6B7280;
+      --diagnosis-primary: #6C8CFF;
+      --diagnosis-track: #252B36;
     }
 
     * { box-sizing: border-box; }
@@ -99,6 +101,7 @@
       gap: var(--gap-card);
       width: 100%;
       min-width: 0;
+      align-items: stretch;
     }
 
     .span-3 { grid-column: span 3; }
@@ -378,15 +381,24 @@
 
     .total-assets-card {
       min-width: 0;
-      overflow: hidden;
+      overflow: visible;
+    }
+
+    .total-assets-card > div {
+      min-width: 0;
     }
 
     .total-assets-card .summary-label,
+    .total-assets-card .card-title,
     .total-assets-card .summary-value,
+    .total-assets-card .total-amount,
     .total-assets-card .change-row,
     .total-assets-card .summary-meta,
+    .total-assets-card .updated-at,
     .total-assets-card .summary-note {
       white-space: nowrap;
+      word-break: keep-all;
+      overflow-wrap: normal;
     }
 
     .summary-label {
@@ -408,6 +420,7 @@
       line-height: 1.1;
       overflow: visible;
       text-overflow: clip;
+      max-width: none;
     }
 
     .summary-note {
@@ -449,7 +462,7 @@
 
     .total-assets-card .summary-meta {
       flex-wrap: nowrap;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .compact-list {
@@ -914,12 +927,12 @@
           <div class="top-summary-grid">
           <article class="card summary-card hero total-assets-card">
             <div>
-              <div class="summary-label">총자산</div>
-              <div class="summary-value num">₩324,500,000</div>
+              <div class="summary-label card-title">총자산</div>
+              <div class="summary-value total-amount num">₩324,500,000</div>
               <div class="summary-meta">
                 <span>전월 대비 <b class="positive num">+₩12,400,000</b></span>
                 <span class="positive num">+3.97%</span>
-                <span>최근 업데이트 10분 전</span>
+                <span class="updated-at">최근 업데이트 10분 전</span>
               </div>
             </div>
             <div class="change-row">
