@@ -92,6 +92,15 @@
       gap: var(--gap-card);
     }
 
+    .top-summary-grid {
+      grid-column: span 12;
+      display: grid;
+      grid-template-columns: minmax(0, 6fr) minmax(280px, 3fr) minmax(280px, 3fr);
+      gap: var(--gap-card);
+      width: 100%;
+      min-width: 0;
+    }
+
     .span-3 { grid-column: span 3; }
     .span-4 { grid-column: span 4; }
     .span-5 { grid-column: span 5; }
@@ -367,6 +376,19 @@
       min-height: 190px;
     }
 
+    .total-assets-card {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .total-assets-card .summary-label,
+    .total-assets-card .summary-value,
+    .total-assets-card .change-row,
+    .total-assets-card .summary-meta,
+    .total-assets-card .summary-note {
+      white-space: nowrap;
+    }
+
     .summary-label {
       color: var(--text-secondary);
       font-size: 14px;
@@ -382,7 +404,10 @@
 
     .hero .summary-value {
       margin-top: 20px;
-      font-size: 38px;
+      font-size: clamp(32px, 2.3vw, 44px);
+      line-height: 1.1;
+      overflow: visible;
+      text-overflow: clip;
     }
 
     .summary-note {
@@ -419,6 +444,12 @@
       gap: 14px;
       color: var(--text-secondary);
       font-size: 13px;
+      min-width: 0;
+    }
+
+    .total-assets-card .summary-meta {
+      flex-wrap: nowrap;
+      overflow: hidden;
     }
 
     .compact-list {
@@ -880,7 +911,8 @@
 
         <section class="grid" aria-label="자산 대시보드">
           <!-- Summary cards -->
-          <article class="card summary-card hero span-6">
+          <div class="top-summary-grid">
+          <article class="card summary-card hero total-assets-card">
             <div>
               <div class="summary-label">총자산</div>
               <div class="summary-value num">₩324,500,000</div>
@@ -896,7 +928,7 @@
             </div>
           </article>
 
-          <article class="card summary-card span-3">
+          <article class="card summary-card">
             <div>
               <div class="summary-label">확인이 필요한 항목</div>
               <div class="compact-list">
@@ -908,7 +940,7 @@
             <button class="text-button" type="button">전체 보기</button>
           </article>
 
-          <article class="card summary-card span-3">
+          <article class="card summary-card">
             <div>
               <div class="summary-label">이번 달 주요 일정</div>
               <div class="compact-list">
@@ -918,6 +950,8 @@
               </div>
             </div>
           </article>
+
+          </div>
 
           <!-- Allocation -->
           <article class="card span-7">
