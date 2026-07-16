@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AssetFlow | 내 자산 대시보드</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-main: #0E1117;
+      --bg-sidebar: #121722;
+      --bg-card: #171C26;
+      --bg-card-secondary: #141923;
+      --border-card: #282F3B;
+      --text-primary: #F3F4F6;
+      --text-secondary: #9CA3AF;
+      --text-disabled: #667085;
+      --accent: #6C8CFF;
+      --accent-hover: #89A2FF;
+      --positive: #E57373;
+      --negative: #5B8DEF;
+      --radius-card: 16px;
+      --sidebar-width: 240px;
+      --gap-card: 24px;
+      --chart-cash: #4FA3A5;
+      --chart-domestic: #D97777;
+      --chart-global: #5B8DEF;
+      --chart-etf: #8B78C6;
+      --chart-pension: #C79A4B;
+      --chart-realestate: #5F9B76;
+      --chart-other: #6B7280;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 1440px;
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button, input, select {
+      font: inherit;
+      color: inherit;
+    }
+
+    button { cursor: default; }
+
+    .num {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+    }
+
+    /* Layout */
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-card);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+    }
+
+    .main {
+      width: calc(100% - var(--sidebar-width));
+      margin-left: var(--sidebar-width);
+      padding: 30px 40px 44px;
+    }
+
+    .content {
+      max-width: 1580px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--gap-card);
+    }
+
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+
+    /* Common components */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      padding: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .subtext {
+      margin: 6px 0 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .text-button {
+      border: 0;
+      background: transparent;
+      color: var(--accent-hover);
+      padding: 2px 0;
+      font-size: 13px;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .text-button:hover { color: #B4C1FF; }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      background: var(--bg-card-secondary);
+      color: var(--text-secondary);
+      transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      color: var(--text-primary);
+      border-color: #3B4556;
+      background: #1A2130;
+    }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      border: 0;
+      border-radius: 10px;
+      padding: 0 15px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-weight: 700;
+      transition: background 0.15s ease;
+    }
+
+    .primary-btn:hover { background: var(--accent-hover); }
+
+    .outline-btn {
+      width: 100%;
+      height: 42px;
+      border: 1px solid #374151;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-primary);
+      font-weight: 650;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .outline-btn:hover {
+      border-color: #4C5A70;
+      background: #1A2130;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #222A38;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .pill.accent {
+      background: rgba(108, 140, 255, 0.15);
+      color: #AEBBFF;
+    }
+
+    .pill.ready {
+      background: rgba(156, 163, 175, 0.12);
+      color: #A7B0BE;
+      border: 1px solid #313947;
+    }
+
+    /* Sidebar */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 34px;
+      padding: 0 6px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: #1D2638;
+      color: var(--accent-hover);
+      border: 1px solid #30394B;
+      font-weight: 800;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      height: 42px;
+      border: 0;
+      border-radius: 11px;
+      padding: 0 12px;
+      background: transparent;
+      color: var(--text-secondary);
+      text-align: left;
+      font-weight: 650;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-item:hover {
+      background: #171E2B;
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: rgba(108, 140, 255, 0.14);
+      color: var(--text-primary);
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+
+    .nav-item.disabled {
+      color: var(--text-disabled);
+    }
+
+    .nav-spacer { flex: 1; }
+
+    .user-panel {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 14px 8px 0;
+      border-top: 1px solid var(--border-card);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #243047;
+      color: #C5D0FF;
+      font-weight: 800;
+    }
+
+    .user-name {
+      margin: 0;
+      font-weight: 750;
+    }
+
+    .user-desc {
+      margin: 3px 0 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    /* Header */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 800;
+    }
+
+    .base-date {
+      margin: 8px 0 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Summary cards */
+    .summary-card {
+      min-height: 168px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .summary-label {
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .summary-value {
+      margin: 18px 0 8px;
+      font-size: 31px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .summary-note {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .change-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .positive {
+      color: var(--positive);
+      font-weight: 750;
+    }
+
+    .negative {
+      color: var(--negative);
+      font-weight: 750;
+    }
+
+    .sparkline {
+      width: 86px;
+      height: 30px;
+    }
+
+    /* Allocation */
+    .allocation-body {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .donut-wrap {
+      position: relative;
+      width: 238px;
+      height: 238px;
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .donut-center strong {
+      display: block;
+      margin: 4px 0;
+      font-size: 28px;
+      font-weight: 850;
+    }
+
+    .donut-center span {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .legend-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .legend-item {
+      display: grid;
+      grid-template-columns: 12px 1fr auto 42px;
+      gap: 10px;
+      align-items: center;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend-name {
+      color: var(--text-primary);
+      font-weight: 650;
+    }
+
+    .legend-amount {
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    .legend-rate { text-align: right; }
+
+    /* Diagnosis */
+    .diagnosis-summary {
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+      color: #D4DAE6;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .diagnosis-list {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: 70px 1fr 46px;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .metric-row b {
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+
+    .gauge {
+      height: 8px;
+      border-radius: 999px;
+      background: #242B37;
+      overflow: hidden;
+    }
+
+    .gauge span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+    }
+
+    /* Trend and tasks */
+    .segment {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      background: var(--bg-card-secondary);
+    }
+
+    .segment button {
+      height: 30px;
+      min-width: 56px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .segment button:hover,
+    .segment button.active {
+      background: #242C3B;
+      color: var(--text-primary);
+    }
+
+    .trend-body {
+      height: 282px;
+    }
+
+    .trend-stats {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-top: -4px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 13px;
+      margin-bottom: 18px;
+    }
+
+    .task-item {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+    }
+
+    .task-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(199, 154, 75, 0.14);
+      color: #D5B16E;
+    }
+
+    .task-title {
+      margin: 0 0 5px;
+      color: var(--text-primary);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .task-desc {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    /* Asset table */
+    .table-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 650px;
+      justify-content: flex-end;
+    }
+
+    .search {
+      width: 220px;
+      height: 38px;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      background: var(--bg-card-secondary);
+      padding: 0 12px;
+      color: var(--text-secondary);
+    }
+
+    .select {
+      height: 38px;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      background: var(--bg-card-secondary);
+      padding: 0 12px;
+      color: var(--text-secondary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 650;
+      text-align: left;
+      padding: 0 14px 12px;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    td {
+      padding: 17px 14px;
+      border-bottom: 1px solid #232B38;
+      color: #DCE1EA;
+      vertical-align: middle;
+    }
+
+    tbody tr {
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+      background: #1A202C;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .right {
+      text-align: right;
+    }
+
+    .asset-name {
+      color: var(--text-primary);
+      font-weight: 750;
+    }
+
+    .asset-type {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #202838;
+      color: #BCC6D5;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    /* Upcoming features */
+    .future-card {
+      background: var(--bg-card-secondary);
+      min-height: 214px;
+    }
+
+    .future-card .card-header {
+      margin-bottom: 18px;
+    }
+
+    .progress {
+      height: 9px;
+      border-radius: 999px;
+      background: #252C38;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #6B83D7;
+    }
+
+    .cash-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .cash-box {
+      padding: 13px;
+      border-radius: 12px;
+      background: #171D28;
+      border: 1px solid #293241;
+    }
+
+    .cash-box span {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .cash-box strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+    }
+
+    .issue-list {
+      display: grid;
+      gap: 12px;
+      color: #D4DAE6;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Left sidebar -->
+    <aside class="sidebar" aria-label="주요 메뉴">
+      <div class="brand">
+        <div class="logo-mark" aria-hidden="true">A</div>
+        <div class="brand-name">AssetFlow</div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+          홈
+        </button>
+        <button class="nav-item" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16V9"/><path d="M13 16V6"/><path d="M18 16v-4"/></svg>
+          자산
+        </button>
+        <button class="nav-item" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="m4 15 5-5 4 4 7-8"/><path d="M14 6h6v6"/></svg>
+          분석
+        </button>
+        <button class="nav-item disabled" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4v3"/><path d="M12 17v3"/><path d="M4 12h3"/><path d="M17 12h3"/></svg>
+          목표 관리
+          <span class="pill ready">준비 중</span>
+        </button>
+        <button class="nav-item disabled" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+          알림
+          <span class="pill ready">준비 중</span>
+        </button>
+        <button class="nav-item" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.12V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.12-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06A2 2 0 1 1 7.03 3.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.12V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.38.22.75.47 1 .6.35.17.74.4 1.12.4H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
+          설정
+        </button>
+      </nav>
+
+      <div class="nav-spacer"></div>
+      <div class="user-panel">
+        <div class="avatar" aria-hidden="true">김</div>
+        <div>
+          <p class="user-name">김지훈</p>
+          <p class="user-desc">개인 자산</p>
+        </div>
+        <button class="icon-btn" type="button" aria-label="로그아웃">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M21 3v18"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="content">
+        <!-- Header -->
+        <header class="topbar">
+          <div>
+            <h1 class="page-title">내 자산</h1>
+            <p class="base-date">2026년 7월 16일 기준</p>
+          </div>
+          <div class="top-actions">
+            <button class="primary-btn" type="button">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              자산 추가
+            </button>
+            <button class="icon-btn" type="button" aria-label="알림">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+            </button>
+            <div class="avatar" aria-hidden="true">김</div>
+          </div>
+        </header>
+
+        <section class="grid" aria-label="자산 대시보드">
+          <!-- Summary cards -->
+          <article class="card summary-card span-3">
+            <div>
+              <div class="summary-label">총자산</div>
+              <div class="summary-value num">₩324,500,000</div>
+              <div class="summary-note">전월 대비</div>
+            </div>
+            <div class="change-row">
+              <span class="positive num">+₩2,400,000 · +3.97%</span>
+              <svg class="sparkline" viewBox="0 0 86 30" aria-hidden="true"><path d="M2 25 C13 22, 18 18, 29 20 S43 12, 53 14 S69 6, 84 4" fill="none" stroke="#E57373" stroke-width="2.4"/><path d="M2 25 C13 22, 18 18, 29 20 S43 12, 53 14 S69 6, 84 4 L84 30 L2 30Z" fill="rgba(229,115,115,0.12)"/></svg>
+            </div>
+          </article>
+
+          <article class="card summary-card span-3">
+            <div>
+              <div class="summary-label">투자자산</div>
+              <div class="summary-value num">₩178,200,000</div>
+              <div class="summary-note">전체 자산의 54.9%</div>
+            </div>
+            <span class="pill accent">주식 · ETF · 연금</span>
+          </article>
+
+          <article class="card summary-card span-3">
+            <div>
+              <div class="summary-label">안전자산</div>
+              <div class="summary-value num">₩116,300,000</div>
+              <div class="summary-note">전체 자산의 35.8%</div>
+            </div>
+            <span class="pill">예금 · 현금성 자산</span>
+          </article>
+
+          <article class="card summary-card span-3">
+            <div>
+              <div class="summary-label">이번 달 변동</div>
+              <div class="summary-value positive num">+₩9,750,000</div>
+              <div class="summary-note">평가손익 · 입출금 합산 변동</div>
+            </div>
+            <span class="pill accent">월간 업데이트</span>
+          </article>
+
+          <!-- Allocation -->
+          <article class="card span-7">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">자산 구성</h2>
+                <p class="subtext">카테고리별 평가금액과 비중</p>
+              </div>
+              <button class="text-button" type="button">전체 보기</button>
+            </div>
+            <div class="allocation-body">
+              <div class="donut-wrap">
+                <canvas id="allocationChart" width="238" height="238" aria-label="자산 구성 도넛 차트"></canvas>
+                <div class="donut-center">
+                  <div>
+                    <span>총자산</span>
+                    <strong class="num">3.25억</strong>
+                    <span>2026.07.16 기준</span>
+                  </div>
+                </div>
+              </div>
+              <div class="legend-list" aria-label="자산 카테고리 목록">
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-cash)"></span><span class="legend-name">현금·예금</span><span class="legend-amount num">₩81,125,000</span><span class="legend-rate num">25%</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-domestic)"></span><span class="legend-name">국내주식</span><span class="legend-amount num">₩64,900,000</span><span class="legend-rate num">20%</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-global)"></span><span class="legend-name">해외주식</span><span class="legend-amount num">₩58,410,000</span><span class="legend-rate num">18%</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-etf)"></span><span class="legend-name">ETF</span><span class="legend-amount num">₩48,675,000</span><span class="legend-rate num">15%</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-pension)"></span><span class="legend-name">연금</span><span class="legend-amount num">₩32,450,000</span><span class="legend-rate num">10%</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-realestate)"></span><span class="legend-name">부동산</span><span class="legend-amount num">₩25,960,000</span><span class="legend-rate num">8%</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-other)"></span><span class="legend-name">기타</span><span class="legend-amount num">₩12,980,000</span><span class="legend-rate num">4%</span></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Diagnosis -->
+          <article class="card span-5">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">포트폴리오 진단</h2>
+                <p class="subtext">현재 배분 기준 요약</p>
+              </div>
+              <span class="pill accent">안정형 중심</span>
+            </div>
+            <div class="diagnosis-summary">안전자산 비중이 높고 국내 자산이 다소 집중된 포트폴리오예요.</div>
+            <div class="diagnosis-list">
+              <div class="metric-row"><b>안정성</b><div class="gauge"><span style="width: 78%"></span></div><span>높음</span></div>
+              <div class="metric-row"><b>성장성</b><div class="gauge"><span style="width: 52%; background: #8B78C6"></span></div><span>보통</span></div>
+              <div class="metric-row"><b>유동성</b><div class="gauge"><span style="width: 74%; background: #4FA3A5"></span></div><span>높음</span></div>
+              <div class="metric-row"><b>분산성</b><div class="gauge"><span style="width: 58%; background: #C79A4B"></span></div><span>보통</span></div>
+            </div>
+            <button class="outline-btn" type="button">상세 분석 보기</button>
+          </article>
+
+          <!-- Trend -->
+          <article class="card span-8">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">자산 추이</h2>
+                <p class="subtext">최근 6개월 총자산 변동</p>
+              </div>
+              <div class="segment" aria-label="기간 선택">
+                <button type="button">1개월</button>
+                <button type="button">3개월</button>
+                <button class="active" type="button">6개월</button>
+                <button type="button">1년</button>
+              </div>
+            </div>
+            <div class="trend-body">
+              <canvas id="trendChart" aria-label="최근 6개월 자산 추이 라인 차트"></canvas>
+            </div>
+            <div class="trend-stats">
+              <span>6개월 변동 <b class="positive num">+₩38,500,000</b></span>
+              <span>변동률 <b class="positive num">+13.46%</b></span>
+            </div>
+          </article>
+
+          <!-- Tasks -->
+          <article class="card span-4">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">확인이 필요한 항목</h2>
+                <p class="subtext">최근 상태 기반 알림</p>
+              </div>
+            </div>
+            <div class="task-list">
+              <div class="task-item">
+                <div class="task-icon" aria-hidden="true">!</div>
+                <div><p class="task-title">예금 만기까지 14일 남았어요</p><p class="task-desc">국민은행 정기예금</p></div>
+              </div>
+              <div class="task-item">
+                <div class="task-icon" aria-hidden="true">%</div>
+                <div><p class="task-title">해외주식 비중이 설정 기준보다 높아요</p><p class="task-desc">현재 18% · 설정 기준 15%</p></div>
+              </div>
+              <div class="task-item">
+                <div class="task-icon" aria-hidden="true">↻</div>
+                <div><p class="task-title">자산 정보 업데이트가 필요해요</p><p class="task-desc">연결된 오래된 계좌 2개</p></div>
+              </div>
+            </div>
+            <button class="text-button" type="button">전체 보기</button>
+          </article>
+
+          <!-- Asset list -->
+          <article class="card span-12">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">보유 자산</h2>
+                <p class="subtext">평가금액 기준 주요 자산 6개</p>
+              </div>
+              <div class="table-tools">
+                <input class="search" type="search" value="" placeholder="자산명 검색" aria-label="자산명 검색">
+                <select class="select" aria-label="자산 유형 필터"><option>전체 유형</option></select>
+                <select class="select" aria-label="정렬"><option>평가금액 높은순</option></select>
+                <button class="text-button" type="button">전체 자산 보기</button>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 22%">자산명</th>
+                  <th style="width: 14%">자산 유형</th>
+                  <th style="width: 18%">금융기관/플랫폼</th>
+                  <th class="right" style="width: 15%">평가금액</th>
+                  <th class="right" style="width: 10%">수익률</th>
+                  <th class="right" style="width: 12%">전체 자산 내 비중</th>
+                  <th class="right" style="width: 9%">최근 업데이트</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="asset-name">삼성전자</td><td><span class="asset-type">국내주식</span></td><td>삼성증권</td><td class="right num">₩38,400,000</td><td class="right positive num">+8.42%</td><td class="right num">11.8%</td><td class="right">오늘</td></tr>
+                <tr><td class="asset-name">Vanguard S&amp;P 500 ETF</td><td><span class="asset-type">해외 ETF</span></td><td>미래에셋증권</td><td class="right num">₩31,200,000</td><td class="right positive num">+12.30%</td><td class="right num">9.6%</td><td class="right">오늘</td></tr>
+                <tr><td class="asset-name">국민은행 정기예금</td><td><span class="asset-type">예금</span></td><td>국민은행</td><td class="right num">₩30,000,000</td><td class="right positive num">+3.20%</td><td class="right num">9.2%</td><td class="right">1일 전</td></tr>
+                <tr><td class="asset-name">Apple</td><td><span class="asset-type">해외주식</span></td><td>키움증권</td><td class="right num">₩26,800,000</td><td class="right positive num">+18.15%</td><td class="right num">8.3%</td><td class="right">오늘</td></tr>
+                <tr><td class="asset-name">개인형 퇴직연금</td><td><span class="asset-type">연금</span></td><td>신한은행</td><td class="right num">₩22,500,000</td><td class="right positive num">+5.40%</td><td class="right num">6.9%</td><td class="right">3일 전</td></tr>
+                <tr><td class="asset-name">CMA 계좌</td><td><span class="asset-type">현금성 자산</span></td><td>NH투자증권</td><td class="right num">₩18,700,000</td><td class="right positive num">+2.80%</td><td class="right num">5.8%</td><td class="right">오늘</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <!-- Future cards -->
+          <article class="card future-card span-4">
+            <div class="card-header">
+              <div>
+                <span class="pill ready">준비 중인 기능</span>
+                <h2 class="card-title" style="margin-top: 12px">목표 자산</h2>
+              </div>
+            </div>
+            <p class="subtext">목표금액 <b class="num" style="color: var(--text-primary)">₩500,000,000</b></p>
+            <p class="subtext">현재금액 <b class="num" style="color: var(--text-primary)">₩324,500,000</b></p>
+            <div class="progress" aria-label="목표 달성률 64.9%"><span style="width: 64.9%"></span></div>
+            <p class="subtext num">달성률 64.9%</p>
+          </article>
+
+          <article class="card future-card span-4">
+            <div class="card-header">
+              <div>
+                <span class="pill ready">준비 중인 기능</span>
+                <h2 class="card-title" style="margin-top: 12px">월간 현금흐름</h2>
+              </div>
+            </div>
+            <div class="cash-flow">
+              <div class="cash-box"><span>수입</span><strong class="num">₩6,200,000</strong></div>
+              <div class="cash-box"><span>지출</span><strong class="num">₩3,100,000</strong></div>
+              <div class="cash-box"><span>저축</span><strong class="num">₩3,100,000</strong></div>
+            </div>
+            <p class="subtext">월별 입출금 흐름 요약 영역</p>
+          </article>
+
+          <article class="card future-card span-4">
+            <div class="card-header">
+              <div>
+                <span class="pill ready">준비 중인 기능</span>
+                <h2 class="card-title" style="margin-top: 12px">보유자산 주요 이슈</h2>
+              </div>
+            </div>
+            <div class="issue-list">
+              <div>반도체 업종의 우호적인 환경이 이어지고 있어요.</div>
+              <div>원/달러 환율 변동성이 일부 자산에 영향을 줄 수 있어요.</div>
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Chart configuration for static dashboard mockup.
+    const allocationCanvas = document.getElementById("allocationChart");
+    const trendCanvas = document.getElementById("trendChart");
+    const allocationColors = ["#4FA3A5", "#D97777", "#5B8DEF", "#8B78C6", "#C79A4B", "#5F9B76", "#6B7280"];
+    const allocationData = [25, 20, 18, 15, 10, 8, 4];
+    const trendData = [286000000, 293500000, 301200000, 306800000, 312100000, 324500000];
+
+    function drawFallbackDonut() {
+      const ctx = allocationCanvas.getContext("2d");
+      const size = allocationCanvas.width;
+      const center = size / 2;
+      let start = -Math.PI / 2;
+      ctx.clearRect(0, 0, size, size);
+      allocationData.forEach((value, index) => {
+        const angle = (value / 100) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.arc(center, center, 92, start, start + angle);
+        ctx.lineWidth = 32;
+        ctx.strokeStyle = allocationColors[index];
+        ctx.stroke();
+        start += angle;
+      });
+    }
+
+    function drawFallbackTrend() {
+      const ctx = trendCanvas.getContext("2d");
+      const width = trendCanvas.clientWidth || 720;
+      const height = trendCanvas.clientHeight || 282;
+      const ratio = window.devicePixelRatio || 1;
+      trendCanvas.width = width * ratio;
+      trendCanvas.height = height * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.clearRect(0, 0, width, height);
+
+      const padding = { top: 20, right: 20, bottom: 32, left: 48 };
+      const min = 280000000;
+      const max = 330000000;
+      const chartWidth = width - padding.left - padding.right;
+      const chartHeight = height - padding.top - padding.bottom;
+      const labels = ["2월", "3월", "4월", "5월", "6월", "7월"];
+      const points = trendData.map((value, index) => ({
+        x: padding.left + (chartWidth / (trendData.length - 1)) * index,
+        y: padding.top + chartHeight - ((value - min) / (max - min)) * chartHeight
+      }));
+
+      ctx.strokeStyle = "rgba(156, 163, 175, 0.10)";
+      ctx.lineWidth = 1;
+      [280000000, 300000000, 320000000].forEach(value => {
+        const y = padding.top + chartHeight - ((value - min) / (max - min)) * chartHeight;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
+        ctx.stroke();
+        ctx.fillStyle = "#9CA3AF";
+        ctx.font = "12px Pretendard, sans-serif";
+        ctx.fillText(`${(value / 100000000).toFixed(1)}억`, 4, y + 4);
+      });
+
+      const fill = ctx.createLinearGradient(0, padding.top, 0, height - padding.bottom);
+      fill.addColorStop(0, "rgba(108, 140, 255, 0.24)");
+      fill.addColorStop(1, "rgba(108, 140, 255, 0)");
+      ctx.beginPath();
+      points.forEach((point, index) => index ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y));
+      ctx.lineTo(points[points.length - 1].x, height - padding.bottom);
+      ctx.lineTo(points[0].x, height - padding.bottom);
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.fill();
+
+      ctx.beginPath();
+      points.forEach((point, index) => index ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y));
+      ctx.strokeStyle = "#6C8CFF";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      points.forEach((point, index) => {
+        ctx.fillStyle = "#9CA3AF";
+        ctx.font = "12px Pretendard, sans-serif";
+        ctx.fillText(labels[index], point.x - 10, height - 8);
+      });
+      const last = points[points.length - 1];
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#AEBBFF";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#0E1117";
+      ctx.stroke();
+    }
+
+    if (window.Chart) {
+      Chart.defaults.color = "#9CA3AF";
+      Chart.defaults.font.family = 'Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+      new Chart(allocationCanvas, {
+        type: "doughnut",
+        data: {
+          labels: ["현금·예금", "국내주식", "해외주식", "ETF", "연금", "부동산", "기타"],
+          datasets: [{
+            data: allocationData,
+            backgroundColor: allocationColors,
+            borderWidth: 0,
+            hoverOffset: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "70%",
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          animation: false
+        }
+      });
+
+      const gradient = trendCanvas.getContext("2d").createLinearGradient(0, 0, 0, 270);
+      gradient.addColorStop(0, "rgba(108, 140, 255, 0.24)");
+      gradient.addColorStop(1, "rgba(108, 140, 255, 0)");
+
+      new Chart(trendCanvas, {
+        type: "line",
+        data: {
+          labels: ["2월", "3월", "4월", "5월", "6월", "7월"],
+          datasets: [{
+            data: trendData,
+            borderColor: "#6C8CFF",
+            backgroundColor: gradient,
+            fill: true,
+            tension: 0.38,
+            pointRadius: [0, 0, 0, 0, 0, 5],
+            pointHoverRadius: 5,
+            pointBackgroundColor: "#AEBBFF",
+            pointBorderColor: "#0E1117",
+            pointBorderWidth: 2,
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: {
+            x: {
+              grid: { display: false },
+              border: { display: false },
+              ticks: { color: "#9CA3AF", font: { size: 12 } }
+            },
+            y: {
+              min: 280000000,
+              max: 330000000,
+              border: { display: false },
+              grid: { color: "rgba(156, 163, 175, 0.10)" },
+              ticks: {
+                stepSize: 20000000,
+                callback: value => `${(value / 100000000).toFixed(1)}억`
+              }
+            }
+          }
+        }
+      });
+    } else {
+      drawFallbackDonut();
+      drawFallbackTrend();
+      window.addEventListener("resize", drawFallbackTrend);
+    }
+  </script>
+</body>
+</html>
