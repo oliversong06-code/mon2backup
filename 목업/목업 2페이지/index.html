@@ -815,9 +815,11 @@
     }
 
     .contribution-fill {
+      display: block;
       height: 100%;
       border-radius: inherit;
       min-width: 4px;
+      opacity: 1;
     }
 
     .contribution-fill.positive {
@@ -1143,16 +1145,22 @@
     document.getElementById("nextInsight").addEventListener("click", () => moveInsight(1));
     document.getElementById("insightCount").textContent = `1 / ${insights.length}`;
 
+    const maxContribution = Math.max(...contributions.map(item => Math.abs(Number(item.value))));
+
     document.getElementById("contributionList").innerHTML = contributions.map(item => {
-      const max = Math.max(...contributions.map(row => Math.abs(row.value)));
-      const width = Math.min(100, Math.abs(item.value) / max * 100);
-      const className = item.value >= 0 ? "money-positive" : "money-negative";
-      const fillClass = item.value >= 0 ? "positive" : "negative";
+      const amount = Number(item.value);
+      const width = maxContribution > 0
+        ? Math.min(100, Math.abs(amount) / maxContribution * 100)
+        : 0;
+      const className = amount >= 0 ? "money-positive" : "money-negative";
+      const fillClass = amount >= 0 ? "positive" : "negative";
       return `
         <div class="contribution-row">
           <span class="contribution-name">${item.name}</span>
-          <span class="contribution-track"><span class="contribution-fill ${fillClass}" style="width:${width}%"></span></span>
-          <span class="${className} right num">${formatMoney(item.value)}</span>
+          <div class="contribution-track">
+            <div class="contribution-fill ${fillClass}" style="width:${width}%"></div>
+          </div>
+          <span class="${className} right num">${formatMoney(amount)}</span>
         </div>
       `;
     }).join("");
