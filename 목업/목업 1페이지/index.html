@@ -665,15 +665,37 @@
       color: var(--text-primary);
     }
 
-    .trend-body {
-      height: 282px;
+    .asset-trend-card {
+      display: grid;
+      grid-template-rows: auto minmax(0, 282px) auto;
+      gap: 16px;
     }
 
-    .trend-stats {
+    .trend-header {
+      margin-bottom: 0;
+    }
+
+    .trend-chart-wrap {
+      position: relative;
+      min-height: 0;
+      height: 282px;
+      overflow: hidden;
+    }
+
+    .trend-chart-wrap canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .trend-summary {
       display: flex;
+      flex-wrap: wrap;
       gap: 18px;
       align-items: center;
-      margin-top: -4px;
+      min-height: 24px;
+      padding-top: 4px;
+      border-top: 1px solid rgba(40, 47, 59, 0.72);
       color: var(--text-secondary);
       font-size: 13px;
     }
@@ -1031,8 +1053,8 @@
           </article>
 
           <!-- Trend -->
-          <article class="card span-12">
-            <div class="card-header">
+          <article class="card asset-trend-card span-12">
+            <div class="card-header trend-header">
               <div>
                 <h2 class="card-title">자산 추이</h2>
                 <p class="subtext">최근 6개월 총자산 변동</p>
@@ -1044,10 +1066,10 @@
                 <button type="button">1년</button>
               </div>
             </div>
-            <div class="trend-body">
+            <div class="trend-chart-wrap">
               <canvas id="trendChart" aria-label="최근 6개월 자산 추이 라인 차트"></canvas>
             </div>
-            <div class="trend-stats">
+            <div class="trend-summary">
               <span>6개월 변동 <b class="positive num">+₩38,500,000</b></span>
               <span>변동률 <b class="positive num">+13.46%</b></span>
             </div>
