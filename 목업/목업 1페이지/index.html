@@ -561,7 +561,7 @@
 
     .legend-item {
       display: grid;
-      grid-template-columns: 12px 1fr auto 42px;
+      grid-template-columns: 12px minmax(92px, 1fr) 48px 106px;
       gap: 10px;
       align-items: center;
       color: var(--text-secondary);
@@ -579,11 +579,17 @@
     }
 
     .legend-amount {
-      color: var(--text-primary);
+      color: var(--text-secondary);
       text-align: right;
+      font-size: 12px;
     }
 
-    .legend-rate { text-align: right; }
+    .legend-rate {
+      color: var(--text-primary);
+      text-align: right;
+      font-size: 15px;
+      font-weight: 850;
+    }
 
     /* Diagnosis */
     .diagnosis-summary {
@@ -976,7 +982,6 @@
               <div class="card-actions">
                 <div class="segment" aria-label="자산 구성 분류 기준">
                   <button class="active" type="button" data-allocation-view="type">자산 유형</button>
-                  <button type="button" data-allocation-view="nature">자산 성격</button>
                   <button type="button" data-allocation-view="institution">금융기관</button>
                   <button type="button" data-allocation-view="country">국가</button>
                 </div>
@@ -995,13 +1000,13 @@
                 </div>
               </div>
               <div class="legend-list" id="allocationLegend" aria-label="자산 카테고리 목록">
-                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-cash)"></span><span class="legend-name">현금·예금</span><span class="legend-amount num">₩81,125,000</span><span class="legend-rate num">25%</span></div>
-                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-domestic)"></span><span class="legend-name">국내주식</span><span class="legend-amount num">₩64,900,000</span><span class="legend-rate num">20%</span></div>
-                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-global)"></span><span class="legend-name">해외주식</span><span class="legend-amount num">₩58,410,000</span><span class="legend-rate num">18%</span></div>
-                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-etf)"></span><span class="legend-name">ETF</span><span class="legend-amount num">₩48,675,000</span><span class="legend-rate num">15%</span></div>
-                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-pension)"></span><span class="legend-name">연금</span><span class="legend-amount num">₩32,450,000</span><span class="legend-rate num">10%</span></div>
-                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-realestate)"></span><span class="legend-name">부동산</span><span class="legend-amount num">₩25,960,000</span><span class="legend-rate num">8%</span></div>
-                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-other)"></span><span class="legend-name">기타</span><span class="legend-amount num">₩12,980,000</span><span class="legend-rate num">4%</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-cash)"></span><span class="legend-name">현금·예금</span><span class="legend-rate num">25%</span><span class="legend-amount num">₩81,125,000</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-domestic)"></span><span class="legend-name">국내주식</span><span class="legend-rate num">20%</span><span class="legend-amount num">₩64,900,000</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-global)"></span><span class="legend-name">해외주식</span><span class="legend-rate num">18%</span><span class="legend-amount num">₩58,410,000</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-etf)"></span><span class="legend-name">ETF</span><span class="legend-rate num">15%</span><span class="legend-amount num">₩48,675,000</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-pension)"></span><span class="legend-name">연금</span><span class="legend-rate num">10%</span><span class="legend-amount num">₩32,450,000</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-realestate)"></span><span class="legend-name">부동산</span><span class="legend-rate num">8%</span><span class="legend-amount num">₩25,960,000</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--chart-other)"></span><span class="legend-name">기타</span><span class="legend-rate num">4%</span><span class="legend-amount num">₩12,980,000</span></div>
               </div>
             </div>
           </article>
@@ -1170,7 +1175,6 @@
     };
     if (sharedMockData) {
       allocationViews.type = sharedMockData.assetComposition;
-      allocationViews.nature = sharedMockData.allocationViews.nature;
     }
 
     let currentAllocationView = "type";
@@ -1186,8 +1190,8 @@
         <div class="legend-item">
           <span class="legend-dot" style="background: ${item.color}"></span>
           <span class="legend-name">${item.label}</span>
-          <span class="legend-amount num">${item.amount}</span>
           <span class="legend-rate num">${item.rate}%</span>
+          <span class="legend-amount num">${item.amount}</span>
         </div>
       `).join("");
     }
