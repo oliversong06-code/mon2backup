@@ -17,7 +17,6 @@
       --text-secondary: #9CA3AF;
       --text-disabled: #667085;
       --accent: #6C8CFF;
-      --accent-hover: #89A2FF;
       --positive: #E57373;
       --negative: #5B8DEF;
       --radius-card: 16px;
@@ -30,6 +29,7 @@
       --chart-violet: #9B6DFF;
       --chart-gold: #F2B84B;
       --chart-teal: #22C7C9;
+      --chart-green: #4FC27A;
       --chart-gray: #6B7280;
     }
 
@@ -84,10 +84,8 @@
       gap: 20px var(--gap-card);
     }
 
-    .span-4 { grid-column: span 4; }
     .span-5 { grid-column: span 5; }
     .span-7 { grid-column: span 7; }
-    .span-8 { grid-column: span 8; }
     .span-12 { grid-column: span 12; }
 
     .card {
@@ -311,29 +309,81 @@
       color: #DCE7FF;
     }
 
+    .cta-card {
+      grid-column: span 12;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-color: rgba(77, 141, 255, 0.36);
+      background: linear-gradient(135deg, rgba(77, 141, 255, 0.12), var(--bg-card) 48%);
+    }
+
+    .primary-btn,
+    .small-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(77, 141, 255, 0.44);
+      border-radius: 10px;
+      background: rgba(77, 141, 255, 0.11);
+      color: #CFE0FF;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .primary-btn {
+      min-height: 40px;
+      border: 0;
+      padding: 0 15px;
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .small-action {
+      min-height: 30px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+
     .summary-card {
       grid-column: span 12;
       display: grid;
-      gap: 16px;
+      grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1.08fr);
+      gap: 18px;
+      align-items: stretch;
       border-color: rgba(77, 141, 255, 0.36);
       background: linear-gradient(135deg, rgba(77, 141, 255, 0.13), rgba(23, 28, 38, 0.96) 42%);
     }
 
-    .summary-copy {
-      display: grid;
-      gap: 10px;
+    .summary-primary {
       min-width: 0;
+      display: grid;
+      align-content: center;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(20, 25, 35, 0.68);
+      border: 1px solid #263040;
     }
 
-    .summary-copy h2 {
+    .summary-primary h2 {
       margin: 0;
-      font-size: 22px;
-      line-height: 1.35;
-      font-weight: 850;
-      word-break: keep-all;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 750;
     }
 
-    .summary-copy p {
+    .summary-total {
+      display: block;
+      color: #fff;
+      font-size: clamp(34px, 3vw, 46px);
+      line-height: 1.08;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .summary-primary p {
       margin: 0;
       color: var(--text-secondary);
       line-height: 1.5;
@@ -342,7 +392,7 @@
 
     .summary-metrics {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -361,10 +411,11 @@
       color: var(--text-secondary);
       font-size: 12px;
       font-weight: 700;
+      word-break: keep-all;
     }
 
     .metric-value {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 850;
       line-height: 1.2;
       white-space: nowrap;
@@ -404,40 +455,38 @@
 
     .composition-card {
       min-height: 0;
+      padding-bottom: 20px;
     }
 
     .composition-layout {
       display: grid;
-      grid-template-columns: minmax(260px, 0.38fr) minmax(0, 0.62fr);
-      gap: 24px;
-      align-items: stretch;
+      gap: 16px;
     }
 
-    .donut-wrap {
+    .chart-zone {
       display: grid;
       place-items: center;
+      min-height: 190px;
+      padding: 4px 0 0;
     }
 
     .donut {
-      width: 244px;
-      height: 244px;
+      width: 206px;
+      height: 206px;
       border-radius: 50%;
       display: grid;
       place-items: center;
+      position: relative;
       background: conic-gradient(var(--chart-blue) 0 45.9%, var(--chart-violet) 45.9% 74.3%, var(--chart-gold) 74.3% 100%);
     }
 
     .donut::before {
       content: "";
-      width: 154px;
-      height: 154px;
+      width: 128px;
+      height: 128px;
       border-radius: 50%;
       background: var(--bg-card);
       position: absolute;
-    }
-
-    .donut {
-      position: relative;
     }
 
     .donut-center {
@@ -455,19 +504,19 @@
     .donut-center strong {
       display: block;
       margin-top: 6px;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 850;
     }
 
     .single-focus {
-      width: 244px;
-      min-height: 244px;
-      border-radius: 50%;
+      width: min(100%, 480px);
+      min-height: 150px;
+      border-radius: 16px;
       display: grid;
       place-items: center;
-      padding: 24px;
+      padding: 22px;
       text-align: center;
-      background: radial-gradient(circle at 50% 50%, rgba(77, 141, 255, 0.24), rgba(77, 141, 255, 0.10) 62%, rgba(77, 141, 255, 0.26) 63%);
+      background: linear-gradient(135deg, rgba(77, 141, 255, 0.20), rgba(77, 141, 255, 0.07));
       border: 1px solid rgba(77, 141, 255, 0.38);
     }
 
@@ -486,122 +535,81 @@
 
     .list-panel {
       min-width: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .legend-list {
-      display: grid;
-      gap: 10px;
-      max-height: 330px;
-      overflow-y: auto;
+      max-height: 360px;
+      overflow: auto;
       padding-right: 4px;
       scrollbar-width: thin;
       scrollbar-color: #3B4556 transparent;
     }
 
-    .legend-list::-webkit-scrollbar { width: 6px; }
-    .legend-list::-webkit-scrollbar-thumb { background: #3B4556; border-radius: 999px; }
+    .list-panel::-webkit-scrollbar { width: 6px; height: 6px; }
+    .list-panel::-webkit-scrollbar-thumb { background: #3B4556; border-radius: 999px; }
 
-    .legend-row {
+    .table {
       display: grid;
-      grid-template-columns: minmax(140px, 1fr) 92px 132px 124px;
-      gap: 12px;
+      min-width: 980px;
+    }
+
+    .table-row {
+      display: grid;
       align-items: center;
+      gap: 12px;
+      min-height: 48px;
       padding: 12px 0;
       border-bottom: 1px solid rgba(40, 47, 59, 0.76);
     }
 
-    .legend-row:last-child { border-bottom: 0; }
+    .table-row:last-child { border-bottom: 0; }
 
-    .legend-name {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      min-width: 0;
-      color: var(--text-primary);
+    .table-row.header {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      min-height: 34px;
+      padding-top: 0;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 12px;
       font-weight: 750;
     }
 
-    .legend-dot {
-      width: 9px;
-      height: 9px;
-      flex: none;
-      border-radius: 50%;
-      background: var(--global-stock);
-    }
+    .stock-grid { grid-template-columns: minmax(170px, 1fr) 110px 142px 142px 132px 140px; }
+    .group-grid { grid-template-columns: minmax(160px, 1fr) 142px 132px 112px 176px 150px; }
+    .simple-grid { grid-template-columns: minmax(160px, 1fr) 150px 142px 112px 190px; }
 
-    .legend-rate {
-      color: #DCE7FF;
-      font-weight: 850;
+    .cell {
+      min-width: 0;
       text-align: right;
-    }
-
-    .legend-amount,
-    .legend-meta {
       color: var(--text-secondary);
-      text-align: right;
       white-space: nowrap;
     }
 
-    .stock-row {
-      display: grid;
-      grid-template-columns: minmax(130px, 1fr) 88px 112px 82px 122px 82px 76px;
-      gap: 10px;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(40, 47, 59, 0.76);
-    }
+    .cell:first-child { text-align: left; }
 
-    .stock-row:last-child { border-bottom: 0; }
-
-    .stock-name {
+    .name-cell {
       display: grid;
       gap: 4px;
       min-width: 0;
-    }
-
-    .stock-name strong {
-      font-weight: 800;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .stock-name span {
-      color: var(--text-secondary);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .stock-cell {
-      color: var(--text-secondary);
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .stock-cell.primary {
       color: var(--text-primary);
       font-weight: 800;
     }
 
-    .stock-cell.positive { color: var(--positive); font-weight: 800; }
-    .stock-cell.negative { color: var(--negative); font-weight: 800; }
-
-    .small-action {
-      min-height: 30px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(77, 141, 255, 0.44);
-      border-radius: 9px;
-      padding: 0 10px;
-      background: rgba(77, 141, 255, 0.11);
-      color: #CFE0FF;
+    .name-cell span {
+      color: var(--text-secondary);
       font-size: 12px;
-      font-weight: 750;
+      font-weight: 600;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
+    .cell.primary {
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+
+    .cell.positive { color: var(--positive); font-weight: 800; }
+    .cell.negative { color: var(--negative); font-weight: 800; }
 
     .return-card,
     .feature-note-card { min-height: 0; }
@@ -641,12 +649,14 @@
 
     .fact-card {
       display: grid;
-      gap: 8px;
+      gap: 7px;
       min-width: 0;
+      min-height: 118px;
       padding: 14px;
       border-radius: 14px;
       background: var(--bg-card-secondary);
       border: 1px solid #263040;
+      align-content: start;
     }
 
     .fact-card strong {
@@ -666,63 +676,22 @@
     .fact-card p {
       margin: 0;
       color: var(--text-secondary);
-      line-height: 1.45;
-    }
-
-    .cta-card {
-      grid-column: span 12;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      border-color: rgba(77, 141, 255, 0.36);
-      background: linear-gradient(135deg, rgba(77, 141, 255, 0.12), var(--bg-card) 48%);
-    }
-
-    .primary-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 40px;
-      border: 0;
-      border-radius: 10px;
-      padding: 0 15px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 800;
-      white-space: nowrap;
+      line-height: 1.4;
+      word-break: keep-all;
     }
 
     @media (max-width: 1360px) {
-      .span-4,
       .span-5,
-      .span-7,
-      .span-8 {
+      .span-7 {
         grid-column: span 12;
       }
 
-      .summary-card,
-      .composition-layout {
+      .summary-card {
         grid-template-columns: 1fr;
       }
 
-      .summary-metrics,
       .feature-note {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .composition-layout {
-        justify-items: center;
-      }
-
-      .legend-row {
-        grid-template-columns: minmax(120px, 1fr) 80px 116px 110px;
-      }
-
-      .stock-row {
-        grid-template-columns: minmax(150px, 1fr) repeat(6, minmax(82px, auto));
-        overflow-x: auto;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
   </style>
@@ -792,10 +761,10 @@
             <div class="asset-nav-inner" aria-label="자산군 선택">
               <span class="asset-nav-label">자산군 선택</span>
               <a class="asset-tab" href="../목업 2페이지/index.html">전체 자산</a>
-              <span class="asset-tab">예금</span>
+              <span class="asset-tab">현금·예금</span>
               <span class="asset-tab active">해외주식</span>
               <span class="asset-tab">국내주식</span>
-              <span class="asset-tab">연금·적금</span>
+              <span class="asset-tab">연금</span>
               <span class="asset-tab">기타</span>
             </div>
           </article>
@@ -803,22 +772,20 @@
           <article class="card cta-card">
             <div>
               <h2 class="card-title">해외주식 분석</h2>
-              <p class="subtext">최근 1개월 손익에는 현지 주가 변화의 영향이 환율 변화보다 크게 작용했어요.</p>
+              <p class="subtext">최근 1개월 수익에는 현지 주가 변화와 환율 변화가 함께 반영되어 있어요.</p>
               <p class="subtext">현지 주가 영향 <b class="num" style="color: var(--positive);">+₩3,120,000</b> · 환율 영향 <b class="num" style="color: var(--positive);">+₩1,020,000</b></p>
             </div>
             <button class="primary-btn" type="button">해외주식 상세 분석 보기</button>
           </article>
 
           <article class="card summary-card">
-            <div class="summary-copy">
+            <div class="summary-primary">
               <span class="pill" style="width:max-content; background: var(--global-stock-soft); color:#DCE7FF;">해외주식 총괄</span>
-              <h2>해외주식은 전체 자산의 18.0%이며, 3개 종목으로 구성되어 있어요.</h2>
+              <h2>총 평가금액</h2>
+              <strong class="summary-total num">₩58,410,000</strong>
+              <p>해외주식은 전체 자산의 18.0%이며, 3개 종목으로 구성되어 있어요.</p>
             </div>
             <div class="summary-metrics">
-              <div class="metric-box">
-                <span class="metric-label">총 평가금액</span>
-                <strong class="metric-value num">₩58,410,000</strong>
-              </div>
               <div class="metric-box">
                 <span class="metric-label">전체 자산 내 비중</span>
                 <strong class="metric-value num">18.0%</strong>
@@ -845,7 +812,7 @@
               <div>
                 <h2 class="card-title">구성 기준</h2>
                 <p class="subtext" id="viewDescription">종목별로 해외주식 안에서 차지하는 비중과 평가금액을 확인합니다.</p>
-                <p class="subtext">2026년 7월 16일 미국장 종가 기준 · 하루 1회 업데이트</p>
+                <p class="subtext" id="viewNotice">현재가와 가격 변동은 현지 통화 기준 · 2026년 7월 16일 미국장 종가 기준 · 하루 1회 업데이트</p>
               </div>
               <div class="segment" aria-label="구성 기준 선택">
                 <button class="active" type="button" data-view="stock">종목별</button>
@@ -855,9 +822,9 @@
               </div>
             </div>
             <div class="composition-layout">
-              <div class="donut-wrap" id="chartMount"></div>
+              <div class="chart-zone" id="chartMount"></div>
               <div class="list-panel">
-                <div class="legend-list" id="compositionList"></div>
+                <div class="table" id="compositionList"></div>
               </div>
             </div>
           </article>
@@ -865,8 +832,8 @@
           <article class="card return-card span-7">
             <div class="card-header">
               <div>
-                <h2 class="card-title">최근 1개월 손익 +₩4,260,000</h2>
-                <p class="subtext">전체 손익 = 현지 주가 영향 + 환율 영향 + 복합효과</p>
+                <h2 class="card-title">최근 1개월 수익 +₩4,260,000</h2>
+                <p class="subtext">전체 수익 = 현지 주가 영향 + 환율 영향 + 복합효과</p>
               </div>
               <span class="pill">최근 1개월</span>
             </div>
@@ -887,32 +854,16 @@
                 <strong class="num" style="color: var(--positive); text-align:right;">+₩120,000</strong>
               </div>
             </div>
-            <p class="subtext" style="margin-top:18px;">최근 1개월 해외주식 손익에는 현지 주가 상승의 영향이 환율 변화보다 크게 작용했어요.</p>
+            <p class="subtext" style="margin-top:18px;">최근 1개월 기준의 수익분해이며, 전체 보유기간 평가손익과는 구분해서 봐야 해요.</p>
           </article>
 
           <article class="card feature-note-card span-5">
             <div class="card-header">
               <div>
-                <h2 class="card-title">현재 구성의 핵심</h2>
+                <h2 class="card-title">현재 구성의 특성</h2>
               </div>
             </div>
-            <div class="feature-note">
-              <div class="fact-card">
-                <strong class="num">74.3%</strong>
-                <span>상위 2종목</span>
-                <p>Apple과 Microsoft 두 종목이 해외주식 평가액의 74.3%를 차지해요.</p>
-              </div>
-              <div class="fact-card">
-                <strong class="num">74.3%</strong>
-                <span>기술 산업</span>
-                <p>기술 산업의 비중이 가장 커요.</p>
-              </div>
-              <div class="fact-card">
-                <strong class="num">100%</strong>
-                <span>미국 · USD</span>
-                <p>모든 해외주식은 미국 기업이자 USD 자산으로 구성되어 있어요.</p>
-              </div>
-            </div>
+            <div class="feature-note" id="featureNote"></div>
           </article>
         </section>
       </div>
@@ -921,10 +872,18 @@
 
   <script>
     const totalGlobalStocks = 58410000;
+    const totalDayChange = 536000;
+
     const views = {
       stock: {
         desc: "종목별로 해외주식 안에서 차지하는 비중과 평가금액을 확인합니다.",
-        feature: "Apple과 Microsoft가 해외주식의 74.3%를 차지해요.",
+        notice: "현재가와 가격 변동은 현지 통화 기준 · 2026년 7월 16일 미국장 종가 기준 · 하루 1회 업데이트",
+        chartLabel: "해외주식",
+        insights: [
+          { value: "74.3%", label: "상위 2종목", desc: "Apple·Microsoft 합계" },
+          { value: "74.3%", label: "기술 산업", desc: "해외주식에서 가장 큰 산업 비중" },
+          { value: "100%", label: "미국 · USD", desc: "모든 해외주식은 미국·USD 자산" }
+        ],
         rows: [
           { name: "Apple", price: "$215.50", dayChange: 2.70, dayRate: 1.27, amount: 26800000, globalRate: 45.9, totalRate: 8.3, meta: "기술 · 미국 · USD", color: "#4D8DFF" },
           { name: "Microsoft", price: "$510.20", dayChange: -3.10, dayRate: -0.60, amount: 16610000, globalRate: 28.4, totalRate: 5.1, meta: "기술 · 미국 · USD", color: "#9B6DFF" },
@@ -933,36 +892,59 @@
       },
       sector: {
         desc: "대표 산업 기준으로 해외주식 자산군을 다시 묶어 확인합니다.",
-        feature: "기술 산업의 비중이 74.3%로 가장 커요.",
+        notice: "대표 산업 기준 · 원화 평가액 기준 · 매수·매도 및 입출금 제외 · 전일 종가 대비",
+        chartLabel: "산업별",
+        insights: [
+          { value: "74.3%", label: "기술 산업", desc: "Apple·Microsoft 합계" },
+          { value: "25.7%", label: "자동차 산업", desc: "Tesla 단일 종목 구성" },
+          { value: "+₩536,000", label: "전일 대비", desc: "산업별 변동금액 합계" }
+        ],
         rows: [
-          { name: "기술", amount: 43410000, globalRate: 74.3, meta: "포함 종목 2개", action: "기술 산업 분석 보기", color: "#4D8DFF" },
-          { name: "자동차", amount: 15000000, globalRate: 25.7, meta: "포함 종목 1개", action: "자동차 산업 분석 보기", color: "#F2B84B" }
+          { name: "기술", amount: 43410000, globalRate: 74.3, itemCount: 2, dayAmount: 236000, dayRate: 0.55, action: "기술 산업 분석 보기", color: "#4D8DFF" },
+          { name: "자동차", amount: 15000000, globalRate: 25.7, itemCount: 1, dayAmount: 300000, dayRate: 2.04, action: "자동차 산업 분석 보기", color: "#F2B84B" }
         ]
       },
       country: {
         desc: "상장 국가 기준으로 해외주식 자산군이 어디에 집중되어 있는지 확인합니다.",
-        feature: "보유 해외주식은 모두 미국 기업으로 구성되어 있어요.",
-        single: { title: "미국 100%", amount: "₩58,410,000", meta: "보유 해외주식 3개 종목" },
+        notice: "상장 국가 기준 · 원화 평가액 기준 · 전일 종가 대비",
+        chartLabel: "국가별",
+        single: { title: "미국 100%", amount: 58410000, meta: "3개 종목 · 전일 대비 +₩536,000 (+0.9%)" },
+        insights: [
+          { value: "100%", label: "미국 자산", desc: "해외주식 전액이 미국에 집중" },
+          { value: "3개", label: "포함 종목 수", desc: "Apple·Microsoft·Tesla" },
+          { value: "+₩536,000", label: "전일 대비", desc: "미국 자산의 원화 평가액 변동" }
+        ],
         rows: [
-          { name: "미국", amount: 58410000, globalRate: 100, meta: "포함 종목 3개", color: "#4D8DFF" }
+          { name: "미국", amount: 58410000, globalRate: 100, itemCount: 3, dayAmount: 536000, dayRate: 0.9, color: "#4D8DFF" }
         ]
       },
       currency: {
         desc: "평가 통화 기준으로 해외주식 자산군의 통화 구성을 확인합니다.",
-        feature: "보유 해외주식은 모두 미국 달러로 평가되는 자산이에요.",
-        single: { title: "USD 100%", amount: "₩58,410,000", meta: "보유 해외주식 3개 종목" },
+        notice: "USD 자산의 원화 평가액 변동 기준이며, 환율 자체의 변동률을 뜻하지 않습니다.",
+        chartLabel: "통화별",
+        single: { title: "USD 100%", amount: 58410000, meta: "3개 종목 · 전일 대비 +₩536,000 (+0.9%)" },
+        insights: [
+          { value: "100%", label: "USD 자산", desc: "해외주식 전액이 USD로 평가" },
+          { value: "3개", label: "포함 종목 수", desc: "미국 상장 종목 구성" },
+          { value: "+₩536,000", label: "전일 대비", desc: "USD 자산의 원화 평가액 변동" }
+        ],
         rows: [
-          { name: "USD", amount: 58410000, globalRate: 100, meta: "포함 종목 3개", color: "#4D8DFF" }
+          { name: "USD", amount: 58410000, globalRate: 100, itemCount: 3, dayAmount: 536000, dayRate: 0.9, color: "#4D8DFF" }
         ]
       }
     };
 
-    const formatWon = value => `₩${value.toLocaleString("ko-KR")}`;
-    const formatDollarChange = value => `${value > 0 ? "+" : "-"}$${Math.abs(value).toFixed(2)}`;
-    const formatRateChange = value => `${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
+    const formatWon = value => `${value >= 0 ? "" : "-"}₩${Math.abs(value).toLocaleString("ko-KR")}`;
+    const formatSignedWon = value => `${value >= 0 ? "+" : "-"}₩${Math.abs(value).toLocaleString("ko-KR")}`;
+    const formatDollarChange = value => `${value >= 0 ? "+" : "-"}$${Math.abs(value).toFixed(2)}`;
+    const formatRateChange = value => `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
+    const formatKrwRateChange = value => `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
+
     const chartMount = document.getElementById("chartMount");
     const compositionList = document.getElementById("compositionList");
     const viewDescription = document.getElementById("viewDescription");
+    const viewNotice = document.getElementById("viewNotice");
+    const featureNote = document.getElementById("featureNote");
 
     function conicGradient(rows) {
       let cursor = 0;
@@ -979,7 +961,7 @@
           <div class="single-focus">
             <div>
               <strong>${view.single.title}</strong>
-              <span class="num">${view.single.amount}</span>
+              <span class="num">${formatWon(view.single.amount)}</span>
               <span>${view.single.meta}</span>
             </div>
           </div>
@@ -990,59 +972,81 @@
       chartMount.innerHTML = `
         <div class="donut" style="background: conic-gradient(${conicGradient(view.rows)});">
           <div class="donut-center">
-            <span>해외주식</span>
+            <span>${view.chartLabel}</span>
             <strong class="num">${formatWon(totalGlobalStocks)}</strong>
           </div>
         </div>
       `;
     }
 
-    function renderRows(key, view) {
-      if (key === "stock") {
-        compositionList.innerHTML = `
-          <div class="stock-row" style="padding-top:0; color: var(--text-secondary); font-size:12px; font-weight:750;">
-            <span>종목</span>
-            <span class="stock-cell">현재가</span>
-            <span class="stock-cell">전일 대비</span>
-            <span class="stock-cell">등락률</span>
-            <span class="stock-cell">평가금액</span>
-            <span class="stock-cell">해외주식</span>
-            <span class="stock-cell">전체</span>
-          </div>
-          ${view.rows.map(item => {
-            const directionClass = item.dayChange >= 0 ? "positive" : "negative";
-            return `
-              <div class="stock-row">
-                <span class="stock-name">
-                  <strong>${item.name}</strong>
-                  <span>${item.meta}</span>
-                </span>
-                <span class="stock-cell primary num">${item.price}</span>
-                <span class="stock-cell ${directionClass} num">${formatDollarChange(item.dayChange)}</span>
-                <span class="stock-cell ${directionClass} num">${formatRateChange(item.dayRate)}</span>
-                <span class="stock-cell num">${formatWon(item.amount)}</span>
-                <span class="stock-cell primary num">${item.globalRate.toFixed(1)}%</span>
-                <span class="stock-cell num">${item.totalRate.toFixed(1)}%</span>
-              </div>
-            `;
-          }).join("")}
-        `;
-        return;
-      }
+    function renderStockRows(view) {
+      compositionList.innerHTML = `
+        <div class="table-row stock-grid header">
+          <span>종목</span>
+          <span class="cell">현재가</span>
+          <span class="cell">전일 대비</span>
+          <span class="cell">평가금액</span>
+          <span class="cell">해외주식 내 비중</span>
+          <span class="cell">전체 자산 내 비중</span>
+        </div>
+        ${view.rows.map(item => {
+          const directionClass = item.dayChange >= 0 ? "positive" : "negative";
+          return `
+            <div class="table-row stock-grid">
+              <span class="name-cell">
+                ${item.name}
+                <span>${item.meta}</span>
+              </span>
+              <span class="cell primary num">${item.price}</span>
+              <span class="cell ${directionClass} num">${formatDollarChange(item.dayChange)} (${formatRateChange(item.dayRate)})</span>
+              <span class="cell num">${formatWon(item.amount)}</span>
+              <span class="cell primary num">${item.globalRate.toFixed(1)}%</span>
+              <span class="cell num">${item.totalRate.toFixed(1)}%</span>
+            </div>
+          `;
+        }).join("")}
+      `;
+    }
 
-      compositionList.innerHTML = view.rows.map(item => {
-        const totalRate = item.totalRate == null ? "" : `<span class="legend-meta num">전체 ${item.totalRate.toFixed(1)}%</span>`;
-        const action = item.action ? `<button class="small-action" type="button">${item.action}</button>` : `<span class="legend-meta">${item.meta}</span>`;
-        return `
-          <div class="legend-row">
-            <span class="legend-name"><span class="legend-dot" style="background:${item.color};"></span>${item.name}</span>
-            <span class="legend-rate num">${item.globalRate.toFixed(1)}%</span>
-            <span class="legend-amount num">${formatWon(item.amount)}</span>
-            ${key === "stock" ? totalRate : action}
-          </div>
-          ${key === "stock" ? `<p class="subtext" style="margin:-6px 0 4px 18px;">${item.meta}</p>` : ""}
-        `;
-      }).join("");
+    function renderGroupRows(key, view) {
+      const isSector = key === "sector";
+      const gridClass = isSector ? "group-grid" : "simple-grid";
+      const header = isSector
+        ? ["산업", "평가금액", "해외주식 내 비중", "포함 종목 수", "전일 대비 평가금액 변동", "산업 분석"]
+        : [key === "country" ? "국가" : "통화", "평가금액", "해외주식 내 비중", "포함 종목 수", "전일 대비 평가금액 변동"];
+
+      compositionList.innerHTML = `
+        <div class="table-row ${gridClass} header">
+          ${header.map((label, index) => `<span class="${index === 0 ? "" : "cell"}">${label}</span>`).join("")}
+        </div>
+        ${view.rows.map(item => {
+          const directionClass = item.dayAmount >= 0 ? "positive" : "negative";
+          const action = isSector ? `<span class="cell"><button class="small-action" type="button">${item.action}</button></span>` : "";
+          return `
+            <div class="table-row ${gridClass}">
+              <span class="name-cell">
+                ${item.name}
+                <span>${isSector ? "대표 산업 기준" : key === "country" ? "상장 국가 기준" : "평가 통화 기준"}</span>
+              </span>
+              <span class="cell num">${formatWon(item.amount)}</span>
+              <span class="cell primary num">${item.globalRate.toFixed(1)}%</span>
+              <span class="cell num">${item.itemCount}개</span>
+              <span class="cell ${directionClass} num">${formatSignedWon(item.dayAmount)} (${formatKrwRateChange(item.dayRate)})</span>
+              ${action}
+            </div>
+          `;
+        }).join("")}
+      `;
+    }
+
+    function renderInsights(view) {
+      featureNote.innerHTML = view.insights.map(item => `
+        <div class="fact-card">
+          <strong class="num">${item.value}</strong>
+          <span>${item.label}</span>
+          <p>${item.desc}</p>
+        </div>
+      `).join("");
     }
 
     function setView(key) {
@@ -1051,8 +1055,15 @@
         button.classList.toggle("active", button.dataset.view === key);
       });
       viewDescription.textContent = view.desc;
+      viewNotice.textContent = view.notice;
       renderChart(view);
-      renderRows(key, view);
+      renderInsights(view);
+
+      if (key === "stock") {
+        renderStockRows(view);
+      } else {
+        renderGroupRows(key, view);
+      }
     }
 
     document.querySelectorAll("[data-view]").forEach(button => {
