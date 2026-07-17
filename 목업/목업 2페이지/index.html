@@ -23,6 +23,7 @@
       --contribution-track: #20283a;
       --contribution-positive-fill: #ff6b6b;
       --contribution-negative-fill: #4f8cff;
+      --stack-separator: rgba(14, 17, 23, 0.48);
       --radius-card: 16px;
       --sidebar-width: 240px;
       --gap-card: 24px;
@@ -555,6 +556,7 @@
 
     .focus-card {
       display: block;
+      padding-bottom: 20px;
     }
 
     .carousel-head {
@@ -562,7 +564,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
     }
 
     .carousel-controls {
@@ -599,7 +601,7 @@
 
     .carousel-viewport {
       overflow: hidden;
-      min-height: 230px;
+      min-height: 198px;
       width: 100%;
     }
 
@@ -618,9 +620,9 @@
       flex: 0 0 100%;
       display: grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(340px, 1fr);
-      gap: 22px;
+      gap: 20px;
       align-items: start;
-      min-height: 230px;
+      min-height: 198px;
     }
 
     .insight-panel {
@@ -650,7 +652,7 @@
 
     .insight-title-wrap {
       width: 100%;
-      padding: 20px 0;
+      padding: 14px 0;
     }
 
     .focus-title {
@@ -679,12 +681,13 @@
       font-size: 12px;
       font-weight: 800;
       white-space: nowrap;
+      box-shadow: inset -1px 0 0 var(--stack-separator);
     }
 
     .stack-labels {
       display: grid;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 7px;
+      margin-top: 10px;
     }
 
     .stack-label {
@@ -695,6 +698,29 @@
       color: var(--text-secondary);
     }
 
+    .stack-label-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .stack-dot {
+      width: 8px;
+      height: 8px;
+      flex: none;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .stack-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
     .factor-list,
     .contribution-list {
       display: grid;
@@ -702,7 +728,7 @@
     }
 
     .factor-row {
-      padding: 12px 0;
+      padding: 10px 0;
       border-bottom: 1px solid rgba(40, 47, 59, 0.78);
     }
 
@@ -764,7 +790,7 @@
       border-radius: 14px;
       background: var(--bg-card-secondary);
       border: 1px solid #263040;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .contribution-total span {
@@ -1025,11 +1051,11 @@
             <div class="card-header">
               <div>
                 <h2 class="card-title">최근 1개월 수익 기여도</h2>
-                <p class="subtext">수익률이 아닌 총자산 변화에 기여한 절대금액</p>
+                <p class="subtext">전체 움직임에서 각 자산의 절대 기여금액이 차지하는 비중</p>
               </div>
             </div>
             <div class="contribution-total">
-              <span>총자산</span>
+              <span>전체 움직임</span>
               <strong class="money-positive num" id="monthlyChange">+12,400,000원</strong>
             </div>
             <div class="contribution-list" id="contributionList"></div>
@@ -1050,7 +1076,6 @@
 
     const formatMoney = value => `${value > 0 ? "+" : "-"}${Math.abs(value).toLocaleString("ko-KR")}원`;
     const toKoreanWon = value => `₩${value.toLocaleString("ko-KR")}`;
-    const totalChange = contributions.reduce((sum, item) => sum + item.value, 0);
 
     function buildConicGradient(rows) {
       let cursor = 0;
@@ -1064,7 +1089,6 @@
 
     document.querySelector(".donut").style.background = buildConicGradient(allocationData);
     document.getElementById("totalAssetsShort").textContent = "3.25억";
-    document.getElementById("monthlyChange").textContent = formatMoney(totalChange);
     document.getElementById("holdingCount").textContent = `전체 ${assets.length}개`;
 
     document.getElementById("allocationLegend").innerHTML = allocationData.map(item => `
@@ -1099,9 +1123,16 @@
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let activeInsight = 0;
     let isAnimating = false;
+    const stackColorPalettes = [
+      ["#FF6B6B", "#9B6DFF", "#F2B84B", "#6B7280"],
+      ["#4D8DFF", "#22C7C9", "#F2B84B", "#9B6DFF"],
+      ["#22C7C9", "#4D8DFF", "#9B6DFF", "#F2B84B"]
+    ];
+    const getStackColor = (insightIndex, segmentIndex, fallback) =>
+      stackColorPalettes[insightIndex]?.[segmentIndex] ?? fallback;
 
     insightTrack.classList.toggle("no-motion", prefersReducedMotion);
-    insightTrack.innerHTML = insights.map(insight => {
+    insightTrack.innerHTML = insights.map((insight, insightIndex) => {
       const total = insight.segments.reduce((sum, item) => sum + item.rate, 0);
       return `
         <div class="carousel-slide">
@@ -1116,12 +1147,18 @@
           </div>
           <div>
             <div class="stackbar" aria-label="${insight.label} 관련 자산 구성">
-              ${insight.segments.map(item => `<div class="stack-segment" style="width:${(item.rate / total) * 100}%; background:${item.color};">${item.name}</div>`).join("")}
+              ${insight.segments.map((item, segmentIndex) => {
+                const color = getStackColor(insightIndex, segmentIndex, item.color);
+                return `<div class="stack-segment" style="width:${(item.rate / total) * 100}%; background:${color};">${item.name}</div>`;
+              }).join("")}
             </div>
             <div class="stack-labels">
-              ${insight.segments.map(item => `<div class="stack-label"><span>${item.name}</span><strong class="num">${item.rate.toFixed(1)}%</strong></div>`).join("")}
+              ${insight.segments.map((item, segmentIndex) => {
+                const color = getStackColor(insightIndex, segmentIndex, item.color);
+                return `<div class="stack-label"><span class="stack-label-name"><span class="stack-dot" style="background:${color};"></span><span>${item.name}</span></span><strong class="num">${item.rate.toFixed(1)}%</strong></div>`;
+              }).join("")}
             </div>
-            <div style="display:flex; align-items:center; justify-content:flex-end; gap:16px; margin-top:16px;">
+            <div class="stack-actions">
               <button class="text-button" type="button">관련 자산 보기</button>
             </div>
           </div>
@@ -1145,12 +1182,17 @@
     document.getElementById("nextInsight").addEventListener("click", () => moveInsight(1));
     document.getElementById("insightCount").textContent = `1 / ${insights.length}`;
 
-    const maxContribution = Math.max(...contributions.map(item => Math.abs(Number(item.value))));
+    const totalAbsoluteMovement = contributions.reduce(
+      (sum, item) => sum + Math.abs(Number(item.value)),
+      0
+    );
+    document.getElementById("monthlyChange").textContent =
+      `${totalAbsoluteMovement.toLocaleString("ko-KR")}원`;
 
     document.getElementById("contributionList").innerHTML = contributions.map(item => {
       const amount = Number(item.value);
-      const width = maxContribution > 0
-        ? Math.min(100, Math.abs(amount) / maxContribution * 100)
+      const width = totalAbsoluteMovement > 0
+        ? Math.min(100, Math.abs(amount) / totalAbsoluteMovement * 100)
         : 0;
       const className = amount >= 0 ? "money-positive" : "money-negative";
       const fillClass = amount >= 0 ? "positive" : "negative";
