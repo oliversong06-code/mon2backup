@@ -727,6 +727,58 @@
       gap: 14px;
     }
 
+    .analysis-card {
+      height: 430px;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .analysis-card .card-header {
+      flex: none;
+    }
+
+    .factor-list {
+      flex: none;
+    }
+
+    .analysis-card > .subtext {
+      flex: none;
+      margin-top: auto;
+    }
+
+    .contribution-card {
+      min-width: 0;
+    }
+
+    .contribution-card .contribution-total,
+    .contribution-card .contribution-summary {
+      flex: none;
+    }
+
+    .contribution-scroll {
+      min-height: 0;
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #3B4556 transparent;
+    }
+
+    .contribution-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .contribution-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .contribution-scroll::-webkit-scrollbar-thumb {
+      background: #3B4556;
+      border-radius: 999px;
+    }
+
     .factor-row {
       padding: 10px 0;
       border-bottom: 1px solid rgba(40, 47, 59, 0.78);
@@ -931,9 +983,16 @@
         grid-column: span 12;
       }
 
-      .card.equal-height {
+      .card.equal-height,
+      .analysis-card {
         height: auto;
         min-height: 0;
+      }
+
+      .contribution-scroll {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
       }
 
       .asset-scroll {
@@ -1096,7 +1155,7 @@
 
           <p class="section-hint">다음으로 내 자산에 영향을 주는 요인을 살펴보세요.</p>
 
-          <article class="card span-6">
+          <article class="card analysis-card span-6">
             <div class="card-header">
               <div>
                 <h2 class="card-title">주요 영향 요인</h2>
@@ -1108,7 +1167,7 @@
             <p class="subtext" style="margin-top: 20px;">하나의 자산이 여러 영향 요인에 동시에 포함될 수 있어 합계가 100%를 넘을 수 있습니다.</p>
           </article>
 
-          <article class="card span-6">
+          <article class="card analysis-card contribution-card span-6">
             <div class="card-header">
               <div>
                 <h2 class="card-title">최근 1개월 수익 기여도</h2>
@@ -1120,7 +1179,9 @@
               <strong class="money-positive num" id="monthlyChange">+12,400,000원</strong>
             </div>
             <div class="contribution-summary" id="contributionSummary"></div>
-            <div class="contribution-list" id="contributionList"></div>
+            <div class="contribution-scroll">
+              <div class="contribution-list" id="contributionList"></div>
+            </div>
           </article>
         </section>
       </div>
