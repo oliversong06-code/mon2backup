@@ -20,6 +20,8 @@
       --accent-hover: #89A2FF;
       --positive: #E57373;
       --negative: #5B8DEF;
+      --contribution-positive: #FF7A70;
+      --contribution-negative: #63A0FF;
       --radius-card: 16px;
       --sidebar-width: 240px;
       --gap-card: 24px;
@@ -699,10 +701,20 @@
     }
 
     .factor-row {
-      display: grid;
-      grid-template-columns: 132px 1fr 48px;
-      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(40, 47, 59, 0.78);
+    }
+
+    .factor-row:last-child {
+      border-bottom: 0;
+    }
+
+    .factor-main {
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 5px;
     }
 
     .factor-name {
@@ -737,8 +749,10 @@
     .factor-value {
       text-align: right;
       color: #DCE1EA;
-      font-weight: 750;
+      font-size: 18px;
+      font-weight: 850;
       font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
     .contribution-total {
@@ -787,11 +801,17 @@
     .money-negative { color: var(--negative); }
 
     .contribution-list {
-      gap: 12px;
+      gap: 11px;
     }
 
     .contribution-list .bar-track {
-      height: 11px;
+      height: 16px;
+      background: #202734;
+      border: 1px solid rgba(55, 65, 81, 0.72);
+    }
+
+    .contribution-list .bar-fill {
+      min-width: 4px;
     }
 
     .section-hint {
@@ -977,7 +997,7 @@
             <div class="card-header">
               <div>
                 <h2 class="card-title">주요 영향 요인</h2>
-                <p class="subtext">자산별로 함께 연결될 수 있는 시장·산업·금리 요인</p>
+                <p class="subtext">각 비율은 해당 요인과 연결된 자산이 전체 자산에서 차지하는 비중이에요.</p>
               </div>
             </div>
             <div class="factor-list" id="factorList"></div>
@@ -1051,9 +1071,11 @@
 
     document.getElementById("factorList").innerHTML = factors.map(item => `
       <div class="factor-row">
-        <span class="factor-meta"><span class="factor-name">${item.name}</span><span class="factor-count">${item.count}</span></span>
-        <span class="bar-track"><span class="bar-fill" style="width:${item.value}%"></span></span>
-        <span class="factor-value num">${item.value}%</span>
+        <div class="factor-main">
+          <span class="factor-name">${item.name}</span>
+          <span class="factor-value num">${item.value}%</span>
+        </div>
+        <span class="factor-count">${item.count}</span>
       </div>
     `).join("");
 
@@ -1109,12 +1131,13 @@
 
     document.getElementById("contributionList").innerHTML = contributions.map(item => {
       const max = Math.max(...contributions.map(row => Math.abs(row.value)));
-      const width = Math.max(10, Math.min(100, Math.abs(item.value) / max * 100));
+      const width = Math.min(100, Math.abs(item.value) / max * 100);
       const className = item.value >= 0 ? "money-positive" : "money-negative";
+      const barColor = item.value >= 0 ? "var(--contribution-positive)" : "var(--contribution-negative)";
       return `
         <div class="contribution-row">
           <span class="contribution-name">${item.name}</span>
-          <span class="bar-track"><span class="bar-fill" style="width:${width}%; background:${item.value >= 0 ? "var(--positive)" : "var(--negative)"}"></span></span>
+          <span class="bar-track"><span class="bar-fill" style="width:${width}%; background:${barColor}"></span></span>
           <span class="${className} right num">${formatMoney(item.value)}</span>
         </div>
       `;
