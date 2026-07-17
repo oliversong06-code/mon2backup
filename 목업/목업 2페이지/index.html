@@ -783,10 +783,9 @@
     }
 
     .contribution-total {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      padding: 10px 14px;
+      display: grid;
+      gap: 6px;
+      padding: 12px 14px;
       border-radius: 14px;
       background: var(--bg-card-secondary);
       border: 1px solid #263040;
@@ -799,15 +798,50 @@
     }
 
     .contribution-total strong {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 850;
+      line-height: 1.15;
+    }
+
+    .contribution-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .contribution-summary-card {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: rgba(20, 25, 35, 0.72);
+      border: 1px solid #263040;
+    }
+
+    .contribution-summary-card span {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .contribution-summary-card strong {
+      font-size: 17px;
+      font-weight: 850;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .contribution-summary-card small {
+      color: var(--text-secondary);
+      font-size: 12px;
     }
 
     .contribution-row {
       display: grid;
-      grid-template-columns: 128px 1fr 122px;
-      gap: 10px;
-      align-items: center;
+      gap: 7px;
     }
 
     .contribution-name {
@@ -828,7 +862,34 @@
     .money-negative { color: var(--negative); }
 
     .contribution-list {
-      gap: 11px;
+      gap: 13px;
+    }
+
+    .contribution-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .contribution-group + .contribution-group {
+      padding-top: 4px;
+      border-top: 1px solid rgba(40, 47, 59, 0.72);
+    }
+
+    .contribution-group-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .contribution-row-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
     .contribution-track {
@@ -1055,9 +1116,10 @@
               </div>
             </div>
             <div class="contribution-total">
-              <span>전체 움직임</span>
+              <span>최근 1개월 순손익</span>
               <strong class="money-positive num" id="monthlyChange">+12,400,000원</strong>
             </div>
+            <div class="contribution-summary" id="contributionSummary"></div>
             <div class="contribution-list" id="contributionList"></div>
           </article>
         </section>
@@ -1186,26 +1248,71 @@
       (sum, item) => sum + Math.abs(Number(item.value)),
       0
     );
-    document.getElementById("monthlyChange").textContent =
-      `${totalAbsoluteMovement.toLocaleString("ko-KR")}원`;
+    const netMonthlyProfit = contributions.reduce((sum, item) => sum + Number(item.value), 0);
+    const profitableAssets = contributions
+      .filter(item => Number(item.value) > 0)
+      .sort((a, b) => Number(b.value) - Number(a.value));
+    const lossAssets = contributions
+      .filter(item => Number(item.value) < 0)
+      .sort((a, b) => Number(a.value) - Number(b.value));
+    const profitableTotal = profitableAssets.reduce((sum, item) => sum + Number(item.value), 0);
+    const lossTotal = lossAssets.reduce((sum, item) => sum + Number(item.value), 0);
 
-    document.getElementById("contributionList").innerHTML = contributions.map(item => {
-      const amount = Number(item.value);
-      const width = totalAbsoluteMovement > 0
-        ? Math.min(100, Math.abs(amount) / totalAbsoluteMovement * 100)
-        : 0;
-      const className = amount >= 0 ? "money-positive" : "money-negative";
-      const fillClass = amount >= 0 ? "positive" : "negative";
-      return `
-        <div class="contribution-row">
-          <span class="contribution-name">${item.name}</span>
-          <div class="contribution-track">
-            <div class="contribution-fill ${fillClass}" style="width:${width}%"></div>
+    document.getElementById("monthlyChange").className =
+      `${netMonthlyProfit >= 0 ? "money-positive" : "money-negative"} num`;
+    document.getElementById("monthlyChange").textContent = formatMoney(netMonthlyProfit);
+
+    document.getElementById("contributionSummary").innerHTML = `
+      <div class="contribution-summary-card">
+        <span>수익 자산 합계</span>
+        <strong class="money-positive num">${formatMoney(profitableTotal)}</strong>
+        <small>${profitableAssets.length}개 자산</small>
+      </div>
+      <div class="contribution-summary-card">
+        <span>손실 자산 합계</span>
+        <strong class="money-negative num">${formatMoney(lossTotal)}</strong>
+        <small>${lossAssets.length}개 자산</small>
+      </div>
+    `;
+
+    function renderContributionRows(items) {
+      return items.map(item => {
+        const amount = Number(item.value);
+        const width = totalAbsoluteMovement > 0
+          ? Math.min(100, Math.abs(amount) / totalAbsoluteMovement * 100)
+          : 0;
+        const className = amount >= 0 ? "money-positive" : "money-negative";
+        const fillClass = amount >= 0 ? "positive" : "negative";
+        return `
+          <div class="contribution-row">
+            <div class="contribution-row-head">
+              <span class="contribution-name">${item.name}</span>
+              <span class="${className} right num">${formatMoney(amount)}</span>
+            </div>
+            <div class="contribution-track">
+              <div class="contribution-fill ${fillClass}" style="width:${width}%"></div>
+            </div>
           </div>
-          <span class="${className} right num">${formatMoney(amount)}</span>
+        `;
+      }).join("");
+    }
+
+    function renderContributionGroup(title, items) {
+      if (!items.length) return "";
+      return `
+        <div class="contribution-group">
+          <div class="contribution-group-title">
+            <span>${title}</span>
+            <span>${items.length}개</span>
+          </div>
+          ${renderContributionRows(items)}
         </div>
       `;
-    }).join("");
+    }
+
+    document.getElementById("contributionList").innerHTML =
+      renderContributionGroup("수익 자산", profitableAssets) +
+      renderContributionGroup("손실 자산", lossAssets);
   </script>
 </body>
 </html>
