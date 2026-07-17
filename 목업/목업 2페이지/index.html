@@ -20,8 +20,9 @@
       --accent-hover: #89A2FF;
       --positive: #E57373;
       --negative: #5B8DEF;
-      --contribution-positive: #FF7A70;
-      --contribution-negative: #63A0FF;
+      --contribution-track: #20283a;
+      --contribution-positive-fill: #ff6b6b;
+      --contribution-negative-fill: #4f8cff;
       --radius-card: 16px;
       --sidebar-width: 240px;
       --gap-card: 24px;
@@ -804,14 +805,27 @@
       gap: 11px;
     }
 
-    .contribution-list .bar-track {
-      height: 16px;
-      background: #202734;
-      border: 1px solid rgba(55, 65, 81, 0.72);
+    .contribution-track {
+      position: relative;
+      width: 100%;
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--contribution-track);
     }
 
-    .contribution-list .bar-fill {
+    .contribution-fill {
+      height: 100%;
+      border-radius: inherit;
       min-width: 4px;
+    }
+
+    .contribution-fill.positive {
+      background: var(--contribution-positive-fill);
+    }
+
+    .contribution-fill.negative {
+      background: var(--contribution-negative-fill);
     }
 
     .section-hint {
@@ -1133,11 +1147,11 @@
       const max = Math.max(...contributions.map(row => Math.abs(row.value)));
       const width = Math.min(100, Math.abs(item.value) / max * 100);
       const className = item.value >= 0 ? "money-positive" : "money-negative";
-      const barColor = item.value >= 0 ? "var(--contribution-positive)" : "var(--contribution-negative)";
+      const fillClass = item.value >= 0 ? "positive" : "negative";
       return `
         <div class="contribution-row">
           <span class="contribution-name">${item.name}</span>
-          <span class="bar-track"><span class="bar-fill" style="width:${width}%; background:${barColor}"></span></span>
+          <span class="contribution-track"><span class="contribution-fill ${fillClass}" style="width:${width}%"></span></span>
           <span class="${className} right num">${formatMoney(item.value)}</span>
         </div>
       `;
