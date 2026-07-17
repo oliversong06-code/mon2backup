@@ -314,17 +314,13 @@
     .summary-card {
       grid-column: span 12;
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) repeat(3, minmax(160px, 0.3fr));
-      gap: 18px;
-      align-items: stretch;
+      gap: 16px;
       border-color: rgba(77, 141, 255, 0.36);
       background: linear-gradient(135deg, rgba(77, 141, 255, 0.13), rgba(23, 28, 38, 0.96) 42%);
     }
 
     .summary-copy {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      display: grid;
       gap: 10px;
       min-width: 0;
     }
@@ -342,6 +338,12 @@
       color: var(--text-secondary);
       line-height: 1.5;
       word-break: keep-all;
+    }
+
+    .summary-metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
     }
 
     .metric-box {
@@ -366,6 +368,12 @@
       font-weight: 850;
       line-height: 1.2;
       white-space: nowrap;
+    }
+
+    .metric-caption {
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.35;
     }
 
     .segment {
@@ -395,14 +403,14 @@
     }
 
     .composition-card {
-      min-height: 440px;
+      min-height: 0;
     }
 
     .composition-layout {
       display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
+      grid-template-columns: minmax(260px, 0.38fr) minmax(0, 0.62fr);
       gap: 24px;
-      align-items: center;
+      align-items: stretch;
     }
 
     .donut-wrap {
@@ -478,12 +486,14 @@
 
     .list-panel {
       min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .legend-list {
       display: grid;
       gap: 10px;
-      max-height: 302px;
+      max-height: 330px;
       overflow-y: auto;
       padding-right: 4px;
       scrollbar-width: thin;
@@ -534,6 +544,50 @@
       white-space: nowrap;
     }
 
+    .stock-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 1fr) 88px 112px 82px 122px 82px 76px;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(40, 47, 59, 0.76);
+    }
+
+    .stock-row:last-child { border-bottom: 0; }
+
+    .stock-name {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .stock-name strong {
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .stock-name span {
+      color: var(--text-secondary);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .stock-cell {
+      color: var(--text-secondary);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .stock-cell.primary {
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+
+    .stock-cell.positive { color: var(--positive); font-weight: 800; }
+    .stock-cell.negative { color: var(--negative); font-weight: 800; }
+
     .small-action {
       min-height: 30px;
       display: inline-flex;
@@ -550,9 +604,7 @@
     }
 
     .return-card,
-    .feature-note-card {
-      min-height: 300px;
-    }
+    .feature-note-card { min-height: 0; }
 
     .breakdown-list {
       display: grid;
@@ -582,15 +634,39 @@
 
     .feature-note {
       display: grid;
-      gap: 14px;
-      margin-top: 18px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
     }
 
-    .feature-note strong {
+    .fact-card {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+    }
+
+    .fact-card strong {
       display: block;
-      font-size: 20px;
-      line-height: 1.4;
-      word-break: keep-all;
+      color: #DCE7FF;
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 850;
+    }
+
+    .fact-card span {
+      color: var(--text-primary);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .fact-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.45;
     }
 
     .cta-card {
@@ -631,12 +707,22 @@
         grid-template-columns: 1fr;
       }
 
+      .summary-metrics,
+      .feature-note {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .composition-layout {
         justify-items: center;
       }
 
       .legend-row {
         grid-template-columns: minmax(120px, 1fr) 80px 116px 110px;
+      }
+
+      .stock-row {
+        grid-template-columns: minmax(150px, 1fr) repeat(6, minmax(82px, auto));
+        overflow-x: auto;
       }
     }
   </style>
@@ -714,23 +800,43 @@
             </div>
           </article>
 
+          <article class="card cta-card">
+            <div>
+              <h2 class="card-title">해외주식 분석</h2>
+              <p class="subtext">최근 1개월 손익에는 현지 주가 변화의 영향이 환율 변화보다 크게 작용했어요.</p>
+              <p class="subtext">현지 주가 영향 <b class="num" style="color: var(--positive);">+₩3,120,000</b> · 환율 영향 <b class="num" style="color: var(--positive);">+₩1,020,000</b></p>
+            </div>
+            <button class="primary-btn" type="button">해외주식 상세 분석 보기</button>
+          </article>
+
           <article class="card summary-card">
             <div class="summary-copy">
               <span class="pill" style="width:max-content; background: var(--global-stock-soft); color:#DCE7FF;">해외주식 총괄</span>
               <h2>해외주식은 전체 자산의 18.0%이며, 3개 종목으로 구성되어 있어요.</h2>
-              <p>이 화면은 해외주식 자산군의 현재 구성을 확인하기 위한 목업이며, 투자 추천이나 위험 평가는 포함하지 않습니다.</p>
             </div>
-            <div class="metric-box">
-              <span class="metric-label">총 평가금액</span>
-              <strong class="metric-value num">₩58,410,000</strong>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">전체 자산 내 비중</span>
-              <strong class="metric-value num">18.0%</strong>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">보유 종목 수</span>
-              <strong class="metric-value num">3개</strong>
+            <div class="summary-metrics">
+              <div class="metric-box">
+                <span class="metric-label">총 평가금액</span>
+                <strong class="metric-value num">₩58,410,000</strong>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">전체 자산 내 비중</span>
+                <strong class="metric-value num">18.0%</strong>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">보유 종목 수</span>
+                <strong class="metric-value num">3개</strong>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">전체 보유기간 평가손익</span>
+                <strong class="metric-value num" style="color: var(--positive);">+₩8,740,000</strong>
+                <span class="metric-caption num">+17.6%</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">전일 종가 대비 변동</span>
+                <strong class="metric-value num" style="color: var(--positive);">+₩536,000</strong>
+                <span class="metric-caption num">+0.9%</span>
+              </div>
             </div>
           </article>
 
@@ -739,6 +845,7 @@
               <div>
                 <h2 class="card-title">구성 기준</h2>
                 <p class="subtext" id="viewDescription">종목별로 해외주식 안에서 차지하는 비중과 평가금액을 확인합니다.</p>
+                <p class="subtext">2026년 7월 16일 미국장 종가 기준 · 하루 1회 업데이트</p>
               </div>
               <div class="segment" aria-label="구성 기준 선택">
                 <button class="active" type="button" data-view="stock">종목별</button>
@@ -758,14 +865,10 @@
           <article class="card return-card span-7">
             <div class="card-header">
               <div>
-                <h2 class="card-title">간단 수익분해</h2>
-                <p class="subtext">최근 1개월 기준으로 해외주식 자산군 전체의 손익 흐름만 간단히 보여줍니다.</p>
+                <h2 class="card-title">최근 1개월 손익 +₩4,260,000</h2>
+                <p class="subtext">전체 손익 = 현지 주가 영향 + 환율 영향 + 복합효과</p>
               </div>
               <span class="pill">최근 1개월</span>
-            </div>
-            <div class="metric-box" style="margin-bottom: 18px;">
-              <span class="metric-label">해외주식 전체 손익</span>
-              <strong class="metric-value num" style="color: var(--positive);">+₩4,260,000</strong>
             </div>
             <div class="breakdown-list">
               <div class="breakdown-row">
@@ -790,23 +893,26 @@
           <article class="card feature-note-card span-5">
             <div class="card-header">
               <div>
-                <h2 class="card-title">현재 구성에서 확인한 특징</h2>
-                <p class="subtext">좋고 나쁨을 평가한 결과가 아니라 현재 해외주식 구성에서 확인한 특징입니다.</p>
+                <h2 class="card-title">현재 구성의 핵심</h2>
               </div>
             </div>
             <div class="feature-note">
-              <strong id="featureText">Apple과 Microsoft가 해외주식의 74.3%를 차지해요.</strong>
-              <p class="subtext">선택한 구성 기준에 따라 특징 문구가 함께 바뀝니다.</p>
-              <p class="subtext">이 화면은 사용자 인터뷰용 목업이며 매수·매도 판단을 제공하지 않습니다.</p>
+              <div class="fact-card">
+                <strong class="num">74.3%</strong>
+                <span>상위 2종목</span>
+                <p>Apple과 Microsoft 두 종목이 해외주식 평가액의 74.3%를 차지해요.</p>
+              </div>
+              <div class="fact-card">
+                <strong class="num">74.3%</strong>
+                <span>기술 산업</span>
+                <p>기술 산업의 비중이 가장 커요.</p>
+              </div>
+              <div class="fact-card">
+                <strong class="num">100%</strong>
+                <span>미국 · USD</span>
+                <p>모든 해외주식은 미국 기업이자 USD 자산으로 구성되어 있어요.</p>
+              </div>
             </div>
-          </article>
-
-          <article class="card cta-card">
-            <div>
-              <h2 class="card-title">해외주식 상세 분석 보기</h2>
-              <p class="subtext">산업별 손익 기여와 주가·환율 변화의 이유를 자세히 살펴보세요.</p>
-            </div>
-            <button class="primary-btn" type="button">해외주식 상세 분석 보기</button>
           </article>
         </section>
       </div>
@@ -820,9 +926,9 @@
         desc: "종목별로 해외주식 안에서 차지하는 비중과 평가금액을 확인합니다.",
         feature: "Apple과 Microsoft가 해외주식의 74.3%를 차지해요.",
         rows: [
-          { name: "Apple", amount: 26800000, globalRate: 45.9, totalRate: 8.3, meta: "기술 · 미국 · USD", color: "#4D8DFF" },
-          { name: "Microsoft", amount: 16610000, globalRate: 28.4, totalRate: 5.1, meta: "기술 · 미국 · USD", color: "#9B6DFF" },
-          { name: "Tesla", amount: 15000000, globalRate: 25.7, totalRate: 4.6, meta: "자동차 · 미국 · USD", color: "#F2B84B" }
+          { name: "Apple", price: "$215.50", dayChange: 2.70, dayRate: 1.27, amount: 26800000, globalRate: 45.9, totalRate: 8.3, meta: "기술 · 미국 · USD", color: "#4D8DFF" },
+          { name: "Microsoft", price: "$510.20", dayChange: -3.10, dayRate: -0.60, amount: 16610000, globalRate: 28.4, totalRate: 5.1, meta: "기술 · 미국 · USD", color: "#9B6DFF" },
+          { name: "Tesla", price: "$320.00", dayChange: 6.40, dayRate: 2.04, amount: 15000000, globalRate: 25.7, totalRate: 4.6, meta: "자동차 · 미국 · USD", color: "#F2B84B" }
         ]
       },
       sector: {
@@ -852,9 +958,10 @@
     };
 
     const formatWon = value => `₩${value.toLocaleString("ko-KR")}`;
+    const formatDollarChange = value => `${value > 0 ? "+" : "-"}$${Math.abs(value).toFixed(2)}`;
+    const formatRateChange = value => `${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
     const chartMount = document.getElementById("chartMount");
     const compositionList = document.getElementById("compositionList");
-    const featureText = document.getElementById("featureText");
     const viewDescription = document.getElementById("viewDescription");
 
     function conicGradient(rows) {
@@ -891,6 +998,38 @@
     }
 
     function renderRows(key, view) {
+      if (key === "stock") {
+        compositionList.innerHTML = `
+          <div class="stock-row" style="padding-top:0; color: var(--text-secondary); font-size:12px; font-weight:750;">
+            <span>종목</span>
+            <span class="stock-cell">현재가</span>
+            <span class="stock-cell">전일 대비</span>
+            <span class="stock-cell">등락률</span>
+            <span class="stock-cell">평가금액</span>
+            <span class="stock-cell">해외주식</span>
+            <span class="stock-cell">전체</span>
+          </div>
+          ${view.rows.map(item => {
+            const directionClass = item.dayChange >= 0 ? "positive" : "negative";
+            return `
+              <div class="stock-row">
+                <span class="stock-name">
+                  <strong>${item.name}</strong>
+                  <span>${item.meta}</span>
+                </span>
+                <span class="stock-cell primary num">${item.price}</span>
+                <span class="stock-cell ${directionClass} num">${formatDollarChange(item.dayChange)}</span>
+                <span class="stock-cell ${directionClass} num">${formatRateChange(item.dayRate)}</span>
+                <span class="stock-cell num">${formatWon(item.amount)}</span>
+                <span class="stock-cell primary num">${item.globalRate.toFixed(1)}%</span>
+                <span class="stock-cell num">${item.totalRate.toFixed(1)}%</span>
+              </div>
+            `;
+          }).join("")}
+        `;
+        return;
+      }
+
       compositionList.innerHTML = view.rows.map(item => {
         const totalRate = item.totalRate == null ? "" : `<span class="legend-meta num">전체 ${item.totalRate.toFixed(1)}%</span>`;
         const action = item.action ? `<button class="small-action" type="button">${item.action}</button>` : `<span class="legend-meta">${item.meta}</span>`;
@@ -912,7 +1051,6 @@
         button.classList.toggle("active", button.dataset.view === key);
       });
       viewDescription.textContent = view.desc;
-      featureText.textContent = view.feature;
       renderChart(view);
       renderRows(key, view);
     }
