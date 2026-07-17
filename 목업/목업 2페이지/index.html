@@ -99,6 +99,48 @@
       padding: 24px;
     }
 
+    .asset-nav-card {
+      grid-column: span 12;
+      padding: 18px;
+      overflow-x: auto;
+    }
+
+    .asset-nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+    }
+
+    .asset-nav-label {
+      margin-right: 6px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .asset-tab {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 0 13px;
+      background: var(--bg-card-secondary);
+      color: var(--text-secondary);
+      font-weight: 750;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .asset-tab.active {
+      border-color: rgba(108, 140, 255, 0.55);
+      background: rgba(108, 140, 255, 0.14);
+      color: #DCE7FF;
+    }
+
     .card.equal-height {
       min-height: 320px;
       height: 320px;
@@ -1081,6 +1123,18 @@
         </header>
 
         <section class="grid" aria-label="전체 자산 화면">
+          <article class="card asset-nav-card">
+            <div class="asset-nav-inner" aria-label="자산군 선택">
+              <span class="asset-nav-label">자산군 선택</span>
+              <span class="asset-tab active">전체 자산</span>
+              <span class="asset-tab">예금</span>
+              <a class="asset-tab" href="../목업 3페이지/index.html">해외주식</a>
+              <span class="asset-tab">국내주식</span>
+              <span class="asset-tab">연금·적금</span>
+              <span class="asset-tab">기타</span>
+            </div>
+          </article>
+
           <article class="card feature-card span-12">
             <div>
               <p class="feature-kicker">자산 구성에서 확인된 특징</p>
