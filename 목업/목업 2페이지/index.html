@@ -141,6 +141,13 @@
       color: #DCE7FF;
     }
 
+    .asset-tab.disabled {
+      cursor: not-allowed;
+      color: var(--text-disabled);
+      background: rgba(20, 25, 35, 0.65);
+      border-color: rgba(40, 47, 59, 0.7);
+    }
+
     .card.equal-height {
       min-height: 320px;
       height: 320px;
@@ -1127,11 +1134,14 @@
             <div class="asset-nav-inner" aria-label="자산군 선택">
               <span class="asset-nav-label">자산군 선택</span>
               <span class="asset-tab active">전체 자산</span>
-              <span class="asset-tab">예금</span>
-              <a class="asset-tab" href="../목업 3페이지/index.html">해외주식</a>
-              <span class="asset-tab">국내주식</span>
-              <span class="asset-tab">연금·적금</span>
-              <span class="asset-tab">기타</span>
+              <button class="asset-tab disabled" type="button" disabled title="준비 중">현금·예금</button>
+              <button class="asset-tab disabled" type="button" disabled title="준비 중">국내주식</button>
+              <a class="asset-tab" href="../목업화면 4안(3페이지)/index.html">해외주식</a>
+              <button class="asset-tab disabled" type="button" disabled title="준비 중">ETF</button>
+              <button class="asset-tab disabled" type="button" disabled title="준비 중">연금</button>
+              <button class="asset-tab disabled" type="button" disabled title="준비 중">부동산</button>
+              <button class="asset-tab disabled" type="button" disabled title="준비 중">가상자산</button>
+              <button class="asset-tab disabled" type="button" disabled title="준비 중">기타</button>
             </div>
           </article>
 
