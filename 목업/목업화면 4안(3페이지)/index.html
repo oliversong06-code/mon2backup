@@ -356,91 +356,71 @@
     .analysis-preview-card {
       grid-column: span 12;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 22px;
+      gap: 18px;
       border-color: rgba(77, 141, 255, 0.36);
       background: linear-gradient(135deg, rgba(77, 141, 255, 0.12), var(--bg-card) 48%);
     }
 
     .analysis-copy {
       display: grid;
-      gap: 14px;
+      gap: 12px;
       min-width: 0;
     }
 
     .analysis-copy h2 {
       margin: 0;
-      font-size: 20px;
+      font-size: 17px;
       line-height: 1.3;
-      font-weight: 850;
+      font-weight: 750;
       word-break: keep-all;
     }
 
-    .analysis-copy > p {
+    .analysis-summary {
       margin: 0;
-      color: var(--text-secondary);
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 500;
       line-height: 1.55;
       word-break: keep-all;
     }
 
-    .analysis-points {
+    .analysis-stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
+      border: 1px solid #263040;
+      border-radius: 14px;
+      background: rgba(20, 25, 35, 0.62);
+      overflow: hidden;
     }
 
-    .analysis-point {
+    .analysis-stat {
       min-width: 0;
-      padding: 13px;
-      border-radius: 14px;
-      background: rgba(20, 25, 35, 0.82);
-      border: 1px solid #263040;
+      padding: 14px 16px;
       display: grid;
       gap: 6px;
     }
 
-    .analysis-point span {
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 750;
+    .analysis-stat + .analysis-stat {
+      border-left: 1px solid var(--border-card);
     }
 
-    .analysis-point strong {
-      font-size: 16px;
-      font-weight: 850;
+    .analysis-stat span {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .analysis-stat strong {
+      font-size: 19px;
+      font-weight: 750;
       line-height: 1.25;
       white-space: nowrap;
     }
 
-    .analysis-point p {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 12px;
-      line-height: 1.4;
-      word-break: keep-all;
-    }
-
-    .analysis-flow {
-      color: #CFE0FF;
-      font-size: 13px;
-      font-weight: 750;
-      word-break: keep-all;
-    }
-
     .analysis-cta {
-      width: 300px;
-      display: grid;
-      align-content: center;
-      justify-items: end;
-      gap: 10px;
-    }
-
-    .analysis-cta p {
-      margin: 0;
-      color: var(--text-secondary);
-      line-height: 1.45;
-      text-align: right;
-      word-break: keep-all;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     .primary-btn,
@@ -889,18 +869,8 @@
         grid-column: span 12;
       }
 
-      .summary-card,
-      .analysis-preview-card {
+      .summary-card {
         grid-template-columns: 1fr;
-      }
-
-      .analysis-cta {
-        width: auto;
-        justify-items: start;
-      }
-
-      .analysis-cta p {
-        text-align: left;
       }
     }
 
@@ -928,16 +898,20 @@
       }
       .card { padding: 18px; }
       .summary-metrics,
-      .analysis-points,
+      .analysis-stats,
       .feature-note {
         grid-template-columns: 1fr;
+      }
+      .analysis-stat + .analysis-stat {
+        border-left: 0;
+        border-top: 1px solid var(--border-card);
       }
       .diverging-row {
         grid-template-columns: 1fr;
         gap: 8px;
       }
       .diverging-value { text-align: left; }
-      .analysis-point strong,
+      .analysis-stat strong,
       .metric-value,
       .summary-total {
         white-space: normal;
@@ -1028,29 +1002,22 @@
             <div class="analysis-copy">
               <div>
                 <h2>최근 해외주식은 왜 움직였을까요?</h2>
-                <p class="subtext">기술 산업 비중이 큰 현재 구성에서 현지 주가와 원·달러 환율 변화가 최근 손익에 함께 반영됐어요.</p>
+                <p class="analysis-summary">기술주 상승과 원·달러 환율 변화가 최근 해외주식 수익에 함께 영향을 줬어요.</p>
               </div>
-              <div class="analysis-points">
-                <div class="analysis-point">
+              <div class="analysis-stats">
+                <div class="analysis-stat">
                   <span>구성 특성</span>
                   <strong class="num">기술 산업 74.3%</strong>
-                  <p>해외주식의 가장 큰 산업 비중</p>
                 </div>
-                <div class="analysis-point">
-                  <span>가격 요인</span>
-                  <strong class="num" style="color: var(--positive);">현지 주가 영향 +₩3,120,000</strong>
-                  <p>보유 종목의 현지 시장 가격 변화</p>
+                <div class="analysis-stat">
+                  <span>가격 영향</span>
+                  <strong class="num" style="color: var(--positive);">+₩3,120,000</strong>
                 </div>
-                <div class="analysis-point">
-                  <span>환율 요인</span>
-                  <strong class="num" style="color: var(--positive);">원·달러 환율 영향 +₩1,020,000</strong>
-                  <p>달러 자산의 원화 환산 변화</p>
+                <div class="analysis-stat">
+                  <span>환율 영향</span>
+                  <strong class="num" style="color: var(--positive);">+₩1,020,000</strong>
                 </div>
               </div>
-              <div class="analysis-flow">시장·산업·환율 변화 → 보유자산 가격과 환율 영향 → 내 해외주식 손익</div>
-            </div>
-            <div class="analysis-cta">
-              <p>산업·시장·환율 변화가 보유자산의 가격과 손익에 어떻게 연결됐는지 살펴보세요.</p>
               <button class="primary-btn" type="button">변동 이유와 내 자산 영향 분석 보기</button>
             </div>
           </article>
