@@ -731,9 +731,11 @@
     .return-total.neutral { color: var(--neutral); }
 
     .diverging-list {
+      position: relative;
       display: grid;
       gap: 14px;
       margin-top: 18px;
+      padding-bottom: 20px;
     }
 
     .diverging-row {
@@ -813,15 +815,25 @@
 
     .axis-caption {
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 8px;
       color: var(--text-secondary);
       font-size: 11px;
     }
 
-    .axis-caption span:nth-child(2) { color: #DCE7FF; font-weight: 800; }
     .axis-caption span:last-child { text-align: right; }
+
+    .zero-axis-label {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      color: #DCE7FF;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+    }
 
     .feature-note {
       display: grid;
@@ -1001,8 +1013,8 @@
           <article class="card analysis-preview-card">
             <div class="analysis-copy">
               <div>
-                <h2>최근 해외주식은 왜 움직였을까요?</h2>
-                <p class="analysis-summary">기술주 상승과 원·달러 환율 변화가 최근 해외주식 수익에 함께 영향을 줬어요.</p>
+                <h2>보유 해외주식의 수익은 어떻게 만들어졌을까요?</h2>
+                <p class="analysis-summary">기술 산업 중심의 구성에서 현지 주가와 원·달러 환율 변화가 전체 보유기간 손익에 함께 반영됐어요.</p>
               </div>
               <div class="analysis-stats">
                 <div class="analysis-stat">
@@ -1011,11 +1023,11 @@
                 </div>
                 <div class="analysis-stat">
                   <span>가격 영향</span>
-                  <strong class="num" style="color: var(--positive);">+₩3,120,000</strong>
+                  <strong class="num" style="color: var(--positive);">+₩6,400,000</strong>
                 </div>
                 <div class="analysis-stat">
                   <span>환율 영향</span>
-                  <strong class="num" style="color: var(--positive);">+₩1,020,000</strong>
+                  <strong class="num" style="color: var(--positive);">+₩2,090,000</strong>
                 </div>
               </div>
               <button class="primary-btn" type="button">변동 이유와 내 자산 영향 분석 보기</button>
@@ -1076,16 +1088,15 @@
           <article class="card return-card span-7">
             <div class="card-header">
               <div>
-                <h2 class="card-title">최근 1개월 손익분해</h2>
-                <strong class="return-total num positive" id="returnTotal">+₩4,260,000</strong>
+                <h2 class="card-title">전체 보유기간 손익분해</h2>
+                <strong class="return-total num positive" id="returnTotal">+₩8,740,000</strong>
                 <p class="subtext">양수는 0선 오른쪽, 음수는 0선 왼쪽으로 표시해요.</p>
               </div>
-              <span class="pill">최근 1개월</span>
+              <span class="pill">전체 보유기간</span>
             </div>
             <div class="diverging-list" id="returnBreakdown"></div>
             <div class="axis-caption" aria-hidden="true">
               <span>손실 기여</span>
-              <span>0</span>
               <span>수익 기여</span>
             </div>
             <p class="subtext" style="margin-top:16px;">전체 손익 = 현지 주가 영향 + 환율 영향 + 복합효과</p>
@@ -1169,9 +1180,9 @@
 
     const returnScenarios = {
       current: [
-        { label: "현지 주가 영향", value: 3120000 },
-        { label: "환율 영향", value: 1020000 },
-        { label: "복합효과", value: 120000 }
+        { label: "현지 주가 영향", value: 6400000 },
+        { label: "환율 영향", value: 2090000 },
+        { label: "복합효과", value: 250000 }
       ],
       negativeTest: [
         { label: "현지 주가 영향", value: -2100000 },
@@ -1323,7 +1334,7 @@
             <strong class="diverging-value num ${tone}">${formatSignedWon(item.value)}</strong>
           </div>
         `;
-      }).join("");
+      }).join("") + `<span class="zero-axis-label" aria-hidden="true">0</span>`;
     }
 
     function setView(key) {
