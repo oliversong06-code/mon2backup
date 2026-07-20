@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AssetFlow | 분석 보고서</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    :root {
+      --bg-main: #0E1117;
+      --bg-sidebar: #121722;
+      --bg-card: #171C26;
+      --bg-card-secondary: #141923;
+      --border-card: #282F3B;
+      --text-primary: #F3F4F6;
+      --text-secondary: #9CA3AF;
+      --text-disabled: #667085;
+      --accent: #6C8CFF;
+      --positive: #E57373;
+      --negative: #5B8DEF;
+      --warning: #F2B84B;
+      --neutral: #6B7280;
+      --radius-card: 16px;
+      --sidebar-width: 240px;
+      --gap-card: 24px;
+      --global-stock-soft: rgba(77, 141, 255, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 1200px;
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button { font: inherit; color: inherit; }
+    button:not(:disabled) { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .num { font-variant-numeric: tabular-nums; }
+
+    .app { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar-width);
+      min-height: 100vh;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-card);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      z-index: 5;
+    }
+
+    .main {
+      width: calc(100% - var(--sidebar-width));
+      margin-left: var(--sidebar-width);
+      padding: 30px 40px 56px;
+    }
+
+    .content {
+      max-width: 1580px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 34px;
+      padding: 0 6px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 850;
+    }
+
+    .brand-name { font-size: 17px; font-weight: 800; }
+
+    .nav { display: grid; gap: 6px; }
+
+    .nav-item {
+      min-height: 44px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 0 12px;
+      font-weight: 650;
+      text-align: left;
+      text-decoration: none;
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: #202838;
+    }
+
+    .nav-item.disabled { color: var(--text-disabled); }
+    .nav-spacer { flex: 1; }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #222A38;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .pill.ready {
+      background: rgba(156, 163, 175, 0.12);
+      color: #A7B0BE;
+      border: 1px solid #313947;
+      margin-left: auto;
+    }
+
+    .user-panel {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 10px 0;
+      border-top: 1px solid var(--border-card);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #263040;
+      color: #E5E7EB;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    .user-name { margin: 0; font-weight: 750; }
+    .user-desc { margin: 3px 0 0; color: var(--text-secondary); font-size: 12px; }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 850;
+    }
+
+    .page-desc {
+      margin: 9px 0 0;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    .page-meta {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-card);
+      padding: 22px;
+    }
+
+    .asset-nav-card {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      padding: 16px 18px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .asset-nav-card::before,
+    .asset-nav-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 34px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .asset-nav-card::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg-card), rgba(23, 28, 38, 0));
+    }
+
+    .asset-nav-card::after {
+      right: 0;
+      background: linear-gradient(270deg, var(--bg-card), rgba(23, 28, 38, 0));
+    }
+
+    .asset-nav-scroll {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #3B4556 transparent;
+      padding: 2px 20px;
+    }
+
+    .asset-nav-scroll::-webkit-scrollbar { height: 6px; }
+    .asset-nav-scroll::-webkit-scrollbar-thumb { background: #3B4556; border-radius: 999px; }
+
+    .asset-nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+    }
+
+    .asset-nav-label {
+      margin-right: 6px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .asset-tab {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 0 13px;
+      background: var(--bg-card-secondary);
+      color: var(--text-secondary);
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .asset-tab.active {
+      border-color: rgba(77, 141, 255, 0.55);
+      background: var(--global-stock-soft);
+      color: #DCE7FF;
+    }
+
+    .asset-tab.disabled {
+      cursor: not-allowed;
+      color: var(--text-disabled);
+      background: rgba(20, 25, 35, 0.65);
+      border-color: rgba(40, 47, 59, 0.7);
+    }
+
+    .report-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .report-main {
+      display: grid;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .toc-card {
+      position: sticky;
+      top: 92px;
+      display: grid;
+      gap: 14px;
+      max-height: calc(100vh - 116px);
+      overflow: auto;
+    }
+
+    .toc-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .toc-list {
+      display: grid;
+      gap: 5px;
+    }
+
+    .toc-link {
+      display: block;
+      padding: 8px 9px;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.35;
+      border: 1px solid transparent;
+    }
+
+    .toc-link.active {
+      color: #DCE7FF;
+      background: rgba(77, 141, 255, 0.13);
+      border-color: rgba(77, 141, 255, 0.28);
+    }
+
+    .top-link {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      background: #222A38;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .report-section {
+      scroll-margin-top: 110px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .report-section h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+      font-weight: 850;
+    }
+
+    .report-section h3 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.45;
+      font-weight: 800;
+    }
+
+    .report-copy {
+      margin: 0;
+      color: #D1D5DB;
+      font-size: 14px;
+      line-height: 1.75;
+      word-break: keep-all;
+    }
+
+    .report-copy.muted { color: var(--text-secondary); }
+
+    .hero-card {
+      display: grid;
+      gap: 18px;
+      border-color: rgba(108, 140, 255, 0.36);
+      background: linear-gradient(135deg, rgba(108, 140, 255, 0.12), rgba(23, 28, 38, 0.98) 42%);
+    }
+
+    .hero-card h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.25;
+      font-weight: 900;
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      color: #D1D5DB;
+      font-size: 15px;
+      line-height: 1.65;
+      max-width: 920px;
+      word-break: keep-all;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric-box {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(20, 25, 35, 0.82);
+      border: 1px solid #263040;
+    }
+
+    .metric-box span {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .metric-box strong {
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .notice-card {
+      border-color: rgba(242, 184, 75, 0.28);
+      background: rgba(242, 184, 75, 0.06);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .info-box {
+      display: grid;
+      gap: 8px;
+      padding: 15px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+      min-width: 0;
+    }
+
+    .info-box strong {
+      font-size: 16px;
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .direction-tag {
+      width: max-content;
+      min-height: 24px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .direction-tag.support { color: #E8F1FF; background: rgba(77, 141, 255, 0.14); }
+    .direction-tag.pressure { color: #FFE1E1; background: rgba(229, 115, 115, 0.13); }
+    .direction-tag.mixed { color: #FFEBC2; background: rgba(242, 184, 75, 0.13); }
+
+    .timeline {
+      display: grid;
+      gap: 0;
+      border: 1px solid #263040;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-card-secondary);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .timeline-item:last-child { border-bottom: 0; }
+    .timeline-date { color: #DCE7FF; font-weight: 850; }
+    .timeline-text { margin: 0; color: #D1D5DB; line-height: 1.55; }
+
+    .path-flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .path-node {
+      position: relative;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+      min-height: 110px;
+    }
+
+    .path-node::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      width: 10px;
+      height: 1px;
+      background: var(--border-card);
+    }
+
+    .path-node:last-child::after { display: none; }
+    .path-node strong { display: block; margin-bottom: 8px; color: #DCE7FF; }
+    .path-node p { margin: 0; color: var(--text-secondary); line-height: 1.5; }
+
+    .matrix {
+      display: grid;
+      border: 1px solid #263040;
+      border-radius: 14px;
+      overflow: auto;
+      background: var(--bg-card-secondary);
+    }
+
+    .matrix table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+    }
+
+    .matrix th,
+    .matrix td {
+      padding: 13px 12px;
+      border-bottom: 1px solid var(--border-card);
+      color: #D1D5DB;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.45;
+    }
+
+    .matrix th {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(23, 28, 38, 0.84);
+    }
+
+    .matrix tr:last-child td { border-bottom: 0; }
+
+    .source-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .source-list a {
+      color: #CFE0FF;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .report-panel[hidden] { display: none; }
+
+    @media (max-width: 1360px) {
+      .report-shell { grid-template-columns: 1fr; }
+      .toc-card {
+        position: static;
+        max-height: none;
+      }
+      .toc-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="주요 메뉴">
+      <div class="brand">
+        <div class="logo-mark" aria-hidden="true">A</div>
+        <div class="brand-name">AssetFlow</div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-item" href="../목업 1페이지/index.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+          홈
+        </a>
+        <a class="nav-item" href="../목업 2페이지/index.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16V9"/><path d="M13 16V6"/><path d="M18 16v-4"/></svg>
+          자산
+        </a>
+        <a class="nav-item active" href="./index.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="m4 15 5-5 4 4 7-8"/><path d="M14 6h6v6"/></svg>
+          분석
+        </a>
+        <button class="nav-item disabled" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+          목표 관리
+          <span class="pill ready">준비 중</span>
+        </button>
+        <button class="nav-item disabled" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+          알림
+          <span class="pill ready">준비 중</span>
+        </button>
+        <button class="nav-item" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4"/></svg>
+          설정
+        </button>
+      </nav>
+
+      <div class="nav-spacer"></div>
+      <div class="user-panel">
+        <div class="avatar" aria-hidden="true">김</div>
+        <div>
+          <p class="user-name">김지훈</p>
+          <p class="user-desc">개인 자산</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main" id="top">
+      <div class="content">
+        <header class="topbar">
+          <div>
+            <h1 class="page-title">분석</h1>
+            <p class="page-desc">경제·시장·정책 변화가 보유 자산에 전달되는 경로를 보고서 형식으로 정리했습니다.</p>
+          </div>
+          <div class="page-meta">
+            <span class="pill">정보 기준 2026.03.20 18:00 KST</span>
+            <span class="pill">사용자 인터뷰용 예시 데이터</span>
+          </div>
+        </header>
+
+        <article class="card asset-nav-card">
+          <div class="asset-nav-scroll" tabindex="0" aria-label="보고서 선택 가로 스크롤">
+            <div class="asset-nav-inner">
+              <span class="asset-nav-label">보고서 선택</span>
+              <button class="asset-tab active" type="button" data-report="all">전체 자산</button>
+              <button class="asset-tab disabled" type="button" disabled title="이 자산군 분석은 목업 범위에 포함하지 않습니다.">현금·예금</button>
+              <button class="asset-tab disabled" type="button" disabled title="이 자산군 분석은 목업 범위에 포함하지 않습니다.">국내주식</button>
+              <button class="asset-tab" type="button" data-report="global">해외주식</button>
+              <button class="asset-tab disabled" type="button" disabled title="이 자산군 분석은 목업 범위에 포함하지 않습니다.">ETF</button>
+              <button class="asset-tab disabled" type="button" disabled title="이 자산군 분석은 목업 범위에 포함하지 않습니다.">연금</button>
+              <button class="asset-tab disabled" type="button" disabled title="이 자산군 분석은 목업 범위에 포함하지 않습니다.">부동산</button>
+              <button class="asset-tab disabled" type="button" disabled title="이 자산군 분석은 목업 범위에 포함하지 않습니다.">가상자산</button>
+              <button class="asset-tab disabled" type="button" disabled title="이 자산군 분석은 목업 범위에 포함하지 않습니다.">기타</button>
+            </div>
+          </div>
+        </article>
+
+        <section class="report-shell">
+          <div class="report-main">
+            <article class="report-panel" data-panel="all"></article>
+            <article class="report-panel" data-panel="global" hidden></article>
+          </div>
+
+          <aside class="card toc-card" aria-label="보고서 목차">
+            <h2 class="toc-title">보고서 목차</h2>
+            <nav class="toc-list" id="tocList"></nav>
+            <a class="top-link" href="#top">맨 위로</a>
+          </aside>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const commonNotice = `
+      <section class="card notice-card report-section" id="basis">
+        <h2>분석 기준과 정보 범위</h2>
+        <p class="report-copy">본 보고서는 2026년 3월 20일 18:00 KST까지 공개된 정보만을 바탕으로 작성했습니다. 이후 발생한 사건과 시장 변화는 분석에 반영하지 않았습니다.</p>
+        <p class="report-copy muted">보유자산과 평가금액은 화면 구성을 위한 가상 데이터입니다. 경제지표와 시장 상황은 분석 기준 시점 이전의 공개 자료를 사용했습니다.</p>
+        <div class="metric-row">
+          <div class="metric-box"><span>총자산</span><strong class="num">₩325,000,000</strong></div>
+          <div class="metric-box"><span>기술산업 연결</span><strong class="num">34%</strong></div>
+          <div class="metric-box"><span>달러 자산</span><strong class="num">18%</strong></div>
+          <div class="metric-box"><span>현금·예금</span><strong class="num">25%</strong></div>
+        </div>
+      </section>
+    `;
+
+    const allReportSections = [
+      {
+        id: "summary",
+        title: "현재 시장 국면과 종합 해석",
+        body: `
+          <p class="report-copy">현재 포트폴리오에는 서로 다른 세 가지 힘이 동시에 작용하고 있습니다. 중동 에너지 공급 차질은 국제유가와 원·달러 환율을 흔들 수 있고, 이는 수입물가와 시장금리에 부담을 줄 수 있습니다. 반면 AI 인프라 투자와 주요 기술기업 실적은 기술 관련 자산을 지지하는 요인으로 남아 있습니다.</p>
+          <p class="report-copy">같은 경제 요인도 자산마다 다르게 전달됩니다. 원화 약세는 국내 경제에는 비용 부담이지만 달러로 보유한 해외주식의 원화 환산가치에는 지지 요인입니다. 높은 금리는 성장주와 채권 가격에는 부담이 될 수 있지만 현금성 상품의 이자수익에는 일부 긍정적으로 작용합니다.</p>
+          <div class="mini-grid">
+            <div class="info-box"><span class="direction-tag support">지지 요인</span><strong>AI·반도체 투자와 기술기업 실적</strong><p>기술산업 연결 자산에는 긍정적으로 작용할 수 있습니다.</p></div>
+            <div class="info-box"><span class="direction-tag pressure">부담 요인</span><strong>고유가, 원화 약세, 금리 부담</strong><p>수입물가와 할인율을 통해 주식과 채권 평가에 부담을 줄 수 있습니다.</p></div>
+            <div class="info-box"><span class="direction-tag mixed">방향이 갈리는 요인</span><strong>달러와 금리</strong><p>달러 자산에는 지지, 국내 비용과 기술주 평가에는 부담으로 나뉠 수 있습니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "changes",
+        title: "전일 이후 달라진 점",
+        body: `
+          <p class="report-copy">국제유가가 장중 고점에서 일부 진정되고 충돌 완화 기대가 생기면서 위험회피가 과도하게 확대되는 흐름은 일부 완화됐습니다. 다만 원·달러 환율과 국내 금리 부담은 남아 있어, 단기 반등만으로 전체 판단을 바꾸기에는 이릅니다.</p>
+          <div class="mini-grid">
+            <div class="info-box"><strong>새로 확인된 사실</strong><p>국내 주가는 반등했지만 원화와 채권시장의 부담은 이어졌습니다.</p></div>
+            <div class="info-box"><strong>강화된 해석</strong><p>외국인 매도와 금리 상승은 고유가·환율·물가 부담이 해소되지 않았음을 보여줍니다.</p></div>
+            <div class="info-box"><strong>약화된 해석</strong><p>유가가 장중 고점에서 내려오며 최악의 공급 차질 시나리오는 아직 확정되지 않았습니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "global",
+        title: "글로벌 경제 흐름과 국내 전달경로",
+        body: `
+          <p class="report-copy">IMF는 세계경제 성장률을 3.3%로 전망하고 있습니다. 전면적인 침체로 단정할 근거는 부족하지만, 성장의 상당 부분이 미국 기술투자와 일부 민간 수요에 집중되어 있어 충격이 생겼을 때 흔들릴 수 있는 구조입니다.</p>
+          <p class="report-copy">미국은 소비자물가가 비교적 안정적인 반면 생산자물가와 일부 고용 지표에서 부담 신호가 섞여 있습니다. 연준은 기준금리를 유지하면서 물가 전망을 높였고, 에너지 가격과 경기 둔화 가능성을 함께 언급했습니다.</p>
+          <div class="path-flow">
+            <div class="path-node"><strong>글로벌 요인</strong><p>미국 금리, 중국 경기, 중동 에너지 공급</p></div>
+            <div class="path-node"><strong>시장 변수</strong><p>달러, 유가, 글로벌 수요</p></div>
+            <div class="path-node"><strong>국내 전달</strong><p>수출, 원화, 물가, 정책금리</p></div>
+            <div class="path-node"><strong>보유자산</strong><p>국내주식, 해외주식, ETF, 예금, 채권</p></div>
+          </div>
+        `
+      },
+      {
+        id: "factors",
+        title: "포트폴리오에 작용하는 핵심 영향요인",
+        body: `
+          <div class="mini-grid">
+            <div class="info-box"><span class="direction-tag pressure">핵심 요인</span><strong>에너지 공급 충격과 원화 약세</strong><p>전체적으로 부담 요인이지만 달러 자산에는 일부 방어 효과가 있습니다. 영향 기간은 수주에서 수개월까지 달라질 수 있습니다.</p></div>
+            <div class="info-box"><span class="direction-tag pressure">핵심 요인</span><strong>미국 물가와 금리 경로</strong><p>기술주와 채권 평가에는 부담, 예금 이자에는 일부 지지로 작용합니다.</p></div>
+            <div class="info-box"><span class="direction-tag support">중요 요인</span><strong>AI·반도체 투자</strong><p>국내 기술주, 미국 기술주, 관련 ETF에 동시에 연결되는 지지 요인입니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "path",
+        title: "내 자산으로 전달되는 경로",
+        body: `
+          <p class="report-copy">포트폴리오의 중요한 특징은 기술산업과 달러 자산 노출이 동시에 존재한다는 점입니다. AI 투자와 기술기업 실적은 국내주식·해외주식·ETF에 공통으로 영향을 줄 수 있고, 원·달러 환율은 해외주식의 원화 평가액과 국내 수입물가에 서로 다른 방향으로 작용합니다.</p>
+          <div class="matrix">
+            <table>
+              <thead><tr><th>요인</th><th>주로 지지</th><th>주로 부담</th><th>확인할 점</th></tr></thead>
+              <tbody>
+                <tr><td>AI·반도체 투자</td><td>국내 기술주, 해외 기술주, ETF</td><td>투자비 부담이 큰 기업</td><td>실적과 투자 효율</td></tr>
+                <tr><td>미국 금리</td><td>예금 이자</td><td>성장주, 채권 가격</td><td>물가와 고용 지표</td></tr>
+                <tr><td>원화 약세</td><td>달러 자산 원화 평가액</td><td>수입물가, 국내 비용</td><td>환율 지속성</td></tr>
+                <tr><td>유가 상승</td><td>일부 에너지 관련 자산</td><td>소비재, 물류, 수입물가</td><td>공급 차질 지속 여부</td></tr>
+              </tbody>
+            </table>
+          </div>
+        `
+      },
+      {
+        id: "asset-impact",
+        title: "자산군별 영향",
+        body: `
+          <div class="mini-grid">
+            <div class="info-box"><strong>현금·예금</strong><p>가격 변동은 작지만 높은 금리가 이어질 경우 이자수익 측면에서 일부 지지 요인이 됩니다.</p></div>
+            <div class="info-box"><strong>국내주식</strong><p>기술산업과 수출 경로는 지지 요인이지만 원화 약세와 금리 부담은 평가에 압력을 줄 수 있습니다.</p></div>
+            <div class="info-box"><strong>해외주식</strong><p>미국 기술기업 실적과 달러 환산 효과가 동시에 작용합니다.</p></div>
+            <div class="info-box"><strong>ETF</strong><p>기술·반도체 노출이 높다면 주식형 자산과 비슷한 방향으로 움직일 수 있습니다.</p></div>
+            <div class="info-box"><strong>연금</strong><p>장기 포트폴리오 특성상 단기 유가보다 금리와 주식 평가 변화가 누적 효과를 만듭니다.</p></div>
+            <div class="info-box"><strong>부동산</strong><p>금리와 물가 부담이 자금조달 비용과 투자심리에 연결됩니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "interactions",
+        title: "자산 간 상호작용",
+        body: `
+          <p class="report-copy">분산은 자산 이름이 다르다는 사실만으로 완성되지 않습니다. 국내 기술주, 해외 기술주, 기술 ETF는 서로 다른 계좌에 있어도 AI 투자와 금리 변화에 함께 반응할 수 있습니다. 반대로 현금·예금과 달러 자산은 단기 변동성 국면에서 서로 다른 방어 역할을 합니다.</p>
+        `
+      },
+      {
+        id: "scenarios",
+        title: "주요 시나리오",
+        body: `
+          <div class="mini-grid">
+            <div class="info-box"><strong>시나리오 A: 유가·금리 부담 완화</strong><p>기술주 평가 부담이 줄고 달러 방어 효과는 일부 약해질 수 있습니다.</p></div>
+            <div class="info-box"><strong>시나리오 B: 높은 유가와 금리 지속</strong><p>실적이 강한 기술주는 버틸 수 있지만 채권과 성장주 평가는 부담을 받을 수 있습니다.</p></div>
+            <div class="info-box"><strong>시나리오 C: 에너지 공급 충격 확대</strong><p>위험회피와 원화 약세가 커질 수 있고 달러 자산의 환산 방어 효과와 주가 부담이 동시에 나타날 수 있습니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "schedule",
+        title: "앞으로 확인할 일정과 지표",
+        body: `
+          <div class="timeline">
+            <div class="timeline-item"><span class="timeline-date">미국 3월 고용</span><p class="timeline-text">금리 판단과 경기 둔화 여부를 함께 확인합니다.</p></div>
+            <div class="timeline-item"><span class="timeline-date">미국 PCE 물가</span><p class="timeline-text">연준이 중시하는 물가 흐름을 확인합니다.</p></div>
+            <div class="timeline-item"><span class="timeline-date">다음 FOMC</span><p class="timeline-text">중동 충격과 물가·고용의 균형 판단이 중요합니다.</p></div>
+            <div class="timeline-item"><span class="timeline-date">기업 실적</span><p class="timeline-text">Apple, Microsoft, Tesla의 매출·마진·투자 효율을 확인합니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "limits",
+        title: "근거·출처·분석의 한계",
+        body: `
+          <p class="report-copy">이 보고서는 투자 실행 판단이나 목표가를 제시하지 않습니다. 보유수량과 현재가는 목업 값이며, 분석은 보유 비중과 공개 정보의 연결을 설명하는 데 목적이 있습니다.</p>
+          <ul class="source-list">
+            <li><a href="https://www.apple.com/newsroom/" target="_blank" rel="noreferrer">Apple Newsroom</a></li>
+            <li><a href="https://www.microsoft.com/en-us/Investor/earnings" target="_blank" rel="noreferrer">Microsoft Investor Relations</a></li>
+            <li><a href="https://ir.tesla.com/" target="_blank" rel="noreferrer">Tesla Investor Relations</a></li>
+            <li><a href="https://www.federalreserve.gov/" target="_blank" rel="noreferrer">Federal Reserve</a></li>
+            <li><a href="https://www.imf.org/" target="_blank" rel="noreferrer">IMF</a></li>
+          </ul>
+        `
+      }
+    ];
+
+    const globalReportSections = [
+      {
+        id: "g-summary",
+        title: "분석 기준과 해외주식의 역할",
+        body: `
+          <p class="report-copy">해외주식은 총 평가금액 ₩58,410,000, 전체 자산 내 비중 18.0%를 차지합니다. 미국 100%, USD 100% 구조이며 기술산업 비중은 74.3%입니다.</p>
+          <div class="metric-row">
+            <div class="metric-box"><span>총 평가금액</span><strong class="num">₩58,410,000</strong></div>
+            <div class="metric-box"><span>전체 자산 내 비중</span><strong class="num">18.0%</strong></div>
+            <div class="metric-box"><span>기술산업 비중</span><strong class="num">74.3%</strong></div>
+            <div class="metric-box"><span>보유 종목</span><strong class="num">3개</strong></div>
+          </div>
+        `
+      },
+      {
+        id: "g-market",
+        title: "현재 국면과 종합 해석",
+        body: `
+          <p class="report-copy">해외주식은 미국 기술기업 실적, AI·클라우드 투자, 미국 금리, 원·달러 환율이 동시에 작용하는 자산군입니다. 현재 손익은 현지 주가 영향과 환율 영향이 함께 반영된 결과입니다.</p>
+          <div class="mini-grid">
+            <div class="info-box"><span class="direction-tag support">지지</span><strong>Apple·Microsoft 실적과 AI 투자</strong><p>기술산업 비중이 큰 구조에서 주요 지지 요인입니다.</p></div>
+            <div class="info-box"><span class="direction-tag pressure">부담</span><strong>높은 금리와 에너지 가격</strong><p>성장주 평가와 소비 심리에 부담을 줄 수 있습니다.</p></div>
+            <div class="info-box"><span class="direction-tag mixed">혼합</span><strong>원·달러 환율</strong><p>원화 평가액에는 지지이나 국내 비용 부담과 함께 봐야 합니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "g-changes",
+        title: "전일 이후 달라진 점",
+        body: `
+          <p class="report-copy">국제유가가 장중 고점에서 일부 내려오며 위험회피가 완화됐지만, 환율과 금리 부담은 여전히 남아 있습니다. 따라서 해외주식에 대해서는 단기 가격 반등보다 환율과 금리의 지속성을 함께 확인해야 합니다.</p>
+        `
+      },
+      {
+        id: "g-factors",
+        title: "해외주식 핵심 영향요인",
+        body: `
+          <div class="mini-grid">
+            <div class="info-box"><strong>미국 금리와 기술주 평가</strong><p>금리가 높아지면 미래 이익의 현재가치가 낮아져 성장기업 평가에 부담이 될 수 있습니다.</p></div>
+            <div class="info-box"><strong>AI·클라우드 투자</strong><p>Microsoft와 기술 ETF, 국내 반도체 자산까지 연결되는 긍정 요인입니다.</p></div>
+            <div class="info-box"><strong>원·달러 환율</strong><p>달러 기준 주가와 별개로 원화 평가액을 바꾸는 별도 경로입니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "g-fx",
+        title: "주가와 환율은 서로 다른 방향으로 움직일 수 있습니다",
+        body: `
+          <p class="report-copy">해외주식의 원화 가치는 달러 기준 주가와 원·달러 환율의 영향을 함께 받습니다. 주가 상승과 원화 약세가 동시에 발생하면 원화 평가액을 같은 방향으로 지지하지만, 주가 하락과 원화 약세가 함께 발생하면 환율이 일부 방어 역할을 할 수 있습니다.</p>
+          <div class="mini-grid">
+            <div class="info-box"><strong>주가 상승 + 원화 약세</strong><p>두 요인이 같은 방향으로 원화 평가액을 지지합니다.</p></div>
+            <div class="info-box"><strong>주가 하락 + 원화 약세</strong><p>환율 효과가 주가 하락을 일부 완충할 수 있습니다.</p></div>
+            <div class="info-box"><strong>주가 상승 + 원화 강세</strong><p>주가 상승분 일부가 환율로 상쇄될 수 있습니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "g-apple",
+        title: "Apple 분석",
+        body: `
+          <p class="report-copy">Apple은 보유금액 ₩26,800,000, 해외주식 내 비중 45.9%로 가장 큰 종목입니다. iPhone과 서비스 매출, 반복 매출 기반, 강한 현금흐름이 지지 요인입니다. 다만 글로벌 하드웨어 공급망, 소비 둔화, 금리 상승에 따른 대형 기술주 평가 부담은 함께 확인해야 합니다.</p>
+        `
+      },
+      {
+        id: "g-msft",
+        title: "Microsoft 분석",
+        body: `
+          <p class="report-copy">Microsoft는 보유금액 ₩16,610,000, 해외주식 내 비중 28.4%입니다. Azure, Microsoft 365, AI 인프라 투자가 성장축입니다. 동시에 AI 설비투자 비용과 클라우드 마진, 투자 효율은 향후 확인해야 할 핵심 변수입니다.</p>
+        `
+      },
+      {
+        id: "g-tesla",
+        title: "Tesla 분석",
+        body: `
+          <p class="report-copy">Tesla는 보유금액 ₩15,000,000, 해외주식 내 비중 25.7%입니다. 자동차 판매와 마진 둔화는 부담 요인이고, 에너지 저장장치와 자율주행·로봇·AI 기대는 장기 선택지입니다. Apple·Microsoft와 같은 방식으로 단순 기술주로 묶기보다 변동성과 선택지 가치를 분리해 볼 필요가 있습니다.</p>
+        `
+      },
+      {
+        id: "g-compare",
+        title: "종목 간 공통점과 차이",
+        body: `
+          <div class="matrix">
+            <table>
+              <thead><tr><th>항목</th><th>Apple</th><th>Microsoft</th><th>Tesla</th></tr></thead>
+              <tbody>
+                <tr><td>주요 이익원</td><td>iPhone·서비스</td><td>클라우드·소프트웨어·AI</td><td>자동차·에너지·미래 기술</td></tr>
+                <tr><td>AI 연결</td><td>기기·서비스 생태계</td><td>클라우드와 AI 인프라</td><td>자율주행·로봇 기대</td></tr>
+                <tr><td>금리 민감 경로</td><td>대형 기술주 평가</td><td>성장투자 평가</td><td>금융비용과 미래 기대</td></tr>
+                <tr><td>포트폴리오 역할</td><td>가장 큰 보유비중</td><td>AI·클라우드 성장축</td><td>변동성과 장기 선택지</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="report-copy">세 종목은 모두 미국·달러 자산이지만 이익 원천과 금리·무역정책 민감 경로는 다릅니다. 종목 수만으로 분산 정도를 판단하기 어렵습니다.</p>
+        `
+      },
+      {
+        id: "g-scenarios",
+        title: "해외주식 주요 시나리오",
+        body: `
+          <div class="mini-grid">
+            <div class="info-box"><strong>유가·금리 부담 완화</strong><p>Apple과 Microsoft의 평가 부담이 줄고 Tesla의 금융비용 우려도 완화될 수 있습니다.</p></div>
+            <div class="info-box"><strong>높은 유가와 금리 지속</strong><p>실적이 강한 기업은 버틸 수 있지만 성장 기대가 높은 종목은 부담을 받을 수 있습니다.</p></div>
+            <div class="info-box"><strong>공급 충격 확대</strong><p>공통적으로 기술주 평가에 부담이 생기고 달러 환산 효과와 주가 부담이 동시에 나타날 수 있습니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "g-schedule",
+        title: "앞으로 확인할 일정과 지표",
+        body: `
+          <div class="timeline">
+            <div class="timeline-item"><span class="timeline-date">미국 PCE</span><p class="timeline-text">금리 경로와 기술주 평가 부담을 확인합니다.</p></div>
+            <div class="timeline-item"><span class="timeline-date">Apple 실적</span><p class="timeline-text">iPhone과 서비스 성장 지속 여부를 봅니다.</p></div>
+            <div class="timeline-item"><span class="timeline-date">Microsoft 실적</span><p class="timeline-text">Azure 성장, 클라우드 마진, AI 투자 효율을 확인합니다.</p></div>
+            <div class="timeline-item"><span class="timeline-date">Tesla 실적</span><p class="timeline-text">차량 인도, 자동차 마진, 에너지 저장장치 성장 여부를 확인합니다.</p></div>
+          </div>
+        `
+      },
+      {
+        id: "g-limits",
+        title: "해외주식 근거·출처·분석의 한계",
+        body: `
+          <p class="report-copy">미국 시장가격은 2026년 3월 19일 정규장 마감까지의 정보를 사용한 것으로 가정했습니다. 미래 주가나 투자 실행 여부는 예측하지 않습니다.</p>
+          <ul class="source-list">
+            <li><a href="https://www.apple.com/newsroom/" target="_blank" rel="noreferrer">Apple Newsroom</a></li>
+            <li><a href="https://www.microsoft.com/en-us/Investor/earnings" target="_blank" rel="noreferrer">Microsoft Investor Relations</a></li>
+            <li><a href="https://ir.tesla.com/" target="_blank" rel="noreferrer">Tesla Investor Relations</a></li>
+            <li><a href="https://www.federalreserve.gov/" target="_blank" rel="noreferrer">Federal Reserve</a></li>
+          </ul>
+        `
+      }
+    ];
+
+    const reports = {
+      all: {
+        title: "전체 자산 분석",
+        subtitle: "경제·시장·정책 변화가 내 자산으로 전달되는 과정을 종합적으로 살펴봅니다.",
+        badge: "기초 분석 보고서",
+        sections: allReportSections
+      },
+      global: {
+        title: "해외주식 분석",
+        subtitle: "미국 기술주, 원·달러 환율, 보유 종목별 민감 경로를 중심으로 해석합니다.",
+        badge: "해외주식 상세 분석",
+        sections: globalReportSections
+      }
+    };
+
+    const panels = {
+      all: document.querySelector('[data-panel="all"]'),
+      global: document.querySelector('[data-panel="global"]')
+    };
+    const tocList = document.getElementById("tocList");
+    const tabs = document.querySelectorAll("[data-report]");
+
+    function renderReport(key) {
+      const report = reports[key];
+      const panel = panels[key];
+      panel.innerHTML = `
+        <section class="card hero-card report-section" id="${key}-top">
+          <span class="pill" style="width:max-content; background: var(--global-stock-soft); color:#DCE7FF;">${report.badge}</span>
+          <h1>${report.title}</h1>
+          <p class="hero-subtitle">${report.subtitle}</p>
+        </section>
+        ${key === "all" ? commonNotice : ""}
+        ${report.sections.map(section => `
+          <section class="card report-section" id="${section.id}">
+            <h2>${section.title}</h2>
+            ${section.body}
+          </section>
+        `).join("")}
+      `;
+    }
+
+    function setReport(key, updateHash = true) {
+      Object.entries(panels).forEach(([panelKey, panel]) => {
+        panel.hidden = panelKey !== key;
+      });
+      tabs.forEach(tab => tab.classList.toggle("active", tab.dataset.report === key));
+
+      const report = reports[key];
+      tocList.innerHTML = report.sections.map(section => `
+        <a class="toc-link" href="#${section.id}">${section.title}</a>
+      `).join("");
+
+      if (updateHash) {
+        history.replaceState(null, "", `#${key}`);
+      }
+      document.querySelector(".asset-tab.active")?.scrollIntoView({ inline: "center", block: "nearest" });
+      requestAnimationFrame(updateActiveToc);
+    }
+
+    function updateActiveToc() {
+      const visiblePanel = Object.values(panels).find(panel => !panel.hidden);
+      if (!visiblePanel) return;
+      const sections = [...visiblePanel.querySelectorAll(".report-section[id]")];
+      let current = sections[0]?.id;
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top < 150) current = section.id;
+      }
+      document.querySelectorAll(".toc-link").forEach(link => {
+        link.classList.toggle("active", link.getAttribute("href") === `#${current}`);
+      });
+    }
+
+    renderReport("all");
+    renderReport("global");
+    const initialReport = location.hash.includes("global") || new URLSearchParams(location.search).get("report") === "global" ? "global" : "all";
+    setReport(initialReport, false);
+
+    tabs.forEach(tab => tab.addEventListener("click", () => setReport(tab.dataset.report)));
+    document.addEventListener("scroll", updateActiveToc, { passive: true });
+  </script>
+</body>
+</html>
