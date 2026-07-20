@@ -495,7 +495,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 22px;
+      min-width: 28px;
       min-height: 22px;
       margin-left: 4px;
       border-radius: 999px;
@@ -505,6 +505,91 @@
       font-size: 11px;
       font-weight: 850;
       vertical-align: 1px;
+    }
+
+    .evidence-note {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(156, 163, 175, 0.1);
+      color: #A7B0BE;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .reason-card {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+    }
+
+    .reason-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .reason-head strong {
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .reason-label {
+      flex: none;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(108, 140, 255, 0.13);
+      color: #DCE7FF;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .reason-card p {
+      margin: 0;
+      color: #D1D5DB;
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    .reason-detail {
+      display: grid;
+      gap: 7px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-card);
+    }
+
+    .reason-detail span {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .asset-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .asset-tags em {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 42, 56, 0.85);
+      color: #D1D5DB;
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .index-card {
@@ -538,6 +623,105 @@
     .index-card small {
       color: var(--text-disabled);
       line-height: 1.45;
+    }
+
+    .variable-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .variable-card {
+      display: grid;
+      gap: 13px;
+      min-width: 0;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--bg-card-secondary);
+      border: 1px solid #263040;
+    }
+
+    .variable-card header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .variable-card h3 {
+      font-size: 16px;
+    }
+
+    .variable-meta {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .value-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .value-box {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(14, 17, 23, 0.35);
+      border: 1px solid rgba(40, 47, 59, 0.72);
+    }
+
+    .value-box span {
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .value-box strong {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .mini-chart {
+      position: relative;
+      height: 118px;
+      border-radius: 14px;
+      border: 1px solid rgba(40, 47, 59, 0.86);
+      background:
+        linear-gradient(rgba(40, 47, 59, 0.45) 1px, transparent 1px) 0 25% / 100% 25%,
+        rgba(14, 17, 23, 0.32);
+      overflow: hidden;
+    }
+
+    .chart-segment,
+    .chart-dot {
+      position: absolute;
+      background: var(--accent);
+    }
+
+    .chart-segment {
+      height: 2px;
+      transform-origin: left center;
+      opacity: 0.88;
+    }
+
+    .chart-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 2px solid #111722;
+      box-shadow: 0 0 0 2px rgba(108, 140, 255, 0.18);
+    }
+
+    .chart-foot {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-disabled);
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .timeline {
@@ -826,6 +1010,7 @@
       .mini-grid,
       .mini-grid.two,
       .mini-grid.four,
+      .variable-grid,
       .path-flow,
       .pathway-grid,
       .source-grid {
@@ -950,7 +1135,7 @@
       <section class="card notice-card report-section" id="basis">
         <h2>분석 기준과 정보 범위</h2>
         <p class="report-copy">본 보고서는 2026년 3월 20일 18:00 KST까지 공개된 정보만을 바탕으로 작성했습니다. 이후 발생한 사건과 시장 변화는 분석에 반영하지 않았습니다.</p>
-        <p class="report-copy muted">보유자산과 평가금액은 화면 구성을 위한 가상 데이터입니다. 경제지표와 시장 상황은 분석 기준 시점 이전의 공개 자료를 사용했습니다.</p>
+        <p class="report-copy muted">보유자산과 평가금액은 화면 구성을 위한 가상 데이터입니다.<a class="source-chip" href="#source-user">[7]</a> 경제지표와 시장 상황은 분석 기준 시점 이전의 공개 자료 또는 목업용 가정으로 구분했습니다.</p>
         <div class="metric-row">
           <div class="metric-box"><span>총자산</span><strong class="num">₩325,000,000</strong></div>
           <div class="metric-box"><span>기술산업 연결</span><strong class="num">34%</strong></div>
@@ -961,6 +1146,34 @@
     `;
 
     const allReportSections = [
+      {
+        id: "selection-reason",
+        title: "이번 보고서가 이 요인들을 우선 분석한 이유",
+        body: `
+          <p class="report-copy">회원님의 자산구성에서 영향 경로가 크다고 판단된 요인을 우선 선별했습니다. 보유 비중, 통화 노출, 산업 집중도와 현재 시장 변화의 연결성을 기준으로 분석 순서를 정했습니다.<a class="source-chip" href="#source-user">[7]</a></p>
+          <p class="report-copy muted">아래의 핵심·주요 라벨은 분석 우선순위를 의미하며, 예상 손실 규모나 발생 확률을 뜻하지 않습니다.</p>
+          <div class="mini-grid">
+            <article class="reason-card">
+              <div class="reason-head"><strong>미국 물가와 금리</strong><span class="reason-label">핵심</span></div>
+              <div class="reason-detail"><span>선정 근거</span><p>해외주식 내 기술산업 비중 74.3%, 전체 자산의 기술산업 연결 비중 34%, 현금·예금 비중 25%가 동시에 연결됩니다.<a class="source-chip" href="#source-user">[7]</a></p></div>
+              <div class="reason-detail"><span>관련 자산</span><div class="asset-tags"><em>해외주식</em><em>국내주식</em><em>ETF</em><em>현금·예금</em><em>부동산</em></div></div>
+              <p>미국의 물가와 금리 변화는 성장주 평가, 달러 흐름, 국내 시장금리와 현금성 자산의 이자수익을 통해 여러 보유자산에 전달될 수 있습니다.</p>
+            </article>
+            <article class="reason-card">
+              <div class="reason-head"><strong>에너지 공급과 원유 가격</strong><span class="reason-label">주요</span></div>
+              <div class="reason-detail"><span>선정 근거</span><p>국내 자산의 수입물가 노출, 달러 자산 비중 18%, 국내주식·부동산의 금리 간접노출이 함께 고려됐습니다.<a class="source-chip" href="#source-user">[7]</a></p></div>
+              <div class="reason-detail"><span>관련 자산</span><div class="asset-tags"><em>국내주식</em><em>해외주식</em><em>현금·예금</em><em>부동산</em></div></div>
+              <p>에너지 공급 변화는 원유 가격과 수입물가, 원화 가치, 국내 금리 기대를 거쳐 보유자산에 간접적으로 전달될 수 있습니다.</p>
+            </article>
+            <article class="reason-card">
+              <div class="reason-head"><strong>AI 투자와 기술산업 실적</strong><span class="reason-label">주요</span></div>
+              <div class="reason-detail"><span>선정 근거</span><p>기술산업 연결 비중 34%, 해외주식 내 기술산업 비중 74.3%, 기술 관련 ETF 중복 노출이 분석 우선순위에 반영됐습니다.<a class="source-chip" href="#source-user">[7]</a></p></div>
+              <div class="reason-detail"><span>관련 자산</span><div class="asset-tags"><em>해외주식</em><em>국내주식</em><em>ETF</em></div></div>
+              <p>AI 투자와 기술기업 실적은 해외주식뿐 아니라 국내 기술 관련 종목과 ETF에 공통으로 영향을 줄 수 있어, 자산군이 달라도 동일한 경제요인에 함께 노출될 수 있습니다.</p>
+            </article>
+          </div>
+        `
+      },
       {
         id: "summary",
         title: "현재 시장 국면과 종합 해석",
@@ -987,10 +1200,53 @@
         `
       },
       {
+        id: "market-variables",
+        title: "핵심 변수의 최근 변화",
+        body: `
+          <p class="report-copy">이번 보고서에서 중요하게 분석한 시장 변수의 움직임입니다. 각 변수는 자산가격을 단독으로 결정하지 않으며, 다른 경제지표 및 정책 변화와 함께 해석해야 합니다.</p>
+          <p class="report-copy muted">기간은 미국·이란 충돌이 시작된 것으로 가정한 2026년 2월 28일부터 보고서 기준시점인 2026년 3월 20일 18:00 KST까지입니다. 아래 시계열은 검증된 프로젝트 데이터가 없어 실제 가격이 아닌 <strong>목업용 예시 데이터</strong>로 표시합니다.<a class="source-chip" href="#source-mock">[8]</a></p>
+          <div class="variable-grid">
+            <article class="variable-card">
+              <header><h3>국제 원유 가격</h3><span class="variable-meta">목업용 예시</span></header>
+              <div class="value-row"><div class="value-box"><span>시작값</span><strong>72.0</strong></div><div class="value-box"><span>최근값</span><strong>78.4</strong></div><div class="value-box"><span>방향</span><strong>상승</strong></div></div>
+              <div class="mini-chart" aria-label="국제 원유 가격 목업용 예시 추이">
+                <span class="chart-segment" style="left: 8%; top: 72%; width: 24%; transform: rotate(-14deg);"></span><span class="chart-segment" style="left: 31%; top: 66%; width: 24%; transform: rotate(-22deg);"></span><span class="chart-segment" style="left: 54%; top: 56%; width: 27%; transform: rotate(-18deg);"></span>
+                <span class="chart-dot" style="left: 7%; top: 70%;"></span><span class="chart-dot" style="left: 30%; top: 64%;"></span><span class="chart-dot" style="left: 53%; top: 52%;"></span><span class="chart-dot" style="left: 79%; top: 44%;"></span>
+              </div>
+              <div class="chart-foot"><span>2026.02.28</span><span>2026.03.20 18:00</span></div>
+              <p class="report-copy">원유 가격 상승은 에너지 관련 자산에는 지지요인이 될 수 있지만, 국내 수입물가와 기업 비용, 금리 부담에는 반대 방향으로 작용할 수 있습니다.</p>
+              <div class="flow-line"><span>원유 가격</span><b>→</b><span>수입물가</span><b>→</b><span>국내 물가·금리 기대</span><b>→</b><span>국내주식·현금·부동산</span></div>
+            </article>
+            <article class="variable-card">
+              <header><h3>미국 장기금리</h3><span class="variable-meta">목업용 예시</span></header>
+              <div class="value-row"><div class="value-box"><span>시작값</span><strong>4.18%</strong></div><div class="value-box"><span>최근값</span><strong>4.36%</strong></div><div class="value-box"><span>방향</span><strong>상승</strong></div></div>
+              <div class="mini-chart" aria-label="미국 장기금리 목업용 예시 추이">
+                <span class="chart-segment" style="left: 8%; top: 62%; width: 25%; transform: rotate(8deg);"></span><span class="chart-segment" style="left: 32%; top: 66%; width: 22%; transform: rotate(-26deg);"></span><span class="chart-segment" style="left: 53%; top: 54%; width: 28%; transform: rotate(-10deg);"></span>
+                <span class="chart-dot" style="left: 7%; top: 59%;"></span><span class="chart-dot" style="left: 31%; top: 64%;"></span><span class="chart-dot" style="left: 52%; top: 51%;"></span><span class="chart-dot" style="left: 79%; top: 46%;"></span>
+              </div>
+              <div class="chart-foot"><span>2026.02.28</span><span>2026.03.20 18:00</span></div>
+              <p class="report-copy">미국 장기금리 상승은 성장주의 미래 이익에 적용되는 할인율을 높일 수 있으며, 달러와 국내 시장금리에도 간접적으로 영향을 줄 수 있습니다.</p>
+              <div class="flow-line"><span>미국 장기금리</span><b>→</b><span>성장주 할인율</span><b>→</b><span>해외 기술주·기술 ETF</span></div>
+            </article>
+            <article class="variable-card">
+              <header><h3>원/달러 환율</h3><span class="variable-meta">목업용 예시</span></header>
+              <div class="value-row"><div class="value-box"><span>시작값</span><strong>1,332원</strong></div><div class="value-box"><span>최근값</span><strong>1,371원</strong></div><div class="value-box"><span>방향</span><strong>상승</strong></div></div>
+              <div class="mini-chart" aria-label="원/달러 환율 목업용 예시 추이">
+                <span class="chart-segment" style="left: 8%; top: 69%; width: 20%; transform: rotate(-12deg);"></span><span class="chart-segment" style="left: 27%; top: 65%; width: 28%; transform: rotate(-24deg);"></span><span class="chart-segment" style="left: 54%; top: 51%; width: 28%; transform: rotate(5deg);"></span>
+                <span class="chart-dot" style="left: 7%; top: 67%;"></span><span class="chart-dot" style="left: 26%; top: 62%;"></span><span class="chart-dot" style="left: 53%; top: 47%;"></span><span class="chart-dot" style="left: 80%; top: 50%;"></span>
+              </div>
+              <div class="chart-foot"><span>2026.02.28</span><span>2026.03.20 18:00</span></div>
+              <p class="report-copy">원화 약세는 달러 자산의 원화 환산가치에는 지지요인이 될 수 있지만, 국내 수입비용과 물가 부담을 높일 수 있습니다.</p>
+              <div class="flow-line"><span>원/달러 환율</span><b>→</b><span>달러 자산 환산가치 / 국내 수입비용</span><b>→</b><span>해외자산과 국내자산에 상반된 영향</span></div>
+            </article>
+          </div>
+        `
+      },
+      {
         id: "global",
         title: "글로벌 경제 흐름과 국내 전달경로",
         body: `
-          <p class="report-copy">IMF는 세계경제 성장률을 3.3%로 전망하고 있습니다.<a class="source-chip" href="#source-global">1</a> 전면적인 침체로 단정할 근거는 부족하지만, 성장의 상당 부분이 미국 기술투자와 일부 민간 수요에 집중되어 있어 충격이 생겼을 때 흔들릴 수 있는 구조입니다.</p>
+          <p class="report-copy">IMF는 세계경제 성장률을 3.3%로 전망하고 있습니다.<a class="source-chip" href="#source-global">[1]</a> 전면적인 침체로 단정할 근거는 부족하지만, 성장의 상당 부분이 미국 기술투자와 일부 민간 수요에 집중되어 있어 충격이 생겼을 때 흔들릴 수 있는 구조입니다.</p>
           <p class="report-copy">아래 카드는 경제요인이 국내 자산까지 전달되는 흐름을 단순 나열이 아니라 인과관계로 정리한 것입니다. 각 경로는 이후의 자산별 영향과 시나리오 해석의 기준점으로 사용됩니다.</p>
           <div class="mini-grid four">
             <div class="info-box"><strong>미국 금리 → 달러·시장금리 → 국내 자산</strong><p>미국의 물가가 충분히 안정되지 않으면 연준이 금리를 빠르게 낮추기 어려워집니다. 미국 금리가 높은 수준에 머물면 달러 강세와 글로벌 자금조달 부담이 이어질 수 있고, 이는 원화와 국내 시장금리, 외국인 자금 흐름을 거쳐 국내주식·채권·부동산에 서로 다른 방향으로 전달됩니다.</p></div>
@@ -1021,7 +1277,7 @@
             <article class="pathway-block" id="path-energy">
               <header><div><span class="pathway-label">전달경로 A</span><h3>에너지 공급충격과 원화 약세</h3></div><span class="direction-tag mixed">상쇄 요인 포함</span></header>
               <div class="pathway-grid">
-                <div class="pathway-panel"><h4>현재 확인된 변화</h4><p>중동 충돌 이후 에너지 공급차질 우려가 이어지면서 국제유가는 높은 수준을 유지하고 있습니다. 원·달러 환율도 높은 수준에 머물러 있어 한국의 에너지 수입비용과 물가 부담이 함께 커질 수 있는 환경입니다.<a class="source-chip" href="#source-energy">3</a></p></div>
+                <div class="pathway-panel"><h4>현재 확인된 변화</h4><p>중동 충돌 이후 에너지 공급차질 우려가 이어지면서 국제유가는 높은 수준을 유지하고 있습니다. 원·달러 환율도 높은 수준에 머물러 있어 한국의 에너지 수입비용과 물가 부담이 함께 커질 수 있는 환경입니다.<a class="source-chip" href="#source-mock">[8]</a></p></div>
                 <div class="pathway-panel"><h4>왜 중요한가</h4><p>한국은 에너지 수입 의존도가 높기 때문에 유가 상승과 원화 약세가 동시에 나타나면 같은 양의 에너지를 수입하더라도 원화로 지불하는 비용이 더 크게 증가합니다. 이는 기업의 생산·물류비용과 가계의 생활비를 높이고, 물가가 안정되는 속도를 늦출 수 있습니다.</p></div>
                 <div class="pathway-panel full"><h4>내 자산으로 전달되는 과정</h4><div class="flow-line"><span>에너지 공급 우려</span><b>→</b><span>국제유가 상승</span><b>→</b><span>수입비용 증가</span><b>→</b><span>국내 물가 부담</span><b>→</b><span>금리 인하 제약</span><b>→</b><span>국내주식·부동산 부담</span></div><div class="flow-line"><span>원화 약세</span><b>→</b><span>달러자산 원화 환산가치 상승</span><b>→</b><span>해외주식 평가액 일부 지지</span></div><p>사용자의 국내 자산에는 비용 부담으로 작용할 수 있지만, 달러로 보유한 해외주식에는 환율 완충효과가 나타날 수 있습니다.</p></div>
                 <div class="pathway-panel"><h4>다음 신호를 이렇게 해석하세요</h4><ul class="signal-list"><li>국제유가와 원·달러 환율이 함께 상승하면 국내 물가와 금리 부담이 강화될 수 있습니다.</li><li>유가가 하락하거나 원화가 강해지면 국내 비용 부담은 완화될 수 있습니다.</li><li>유가만 하락하고 환율이 높은 수준을 유지하면 에너지 비용 부담은 줄더라도 달러자산의 환율효과는 계속될 수 있습니다.</li></ul></div>
@@ -1031,7 +1287,7 @@
             <article class="pathway-block" id="path-rates">
               <header><div><span class="pathway-label">전달경로 B</span><h3>미국 물가와 금리, 성장주</h3></div><span class="direction-tag pressure">금리 경로</span></header>
               <div class="pathway-grid">
-                <div class="pathway-panel"><h4>현재 확인된 변화</h4><p>미국 물가가 연준의 목표보다 높은 수준에 머물면 시장은 금리 인하가 늦어질 가능성을 반영할 수 있습니다. 이 과정에서 미국 국채금리와 달러가 높은 수준을 유지하면 국내외 성장주 평가에도 영향을 줄 수 있습니다.<a class="source-chip" href="#source-us">2</a></p></div>
+                <div class="pathway-panel"><h4>현재 확인된 변화</h4><p>미국 물가가 연준의 목표보다 높은 수준에 머물면 시장은 금리 인하가 늦어질 가능성을 반영할 수 있습니다. 이 과정에서 미국 국채금리와 달러가 높은 수준을 유지하면 국내외 성장주 평가에도 영향을 줄 수 있습니다.<a class="source-chip" href="#source-us">[2]</a></p></div>
                 <div class="pathway-panel"><h4>왜 중요한가</h4><p>성장주는 현재 이익보다 미래에 발생할 것으로 기대되는 이익의 비중이 큽니다. 금리가 높아지면 미래 이익을 현재 가치로 환산할 때 적용되는 할인율이 높아지므로, 같은 성장 전망을 가지고 있어도 현재 평가가 낮아질 수 있습니다.</p></div>
                 <div class="pathway-panel full"><h4>내 자산으로 전달되는 과정</h4><div class="flow-line"><span>미국 물가 부담</span><b>→</b><span>금리 인하 기대 약화</span><b>→</b><span>미국 국채금리·달러 상승 가능</span><b>→</b><span>성장주 평가 부담</span></div><ul class="signal-list"><li>해외주식 내 기술산업 비중 74.3%: 성장주 평가 부담에 상대적으로 민감합니다.</li><li>국내 기술 관련 자산 34%: 미국 기술주와 공통요인에 반응할 가능성이 있습니다.</li><li>현금·예금 25%: 예금금리가 빠르게 낮아지지 않는 점은 일부 지지입니다.</li><li>달러자산 18%: 달러 강세가 이어지면 원화 평가액에는 일부 지지입니다.</li></ul></div>
                 <div class="pathway-panel"><h4>다음 신호를 이렇게 해석하세요</h4><p>물가 발표는 숫자의 절대 수준만 보지 말고 시장 예상과의 차이 및 최근 추세를 함께 봐야 합니다.</p><ul class="signal-list"><li>물가가 시장 예상보다 높으면 금리 인하 기대가 약해질 수 있습니다.</li><li>예상보다 낮으면 금리 부담이 완화될 수 있습니다.</li><li>물가가 전월보다 낮아졌더라도 시장 예상보다 높다면 부담으로 해석될 수 있습니다.</li><li>시장 예상치 데이터가 준비되지 않았다면 임의의 예상값을 만들지 않고 예상치 데이터 없음으로 표시합니다.</li></ul></div>
@@ -1041,7 +1297,7 @@
             <article class="pathway-block" id="path-ai">
               <header><div><span class="pathway-label">전달경로 C</span><h3>AI 투자와 기술산업 집중</h3></div><span class="direction-tag support">공통 노출</span></header>
               <div class="pathway-grid">
-                <div class="pathway-panel"><h4>현재 확인된 변화</h4><p>AI 인프라와 클라우드 투자, 반도체 수요는 미국 기술기업과 국내 반도체기업의 실적을 지지하는 요인으로 작용하고 있습니다.<a class="source-chip" href="#source-companies">6</a></p></div>
+                <div class="pathway-panel"><h4>현재 확인된 변화</h4><p>AI 인프라와 클라우드 투자, 반도체 수요는 미국 기술기업과 국내 반도체기업의 실적을 지지하는 요인으로 작용하고 있습니다.<a class="source-chip" href="#source-companies">[6]</a></p></div>
                 <div class="pathway-panel"><h4>왜 중요한가</h4><p>AI 투자는 데이터센터·클라우드·반도체·전력설비 등 여러 산업에 연결됩니다. 투자가 계속되면 관련 기업의 매출과 수요를 지지할 수 있지만, 투자효율에 대한 의문이나 기업의 투자계획 축소가 나타나면 관련 자산이 함께 영향을 받을 수 있습니다.</p></div>
                 <div class="pathway-panel full"><h4>내 자산으로 전달되는 과정</h4><div class="flow-line"><span>AI 인프라 투자</span><b>→</b><span>클라우드·반도체 수요</span><b>→</b><span>미국 기술기업·국내 반도체 실적</span><b>→</b><span>해외주식·국내주식·ETF 동시 영향</span></div><p>사용자의 자산은 여러 자산군에 나뉘어 있지만, 국내 기술 관련 자산 34%와 해외주식 내 기술산업 비중 74.3%가 동일한 경제요인에 연결되어 있습니다. 자산군이 다르다는 이유만으로 경제적 분산이 충분하다고 볼 수 없습니다.</p></div>
                 <div class="pathway-panel"><h4>다음 신호를 이렇게 해석하세요</h4><ul class="signal-list"><li>주요 기술기업의 AI 관련 매출과 투자계획이 함께 증가하면 현재의 지지요인이 유지될 수 있습니다.</li><li>투자금액은 증가하지만 매출과 수익성이 따라오지 못하면 투자효율에 대한 부담이 커질 수 있습니다.</li><li>반도체 주문·클라우드 성장·기업의 설비투자 계획이 함께 둔화되면 국내외 기술자산의 공통 지지요인이 약해질 수 있습니다.</li></ul></div>
@@ -1084,9 +1340,9 @@
         title: "주요 시나리오",
         body: `
           <div class="mini-grid">
-            <article class="scenario-card"><h3>시나리오 A. 유가·금리 부담 완화</h3><div class="detail-pair"><span>성립 조건</span><p>에너지 공급 우려 완화, 유가·환율 안정, 물가 둔화</p></div><div class="detail-pair"><span>내 자산으로 전달되는 과정</span><p>물가 부담 완화 → 금리 부담 완화 → 성장주·채권·부동산 비용 부담 일부 완화</p></div><div class="detail-pair"><span>자산별 영향</span><p>기술자산에는 지지, 달러 약세가 동반되면 해외주식의 원화 환산효과는 감소 가능</p></div><div class="detail-pair"><span>약화 신호</span><p>공급차질 재확대, 유가와 환율의 동반 재상승</p></div><p class="report-copy muted">이 시나리오는 발생확률이나 시점을 예측하는 것이 아니라, 현재 분석이 어떤 조건에서 달라질 수 있는지 확인하기 위한 것입니다.</p></article>
-            <article class="scenario-card"><h3>시나리오 B. 높은 유가와 금리 지속</h3><div class="detail-pair"><span>성립 조건</span><p>충돌은 확대되지 않지만 에너지 공급 우려와 물가 부담이 지속</p></div><div class="detail-pair"><span>내 자산으로 전달되는 과정</span><p>금리 부담은 이어지지만 기업실적과 AI 투자가 일부 상쇄</p></div><div class="detail-pair"><span>자산별 영향</span><p>기술자산은 실적과 금리 사이에서 방향이 갈릴 수 있고, 현금·예금은 이자 측면에서 일부 지지</p></div><div class="detail-pair"><span>약화 신호</span><p>유가 급등 또는 기술기업 실적의 뚜렷한 둔화</p></div><p class="report-copy muted">이 시나리오는 발생확률이나 시점을 예측하는 것이 아니라, 현재 분석이 어떤 조건에서 달라질 수 있는지 확인하기 위한 것입니다.</p></article>
-            <article class="scenario-card"><h3>시나리오 C. 에너지 공급충격 확대</h3><div class="detail-pair"><span>성립 조건</span><p>공급차질 확대, 유가·환율 동반 상승, 위험회피 강화</p></div><div class="detail-pair"><span>내 자산으로 전달되는 과정</span><p>수입비용·물가 상승 → 금리 부담 → 국내자산 비용 증가와 성장주 평가 부담</p></div><div class="detail-pair"><span>자산별 영향</span><p>국내주식·부동산·성장주에는 부담이 커질 수 있고, 달러자산은 환율 측면에서 일부 완충 가능</p></div><div class="detail-pair"><span>약화 신호</span><p>공급 정상화, 유가 하락, 원화 안정</p></div><p class="report-copy muted">이 시나리오는 발생확률이나 시점을 예측하는 것이 아니라, 현재 분석이 어떤 조건에서 달라질 수 있는지 확인하기 위한 것입니다.</p></article>
+            <article class="scenario-card"><h3>시나리오 A. 유가·금리 부담 완화</h3><div class="detail-pair"><span>성립 조건</span><p>에너지 공급 우려 완화, 유가·환율 안정, 물가 둔화</p></div><div class="detail-pair"><span>내 자산으로 전달되는 과정</span><p>물가 부담 완화 → 금리 부담 완화 → 성장주·채권·부동산 비용 부담 일부 완화</p></div><div class="detail-pair"><span>자산별 영향</span><p>기술자산에는 지지, 달러 약세가 동반되면 해외주식의 원화 환산효과는 감소 가능</p></div><div class="detail-pair"><span>약화 신호</span><p>공급차질 재확대, 유가와 환율의 동반 재상승</p></div><p class="report-copy muted">이 시나리오는 현재 분석이 어떤 조건에서 달라질 수 있는지 확인하기 위한 것입니다.</p></article>
+            <article class="scenario-card"><h3>시나리오 B. 높은 유가와 금리 지속</h3><div class="detail-pair"><span>성립 조건</span><p>충돌은 확대되지 않지만 에너지 공급 우려와 물가 부담이 지속</p></div><div class="detail-pair"><span>내 자산으로 전달되는 과정</span><p>금리 부담은 이어지지만 기업실적과 AI 투자가 일부 상쇄</p></div><div class="detail-pair"><span>자산별 영향</span><p>기술자산은 실적과 금리 사이에서 방향이 갈릴 수 있고, 현금·예금은 이자 측면에서 일부 지지</p></div><div class="detail-pair"><span>약화 신호</span><p>유가 급등 또는 기술기업 실적의 뚜렷한 둔화</p></div><p class="report-copy muted">이 시나리오는 현재 분석이 어떤 조건에서 달라질 수 있는지 확인하기 위한 것입니다.</p></article>
+            <article class="scenario-card"><h3>시나리오 C. 에너지 공급충격 확대</h3><div class="detail-pair"><span>성립 조건</span><p>공급차질 확대, 유가·환율 동반 상승, 위험회피 강화</p></div><div class="detail-pair"><span>내 자산으로 전달되는 과정</span><p>수입비용·물가 상승 → 금리 부담 → 국내자산 비용 증가와 성장주 평가 부담</p></div><div class="detail-pair"><span>자산별 영향</span><p>국내주식·부동산·성장주에는 부담이 커질 수 있고, 달러자산은 환율 측면에서 일부 완충 가능</p></div><div class="detail-pair"><span>약화 신호</span><p>공급 정상화, 유가 하락, 원화 안정</p></div><p class="report-copy muted">이 시나리오는 현재 분석이 어떤 조건에서 달라질 수 있는지 확인하기 위한 것입니다.</p></article>
           </div>
         `
       },
@@ -1109,12 +1365,14 @@
         body: `
           <p class="report-copy">이 보고서는 투자 실행 판단을 제시하지 않습니다. 보유수량과 현재가는 목업 값이며, 분석은 보유 비중과 공개 정보의 연결을 설명하는 데 목적이 있습니다. 출처가 준비되지 않은 연결 수치는 목업 분석을 위한 가정으로 구분했습니다.</p>
           <div class="source-grid">
-            <div class="source-group" id="source-global"><strong>[1] 글로벌 경기</strong><a href="https://www.imf.org/" target="_blank" rel="noreferrer">IMF</a></div>
-            <div class="source-group" id="source-us"><strong>[2] 미국 물가·고용·금리</strong><a href="https://www.federalreserve.gov/" target="_blank" rel="noreferrer">Federal Reserve</a><span>미국 물가·고용 세부 예상치는 목업 분석을 위한 가정 또는 출처 확인 필요 항목입니다.</span></div>
-            <div class="source-group" id="source-energy"><strong>[3] 에너지·중동 공급</strong><span>국제유가와 공급차질 해석은 목업 분석을 위한 가정입니다. 실제 서비스에서는 에너지 가격·공급 자료 출처 연결이 필요합니다.</span></div>
-            <div class="source-group" id="source-china"><strong>[4] 중국 경기·산업정책</strong><span>중국 경기와 산업투자 설명은 목업 분석을 위한 가정입니다. 실제 서비스에서는 공식 통계와 산업정책 자료 확인이 필요합니다.</span></div>
-            <div class="source-group" id="source-korea"><strong>[5] 한국 환율·금리·주식시장</strong><span>원·달러 환율, 국내 금리, 외국인 수급 연결은 목업 분석을 위한 가정입니다.</span></div>
-            <div class="source-group" id="source-companies"><strong>[6] 보유기업 실적</strong><a href="https://www.apple.com/newsroom/" target="_blank" rel="noreferrer">Apple Newsroom</a><a href="https://www.microsoft.com/en-us/Investor/earnings" target="_blank" rel="noreferrer">Microsoft Investor Relations</a><a href="https://ir.tesla.com/" target="_blank" rel="noreferrer">Tesla Investor Relations</a></div>
+            <div class="source-group" id="source-global"><strong>[1] 공식 통계·기관 자료 · 글로벌 경기</strong><span>기관: IMF</span><span>자료: World Economic Outlook 계열 전망 자료</span><span>기준시점: 보고서 기준시점 이전 공개 자료</span><a href="https://www.imf.org/" target="_blank" rel="noreferrer">원문 링크</a><span>사용 내용: 세계경제 성장률 전망과 글로벌 경기 해석의 배경</span></div>
+            <div class="source-group" id="source-us"><strong>[2] 공식 통계·기관 자료 · 미국 물가·고용·금리</strong><span>기관: Federal Reserve</span><span>자료: 통화정책·금리 관련 공식 발표 및 자료</span><span>기준시점: 2026.03.20 18:00 KST 이전 공개 자료</span><a href="https://www.federalreserve.gov/" target="_blank" rel="noreferrer">원문 링크</a><span>사용 내용: 물가 안정과 금리 경로가 성장주 평가에 연결될 수 있다는 분석 배경</span></div>
+            <div class="source-group" id="source-energy"><strong>[3] 목업용 가정 · 에너지·중동 공급</strong><span>기관/언론사: 출처 확인 필요</span><span>자료: 실제 기사 또는 원유 가격 데이터가 프로젝트에 포함되지 않음</span><span>기준시점: 2026.02.28~2026.03.20 18:00 KST로 가정</span><span>사용 내용: 에너지 공급차질과 원유 가격 경로 설명을 위한 목업 분석 가정</span></div>
+            <div class="source-group" id="source-china"><strong>[4] 목업용 가정 · 중국 경기·산업정책</strong><span>기관/언론사: 출처 확인 필요</span><span>자료: 실제 공식 통계 또는 정책 문서가 프로젝트에 포함되지 않음</span><span>사용 내용: 중국 경기와 국내 수출산업 연결을 설명하기 위한 목업 분석 가정</span></div>
+            <div class="source-group" id="source-korea"><strong>[5] 목업용 가정 · 한국 환율·금리·주식시장</strong><span>기관/언론사: 출처 확인 필요</span><span>자료: 실제 환율·금리·수급 시계열이 프로젝트에 포함되지 않음</span><span>사용 내용: 원화, 국내 시장금리, 외국인 자금 흐름 연결 설명을 위한 목업 분석 가정</span></div>
+            <div class="source-group" id="source-companies"><strong>[6] 기업 공시·IR · 보유기업 실적</strong><span>기관: Apple, Microsoft, Tesla</span><span>자료: 기업 뉴스룸·IR 자료</span><span>기준시점: 보고서 기준시점 이전 공개 자료를 사용하는 것으로 가정</span><a href="https://www.apple.com/newsroom/" target="_blank" rel="noreferrer">Apple Newsroom</a><a href="https://www.microsoft.com/en-us/Investor/earnings" target="_blank" rel="noreferrer">Microsoft Investor Relations</a><a href="https://ir.tesla.com/" target="_blank" rel="noreferrer">Tesla Investor Relations</a><span>사용 내용: 보유기업 실적과 AI·기술산업 해석의 배경</span></div>
+            <div class="source-group" id="source-user"><strong>[7] 사용자 자산 데이터 · 목업 보유구성</strong><span>자료: AssetFlow 목업 화면의 사용자 보유자산 예시 데이터</span><span>기준시점: 사용자 인터뷰용 예시 데이터</span><span>사용 내용: 총자산, 기술산업 연결 비중 34%, 달러 자산 18%, 현금·예금 25%, 해외주식 내 기술산업 비중 74.3%</span></div>
+            <div class="source-group" id="source-mock"><strong>[8] 목업용 가정 · 핵심 변수 시계열</strong><span>자료: 프로젝트 안에 검증된 2026.02.28~2026.03.20 시계열 데이터가 없어 목업용 예시 데이터로 표시</span><span>기준시점: 2026.03.20 18:00 KST 이전 구간으로 가정</span><span>사용 내용: 원유 가격, 미국 장기금리, 원/달러 환율의 방향성과 전달경로를 설명하기 위한 UI 예시</span></div>
           </div>
         `
       }
